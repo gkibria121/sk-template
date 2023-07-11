@@ -1,0 +1,45 @@
+value of $x =  {{$x:.0f}}
+value of $y = {{$y}} 
+value of $xy = {{$xy}} 
+
+The can get $var  {{$var2 }}  $yx 
+
+
+average  $matrtix1  = {{$matrix1.avg()}} \\{{$matrix1.value()}}
+
+max $matrtix1 = {{$matrix1.max()}} \\{{$matrix1.value()}}
+
+min  $matrtix1  = {{$matrix1.min((x)=> x >2):.0f}} \\{{$matrix1.value()}}
+
+sum  $matrtix1  = {{$matrix1.sum((x)=> x>2):.0f}} \\{{$matrix1.value()}}
+
+length  $matrtix1  = {{$matrix1.len():.0f}} \\{{$matrix1.value()}}
+
+value $matrtix4  = {{$matrix4.value()}} {{%print("{{$matrix4.value()}}") if type({{$matrix4.value()}})==list else print('no')%}}
+
+count 0 $matrtix1  = {{$matrix1.count(0)}} \\{{$matrix1.value()}}
+
+print sum of $matrix1 if element is greater then 2  = {{%print(sum(num for index,num in enumerate({{$matrix1.value()}}) if num >2))%}}
+value  $matrtix1  = {{$matrix1.value()}} 
+value 'it' $matrtix4  = {{$matrix4.value('it')}} \\{{$matrix4.value()}}
+value [0][0] $matrtix5 = {{$matrix5.value(0,0)}}  \\{{$matrix5.value()}}
+
+{{$table[1]}}
+
+{%python%}
+
+my_dict = {{$matrix4.value()}}
+
+for key,value in my_dict.items():
+    print(key,value)
+
+{%endpython%}
+
+{%python%}
+
+my_dict = {{$dictonary.value()}}
+for key,value in my_dict.items():
+    print(f"There are {value} number of  {key}'s")
+
+{%endpython%}
+

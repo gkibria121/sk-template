@@ -1,0 +1,25 @@
+Rohim has {{$x:.0f}} taka and Korim has {{$y}} taka. They have {{$xy}} taka.
+The can get $var taka. They need {{$var2 }} taka and $yx 
+
+
+average  $matrtix1  = {{$matrix5.value(0,0)}}
+
+max $matrtix1 = {{$matrix1.max()}}
+
+min  $matrtix1  = {{$matrix1.min():.0f}}
+
+sum  $matrtix1  = {{$matrix1.sum():.0f}}
+
+length  $matrtix1  = {{$matrix1.len():.0f}}
+
+value $matrtix4  = {{$matrix4.value()}}
+
+count x $matrtix1  = {{$matrix1.count(2)}}
+{%python%}
+
+print('hello,world')
+
+{%endpython%}
+
+
+

@@ -1,0 +1,33 @@
+Rohim has 3 taka and Korim has 3 taka. They have 12 taka.
+The can get $var taka. They need 6  taka and $yx 
+
+
+average  $matrtix1  = 2.5 \\[1, 2, 3, 4]
+
+max $matrtix1 = 4 \\[1, 2, 3, 4]
+
+min  $matrtix1  = 1 \\[1, 2, 3, 4]
+
+sum  $matrtix1  = 10 \\[1, 2, 3, 4]
+
+length  $matrtix1  = 4 \\[1, 2, 3, 4]
+
+value $matrtix4  = {'it': 12, 'balu': 18} no
+
+
+count 0 $matrtix1  = 0 \\[1, 2, 3, 4]
+
+print sum of $matrix1 if element is greater then 2  = 7
+
+value  $matrtix1  = [1, 2, 3, 4] 
+value 'it' $matrtix4  = 12 \\{'it': 12, 'balu': 18}
+value [0][0] $matrtix5 = 10  \\[[10], [10]]
+
+it 12
+balu 18
+
+
+There are 5 number of  book's
+There are 7 number of  pen's
+
+

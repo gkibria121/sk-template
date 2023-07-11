@@ -1,0 +1,49 @@
+\$\w+(?:(?:\[\"?\w+\"?\])+)|(?:\.\w+(?:(\((?:(?:[^()])|(?1))*\))))
+
+
+$x["numbers"].min("") + $y["numbers"].max("")
+$x + $y + ($z)
+
+
+##reporter = ReportGenerator()
+##reporter.set_data({'$x': {"numbers" : [1,2,3,4,5,6,7],"students" : [{"name" : "Kibria" ,"grades" : [1,2,3,4,5]}]}})
+##report = reporter.generate(
+##'''
+##
+##{{$x.numbers.min():.2f}}
+##{{$x.numbers.max():.2f}}
+##{{$x.numbers.avg():.2f}}
+##{{$x.numbers.sum():.2f}}
+##{{$x.numbers.len():.2f}}
+##{{$x.numbers.count(1):.2f}}
+##{{$x.numbers.index(1):.2f}}
+##{{$x.numbers.reverse()}}
+##{{$x.numbers.set()}}
+##{{$x.numbers.distinct()}}
+##{{$x.numbers.map((x)=> x*2 if x>2 else x)}}
+##
+##
+##{{$x.numbers.min((x)=>x>1):.2f}}
+##{{$x.numbers.max((x)=>x>1):.2f}}
+##{{$x.numbers.avg((x)=>x>1):.2f}}
+##{{$x.numbers.sum((x)=>x>1):.2f}}
+##{{$x.numbers.len((x)=>x>1):.2f}}
+##
+##''')
+##print(report)
+##{{$x.students[0].name:b}}
+##{{$x.students[0].grades.reverse().max():b}}
+##{{$x.items[0].prices.reverse().sum((x) => x > 1)}}
+##{{$x.items[0].child.reverse().sum((x) => x > 1):.2f}}
+##{{$x.customers[0].orders[0].items.count((x) => x.price > 10)}}
+##{{$x.customers[0].orders[0].items.filter((x) => x.category == "Electronics").length}}
+##{{$x.users[0].posts[0].comments.map((x) => x.author).join(", ")}}
+##{{$x.numbers.sum((x) => x > 1):.2f}}
+##{{$x.students[0].name:b}}
+##{{$x.students[0].grades.reverse().max():b}}
+##{{$x.items[0].prices.reverse().sum((x) => x > 1)}}
+##{{$x.items[0].child.reverse().sum((x) => x > 1):.2f}}
+##{{$x.customers[0].orders[0].items.count((x) => x.price > 10)}}
+##{{$x.customers[0].orders[0].items.filter((x) => x.category == "Electronics").length}}
+##{{$x.users[0].posts[0].comments.map((x) => x.author).join(", ")}}
+##{{$x.amount * 100}}

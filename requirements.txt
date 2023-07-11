@@ -1,0 +1,6 @@
+sk_calculator
+sk_variable_handler
+sk_report_generator
+sk_declaration
+nltk
+pytest
