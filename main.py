@@ -27,9 +27,12 @@ class Controller:
 Controller = Controller()
 
 # data = Controller.get_data(text)
-data = {'$x': 40.6}
-template = '''{{$x::{'align': 'left','fill' : '#','width' : 10}}}
-{{$x::{'align': 'right','fill' : '0','width' : 10,'floor-precision' : 2}}}
+data = {'$x': [1,2,3,4,5,6,7,8,9]}
+template = '''
+<>
+l = {{$x}}
+<<{l}>>
+</>
 '''
 declaration = Controller.get_report(template, data)
 print(declaration)
