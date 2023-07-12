@@ -288,7 +288,7 @@ for key,value in {{$person}}.items():
 {{$person[2]:<10}} : {{$person.city:<10}}{{$person[3]:<10}} : {{$person.country:<10}}
 '''
         self.assertEqual(report, expected_report)
-        expected_report ='\nname       : kibria    age        : 23        \ncity       : Dhaka     country    : Bangladesh'
+        expected_report ='\nname       : kibria    age        : 23        \ncity       : Dhaka     country    : Bangladesh\n'
         report = self.reporter.generate_report(template, data)
         self.assertEqual(report, expected_report)
 
@@ -468,7 +468,7 @@ Kibria'''
 c2 = {'align': 'center','width': 10, 'fill' : 0}
 fl= {'floor-precision': 2}
 </format>'''
-        expected_report ='40.0'
+        expected_report ='40.0\n'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
@@ -477,7 +477,7 @@ fl= {'floor-precision': 2}
 <format>
 fl= {'floor-precision': 2}
 </format>'''
-        expected_report ='40.0'
+        expected_report ='40.0\n'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
@@ -487,7 +487,7 @@ fl= {'floor-precision': 2}
 c2 = {'align': 'center','width': 10, 'fill' : 0}
 fl= {'ceil-precision': 2}
 </format>'''
-        expected_report ='42.0'
+        expected_report ='42.0\n'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
@@ -496,7 +496,7 @@ fl= {'ceil-precision': 2}
 <format>
 fl= {'ceil-precision': 2}
 </format>'''
-        expected_report ='42.0'
+        expected_report ='42.0\n'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
@@ -504,7 +504,7 @@ fl= {'ceil-precision': 2}
         template = '''{{$x::{'align': 'left','fill' : '#','width' : 10}}}
 {{$x::{'align': 'right','fill' : '0','width' : 10,'floor-precision' : 2}}}
 '''
-        expected_report ='40.6######\n40.0'
+        expected_report ='40.6######\n40.0\n'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 if __name__ == '__main__':

@@ -27,12 +27,7 @@ class Controller:
 Controller = Controller()
 
 # data = Controller.get_data(text)
-data = {'$x': [1,2,3,4,5,6,7,8,9]}
-template = '''
-<>
-l = {{$x}}
-<<{l}>>
-</>
-'''
+data = {'$x': 10000}
+template = '''{{$x::{'type' : 'b'}}}'''
 declaration = Controller.get_report(template, data)
 print(declaration)
