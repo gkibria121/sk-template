@@ -1,5 +1,7 @@
 import regex as re
 from .function.floor import Floor
+from .function.upper_case import UpperCase
+from .function.capitalize import Capitalize
 from .function.sum import Sum
 from .function.default import MethodDefault
 from .function.ceil import Ceil
@@ -22,6 +24,8 @@ class SingleFunctionSOlver:
         self.get_index_value = GetIndexValue()
         self.process_condition = ProcessCondition()
         self.floor = Floor()
+        self.capitalize = Capitalize()
+        self.upper = UpperCase()
         self.sum = Sum()
         self.default =MethodDefault()
         self.ceil = Ceil()
@@ -41,7 +45,8 @@ class SingleFunctionSOlver:
 
 
         self.floor.set_next(self.ceil)
-        self.ceil.set_next(self.round)
+        self.ceil.set_next(self.upper)
+        self.upper.set_next(self.round)
         self.round.set_next(self.slice)
         self.slice.set_next(self.filter)
         self.filter.set_next(self.avg)
@@ -50,7 +55,8 @@ class SingleFunctionSOlver:
         self.reverse.set_next(self.max)
         self.max.set_next(self.min)
         self.min.set_next(self.count)
-        self.count.set_next(self.len)
+        self.count.set_next(self.capitalize)
+        self.capitalize.set_next(self.len)
         self.len.set_next(self.set)
 
         self.set.set_next(self.sum)

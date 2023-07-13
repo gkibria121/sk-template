@@ -507,5 +507,40 @@ fl= {'ceil-precision': 2}
         expected_report ='40.6######\n40.0\n'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
+
+
+    def test_string(self):
+        data = {'$x': '123456789'}
+        template = '''{{$x::{'continue' : 5}}}'''
+
+        expected_report ='12...'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x::{'continue' : 2}}}'''
+
+        expected_report ='12'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x::{'continue' : 8}}}'''
+
+        expected_report ='12345...'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+        template = '''{{$x::{'continue' : 13}}}'''
+
+        expected_report ='123456789'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x' : 'Gkibria is a great man'}
+        template = '''{{$x.upper()}}'''
+
+        expected_report ='GKIBRIA IS A GREAT MAN'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+
 if __name__ == '__main__':
     unittest.main()

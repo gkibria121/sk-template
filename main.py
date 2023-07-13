@@ -27,9 +27,7 @@ class Controller:
 Controller = Controller()
 
 # data = Controller.get_data(text)
-data = {'$person': {'name' : 'kibria','age' : 23 , 'city' : 'Dhaka', 'country'  : 'Bangladesh'}}
-template = '''
-{{eval({1, 2, 3, 4, 5, 6, 7} - {5, 6, 7, 8, 9, 10})}}
-'''
+data = {'$x': 'gkibria is my name'}
+template = '''{{$x.upper()}}'''
 declaration = Controller.get_report(template, data)
 print(declaration)

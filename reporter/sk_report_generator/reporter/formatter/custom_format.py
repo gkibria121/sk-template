@@ -1,5 +1,7 @@
 from .custom_format_functions.floor import Floor
+from .custom_format_functions.round import Round
 from .custom_format_functions.ceil import Ceil
+from .custom_format_functions.str_continue import StrContinue
 from .json_to_format_spec.width import WidthHandler
 from .json_to_format_spec.align import AlignHandler
 from .json_to_format_spec.fill import FillHandler
@@ -19,6 +21,7 @@ class CustomFormat:
 
         self.floor = Floor()
         self.ceil = Ceil()
+        self.str_continue = StrContinue()
         self.default = Default()
         self.width_handler = WidthHandler()
         self.align = AlignHandler()
@@ -27,10 +30,17 @@ class CustomFormat:
         self.pad = PadHandler()
         self.precision = PrecisionHandler()
         self.sign = SignHandler()
+        self.round = Round()
         self.type = TypeHandler()
 
-        self.floor.set_successor(self.ceil)
+
+        self.floor.set_successor(self.round)
+        self.round.set_successor(self.str_continue)
+        self.str_continue.set_successor(self.ceil)
         self.ceil.set_successor(self.default)
+
+
+
         self.width_handler.set_successor(self.align)
         self.align.set_successor(self.fill)
         self.fill.set_successor(self.grouping_option)
@@ -44,17 +54,16 @@ class CustomFormat:
         self.process = process
 
     def run(self,value,format_spec,format_class_list):
+
         if len(format_class_list)!=0:
             condition, format_specs = self.custom_format_process.run(format_spec, format_class_list)
             format_pattern = '{{value}:{fill}{align}{sign}{pad}{width}{grouping_option}{precision}{type}}'
-
             default_format_value, format_specs = self.width_handler.handle(value, condition, format_specs,format_pattern)
+            value = self.floor.format(default_format_value, condition, format_specs)
 
-            result = self.floor.format(default_format_value, condition, format_specs)
 
-            return result
 
-        return go_next.run(value,format_spec,format_class_list)
+        return self.go_next.run(value,format_spec,format_class_list)
 
     def set_next(self,go_next):
 

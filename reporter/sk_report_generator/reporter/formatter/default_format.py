@@ -6,7 +6,7 @@ class DefaultFormat:
         if len(format_class_list) ==0:
             if re.sub(r'[\s\-\.]', '', value).isdigit():
                 value = int(value) if value.endswith('.0') or '.' not in value else float(value)
-            return format(value, format_spec)
+            value =  format(value, format_spec)
 
         return self.go_next.run(value,format_spec,format_class_list)
 

@@ -4,7 +4,6 @@ from .formatter.process.template_format_process import TemplateFormatProcess
 from .formatter.default import Default
 from .formatter.format import Format
 from .formatter.default import Default
-from .formatter.custom_format import CustomFormat
 from .formatter.process.format_tag_remove import FormatTagRemover
 import regex as re
 
@@ -20,7 +19,7 @@ class Formatter(IReporter):
 
     def report(self, template):
 
-        format_pattern = r'(?![}])(\{(\{((?:[^{}]|(?2))*)\:([^{}]*)\})\})(?![}])'
+        format_pattern = r'(\{(\{((?:[^{}]|(?2))*)\:([^{}]*)\})\})(?![}])'
         template = self.template_process.run(template)
         matches = re.findall(format_pattern, template)
 

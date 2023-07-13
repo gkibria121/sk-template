@@ -17,6 +17,18 @@ class Floor(IFormatter):
                     value = str(value)
                 else:
                     value = str(value-mod)
+        if 'floor' in format_sepec:
+
+            if condition == None:
+                if format_sepec['floor'] == True:
+                    value = float(value)
+                    mod = value%1
+                    if mod ==0:
+                        value = str(value)
+                    else:
+                        value = str(value-mod)
+
+
 
 
 

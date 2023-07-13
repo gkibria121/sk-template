@@ -14,6 +14,15 @@ class Ceil:
 
             if condition =='':
                 value =math.ceil(value)
+            else:
+                precision = float(condition)
+                value = float(value)
+                mod = value % precision
+
+                if mod == 0:
+                    value = str(value)
+                else:
+                    value = str(value + precision - mod)
 
         return self.go_next.run(value,method,condition)
 

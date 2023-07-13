@@ -10,9 +10,16 @@ class Default(IFormatter):
         return value
 
     def handle(self, value, condition, format_sepec, format_pattern):
-        format_pattern = re.sub(r'\{value\}', str(value), format_pattern)
 
-        return eval(f"f'{format_pattern}'"), format_sepec
+        digit = re.sub(r'[,.]','',value).isdigit()
+        if digit:
+            format_pattern = re.sub(r'\{value\}', str(value), format_pattern)
+        else:
+            format_pattern = re.sub(r'\{value\}', str(f'"{value}"'), format_pattern)
+
+
+        return eval("f'"+format_pattern+"'"), format_sepec
+
 
     def set_successor(self, successor):
         pass
