@@ -1,156 +1,309 @@
 import regex as re
 import math
 
-class Function:
-
-    def __init__(self):
-        self.data = None
-
-    def set_data(self,data):
-        self.data = data
-
-    def update_data(self,condition):
-        if type(self.data) == list:
-            self.data = eval(f'self.data{condition}')
-        elif type(self.data) == dict and re.sub(r'[\[\]]','',condition).isdigit():
-            self.data = list(self.data.keys())
-            self.data = eval(f'self.data{condition}')
-        else:
-            self.data = eval(f"self.data{condition}")
 
 
+class Min:
 
-    def sum(self,condition=None):
-        if condition:
-            pattern = r'\s*\((\w+)\)\s*=>\s*(.*)'
-            match = re.search(pattern,condition)
-            if match:
+    def set_next(self,go_next):
+        self.go_next = go_next
 
-                self.data = eval(f"sum([{match[1]} for {match[1]} in self.data if {match[2]} ])")
-        else:
-            self.data = sum(self.data)
-
-    def min(self,condition=None):
-        if condition:
-            pattern = r'\s*\((\w+)\)\s*=>\s*(.*)'
-            match = re.search(pattern,condition)
-            if match:
-
-                self.data = eval(f"min([{match[1]} for {match[1]} in self.data if {match[2]} ])")
-        else:
-            self.data = min(self.data)
-
-    def max(self,condition=None):
-        if condition:
-            pattern = r'\s*\((\w+)\)\s*=>\s*(.*)'
-            match = re.search(pattern,condition)
-            if match:
-
-                self.data = eval(f"max([{match[1]} for {match[1]} in self.data if {match[2]} ])")
-        else:
-            self.data = max(self.data)
-
-    def len(self,condition=None):
-        if condition:
-            pattern = r'\s*\((\w+)\)\s*=>\s*(.*)'
-            match = re.search(pattern,condition)
-            if match:
-
-                self.data = eval(f"len([{match[1]} for {match[1]} in self.data if {match[2]} ])")
-        else:
-            self.data = len(self.data)
-
-    def avg(self,condition=None):
-
-        if condition:
-            pattern = r'\s*\((\w+)\)\s*=>\s*(.*)'
-            match = re.search(pattern,condition)
-            if match:
-
-                self.data = eval(f"sum([{match[1]} for {match[1]} in self.data if {match[2]} ])/len([{match[1]} for {match[1]} in self.data if {match[2]} ])")
-        else:
-            self.data = sum(self.data)/len(self.data)
+    def run(self,value,method,condition):
 
 
-    def count(self,args):
+        if method =='min':
 
-        if args:
-            args = eval(args)
-            self.data = self.data.count(args)
-        else:
-            self.data = 0
+            if condition =='':
+                value =min(value)
+            else:
+                pattern = r'\s*\((\w+)\)\s*=>\s*(.*)'
+                match = re.search(pattern,condition)
+                if match:
 
-    def reverse(self, condition):
-        if condition:
-            pass
-        else:
-            self.data.reverse()
-
-    def index(self,args):
-
-        args = eval(args)
-        self.data = self.data.index(args)
-
-    def set(self, condition):
-        if condition:
-            pass
-        else:
-
-            self.data = set(self.data)
-
-    def distinct(self,condition):
-        if condition:
-            pass
-        else:
-            self.data = list(set(self.data))
-
-    def map(self,condition):
+                    value = eval(f"min([{match[1]} for {match[1]} in value if {match[2]} ])")
 
 
-        if condition:
+
+        return self.go_next.run(value,method,condition)
+
+class Max:
+
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def run(self,value,method,condition):
+
+
+        if method =='max':
+
+            if condition =='':
+                value =max(value)
+            else:
+                pattern = r'\s*\((\w+)\)\s*=>\s*(.*)'
+                match = re.search(pattern,condition)
+                if match:
+
+                    value = eval(f"max([{match[1]} for {match[1]} in value if {match[2]} ])")
+
+
+
+        return self.go_next.run(value,method,condition)
+
+class Len:
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def run(self,value,method,condition):
+
+
+        if method =='len':
+
+            if condition =='':
+                value =len(value)
+            else:
+
+                pattern = r'\s*\((\w+)\)\s*=>\s*(.*)'
+                match = re.search(pattern,condition)
+                if match:
+                    value= eval(f"len([{match[1]} for {match[1]} in value if {match[2]} ])")
+
+
+        return self.go_next.run(value,method,condition)
+
+class Avg:
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def run(self,value,method,condition):
+
+
+        if method =='avg':
+
+            if condition =='':
+                value =sum(value)/len(value)
+            else:
+
+                pattern = r'\s*\((\w+)\)\s*=>\s*(.*)'
+                match = re.search(pattern,condition)
+                if match:
+                    value= eval(f"sum([{match[1]} for {match[1]} in value if {match[2]} ])/len([{match[1]} for {match[1]} in value if {match[2]} ])")
+
+
+        return self.go_next.run(value,method,condition)
+class Len:
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def run(self,value,method,condition):
+
+
+        if method =='len':
+
+            if condition =='':
+                value =len(value)
+            else:
+                pattern = r'\s*\((\w+)\)\s*=>\s*(.*)'
+                match = re.search(pattern,condition)
+                if match:
+                    value= eval(f"len([{match[1]} for {match[1]} in value if {match[2]} ])")
+
+
+
+
+
+        return self.go_next.run(value,method,condition)
+
+class Count:
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def run(self,value,method,condition):
+
+
+        if method =='count':
+
+            if condition !='':
+                value =value.count(float(condition))
+
+
+
+        return self.go_next.run(value,method,condition)
+
+
+class Reverse:
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def run(self,value,method,condition):
+
+
+        if method =='reverse':
+
+            if condition =='':
+                value =value.reverse()
+
+        return self.go_next.run(value,method,condition)
+class Set:
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def run(self,value,method,condition):
+
+
+        if method =='set':
+
+            if condition =='':
+                value =set(value)
+
+        return self.go_next.run(value,method,condition)
+
+class Distinct:
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def run(self,value,method,condition):
+
+
+        if method =='distinct':
+
+            if condition =='':
+                value =list(set(value))
+
+        return self.go_next.run(value,method,condition)
+
+class Filter:
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def run(self,value,method,condition):
+
+        if method == 'filter':
+
             pattern = r'\s*\(([\w\,]+)\)\s*=>\s*(.*)'
             match = re.search(pattern,condition)
             if match:
-                if type(self.data) == list:
+                event =match[1]
+                condition = match[2]
+                if type(value) == list:
+
                     temp = []
-                    for item in self.data:
-                        exec(f"{match[1]} = {item}")
-                        temp.append(eval(match[2]))
+                    for item in value:
+                        exec(f"{event} = {item}")
+                        filt = eval(f"{condition}")
+                        if filt:
+                            temp.append(item)
 
-                    self.data= temp
 
-                if type(self.data) == set:
+                    value = temp
+
+                if type(value) == set:
+
                     temp = set()
-                    for item in self.data:
-                        exec(f"{match[1]} = {item}")
-                        temp.add(eval(match[2]))
-
-                    self.data= temp
-
-    def slice(self,condition):
-        if len(condition) == 1 :
-            condition = condition+','
-        if condition == '-1':
-            condition = ',,'+condition
-        args = condition.replace(',',':')
-        exec(f"self.data = self.data[{args}]")
+                    for item in value:
+                        exec(f"{event} = {item}")
+                        filt = eval(f"{condition}")
+                        if filt:
+                            temp.add(item)
+                    value = temp
 
 
-    def floor(self,condition):
-
-        if len(condition) ==0:
-
-            self.data = math.floor(self.data)
+            value = eval(f"{value}[{condition}]")
 
 
-    def ceil(self,condition):
+        return self.go_next.run(value,method,condition)
 
-        if len(condition) ==0:
 
-            self.data = math.ceil(self.data)
 
-    def round(self,condition):
+class Slice:
+    def set_next(self,go_next):
+        self.go_next = go_next
 
-        if len(condition) !=0:
+    def run(self,value,method,condition):
 
-            self.data = round(self.data,int(condition))
+        if method == 'slice':
+
+            if len(condition) == 1 :
+                condition = condition+':'
+            if condition == '-1':
+                condition = '::-1'
+            if len(condition)>1:
+                condition = condition.replace(',',':')
+
+            value = eval(f"{value}[{condition}]")
+
+
+        return self.go_next.run(value,method,condition)
+
+
+
+class Ceil:
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def run(self,value,method,condition):
+
+
+        if method =='ceil':
+
+            if condition =='':
+                value =math.ceil(value)
+
+        return self.go_next.run(value,method,condition)
+
+
+
+class Round:
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def run(self,value,method,condition):
+
+
+        if method =='round':
+
+            if condition !='':
+                value =round(value,int(condition))
+
+        return self.go_next.run(value,method,condition)
+
+
+
+
+class Floor:
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def run(self,value,method,condition):
+
+
+        if method =='floor':
+
+            if condition =='':
+                value =math.floor(value)
+
+        return self.go_next.run(value,method,condition)
+
+class Sum:
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def run(self,value,method,condition):
+
+        if method =='sum':
+
+            if condition =='':
+                value =sum(value)
+            else:
+                pattern = r'\s*\((\w+)\)\s*=>\s*(.*)'
+                match = re.search(pattern,condition)
+                if match:
+                    value= eval(f"sum([{match[1]} for {match[1]} in value if {match[2]} ])")
+
+        return self.go_next.run(value,method,condition)
+
+class MethodDefault:
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def run(self,value,method,condition):
+        return value

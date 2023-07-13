@@ -2,6 +2,7 @@ from .reporter.default import Default
 from .reporter.format import Formatter
 from .reporter.script import ScriptEvaluator
 from .reporter.function import FunctionEvaluator
+from .reporter.operation import OperationHandler
 import regex as re
 
 class ReportGenerator:
@@ -10,10 +11,12 @@ class ReportGenerator:
         self.function_evaluate = FunctionEvaluator()
         self.script_evaluate = ScriptEvaluator()
         self.format = Formatter()
+        self.operation = OperationHandler()
         self.default = Default()
 
         self.function_evaluate.set_successor(self.script_evaluate)
-        self.script_evaluate.set_successor(self.format)
+        self.script_evaluate.set_successor(self.operation)
+        self.operation.set_successor(self.format)
         self.format.set_successor(self.default)
 
         self.data = None
