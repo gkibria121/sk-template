@@ -575,5 +575,34 @@ fl= {'ceil-precision': 2}
         expected_report ='Gkibria is'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
+    def test_currency(self):
+        data = {'$x': '10000000'}
+        template = '''{{$x::{'currency' : 'BDT'}}}'''
+        expected_report ='1,00,00,000.0'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x::{'currency' : 'USD'}}}'''
+        expected_report ='10,000,000.0'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x': '10000000.1234'}
+        template = '''{{$x::{'currency' : 'BDT'}}}'''
+        expected_report ='1,00,00,000.12'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x': '10000000.1234'}
+        template = '''{{$x::{'currency' : 'BDT', 'currency_precision' : 3}}}'''
+        expected_report ='1,00,00,000.123'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x': '10000000.1234'}
+        template = '''{{$x::{'currency' : 'USD', 'currency_precision' : 3}}}'''
+        expected_report ='10,000,000.123'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
 if __name__ == '__main__':
     unittest.main()

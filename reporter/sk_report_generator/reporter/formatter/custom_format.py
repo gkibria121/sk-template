@@ -1,4 +1,5 @@
 from .custom_format_functions.floor import Floor
+from .custom_format_functions.currency import Currency
 from .custom_format_functions.round import Round
 from .custom_format_functions.ceil import Ceil
 from .custom_format_functions.str_continue import StrContinue
@@ -20,6 +21,7 @@ class CustomFormat:
 
 
         self.floor = Floor()
+        self.currency = Currency()
         self.ceil = Ceil()
         self.str_continue = StrContinue()
         self.default = Default()
@@ -34,7 +36,8 @@ class CustomFormat:
         self.type = TypeHandler()
 
 
-        self.floor.set_successor(self.round)
+        self.floor.set_successor(self.currency)
+        self.currency.set_successor(self.round)
         self.round.set_successor(self.str_continue)
         self.str_continue.set_successor(self.ceil)
         self.ceil.set_successor(self.default)
@@ -45,10 +48,10 @@ class CustomFormat:
         self.align.set_successor(self.fill)
         self.fill.set_successor(self.grouping_option)
         self.grouping_option.set_successor(self.pad)
-        self.pad.set_successor(self.precision)
-        self.precision.set_successor(self.sign)
+        self.pad.set_successor(self.sign)
         self.sign.set_successor(self.type)
-        self.type.set_successor(self.default)
+        self.type.set_successor(self.precision)
+        self.precision.set_successor(self.default)
 
     def set_process(self,process):
         self.process = process

@@ -3,7 +3,6 @@ from .formatter.process.template_format_process import TemplateFormatProcess
 
 from .formatter.default import Default
 from .formatter.format import Format
-from .formatter.default import Default
 from .formatter.process.format_tag_remove import FormatTagRemover
 import regex as re
 

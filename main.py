@@ -27,9 +27,7 @@ class Controller:
 Controller = Controller()
 
 # data = Controller.get_data(text)
-data = {'$x': '''111112222
-2
-3'''}
-template = '''{{$x.range(3,w)}}'''
+data = {'$x': '10000000.1234'}
+template = '''{{$x::{'currency' : 'BDT', 'currency_precision' : '2'}}} taka'''
 declaration = Controller.get_report(template, data)
 print(declaration)
