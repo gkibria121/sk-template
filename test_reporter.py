@@ -541,6 +541,39 @@ fl= {'ceil-precision': 2}
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
+        template = '''{{$x.capitalize()}}'''
+        expected_report ='Gkibria Is A Great Man'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
 
+        template = '''{{$x.camel()}}'''
+        expected_report ='GkibriaIsAGreatMan'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x.snake()}}'''
+        expected_report ='gkibria_is_a_great_man'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x.range(3,c)}}'''
+        expected_report ='Gki'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x.range(1,2)}}'''
+        expected_report ='k'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x.range(1,2,w)}}'''
+        expected_report ='is '
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x.range(2,w)}}'''
+        expected_report ='Gkibria is'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
 if __name__ == '__main__':
     unittest.main()

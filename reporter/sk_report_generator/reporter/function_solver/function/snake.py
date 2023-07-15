@@ -3,16 +3,17 @@ import math
 
 
 
-class Capitalize:
+class SnakeCase:
     def set_next(self,go_next):
         self.go_next = go_next
 
     def run(self,value,method,condition):
 
 
-        if method =='capitalize':
+        if method =='snake':
 
             if condition =='':
-                value =re.sub(r'\b(\w)',lambda match: match[1].upper(), value)
+                pattern = r'\s+'
+                value =re.sub(pattern,'_' , value.lower())
 
         return self.go_next.run(value,method,condition)

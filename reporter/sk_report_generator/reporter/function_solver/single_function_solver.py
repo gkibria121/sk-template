@@ -16,6 +16,10 @@ from .function.min import Min
 from .function.max import Max
 from .function.count import Count
 from .function.len import Len
+from .function.lower import LowerCase
+from .function.camel import CamelCase
+from .function.snake import SnakeCase
+from .function.range import Range
 
 
 class SingleFunctionSOlver:
@@ -40,6 +44,10 @@ class SingleFunctionSOlver:
         self.max = Max()
         self.min = Min()
         self.len = Len()
+        self.lower = LowerCase()
+        self.camel = CamelCase()
+        self.snake = SnakeCase()
+        self.range = Range()
 
 
 
@@ -49,7 +57,8 @@ class SingleFunctionSOlver:
         self.upper.set_next(self.round)
         self.round.set_next(self.slice)
         self.slice.set_next(self.filter)
-        self.filter.set_next(self.avg)
+        self.slice.set_next(self.lower)
+        self.lower.set_next(self.avg)
         self.avg.set_next(self.distinct)
         self.distinct.set_next(self.reverse)
         self.reverse.set_next(self.max)
@@ -57,7 +66,10 @@ class SingleFunctionSOlver:
         self.min.set_next(self.count)
         self.count.set_next(self.capitalize)
         self.capitalize.set_next(self.len)
-        self.len.set_next(self.set)
+        self.len.set_next(self.camel)
+        self.camel.set_next(self.snake)
+        self.snake.set_next(self.range)
+        self.range.set_next(self.set)
 
         self.set.set_next(self.sum)
         self.sum.set_next(self.default)

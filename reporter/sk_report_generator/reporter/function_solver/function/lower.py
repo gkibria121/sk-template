@@ -3,16 +3,16 @@ import math
 
 
 
-class Capitalize:
+class LowerCase:
     def set_next(self,go_next):
         self.go_next = go_next
 
     def run(self,value,method,condition):
 
 
-        if method =='capitalize':
+        if method =='lower':
 
             if condition =='':
-                value =re.sub(r'\b(\w)',lambda match: match[1].upper(), value)
+                value =value.lower()
 
         return self.go_next.run(value,method,condition)

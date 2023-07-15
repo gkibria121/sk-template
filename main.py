@@ -27,7 +27,9 @@ class Controller:
 Controller = Controller()
 
 # data = Controller.get_data(text)
-data = {'$x': 'gkibria is my name'}
-template = '''{{$x.upper()}}'''
+data = {'$x': '''111112222
+2
+3'''}
+template = '''{{$x.range(3,w)}}'''
 declaration = Controller.get_report(template, data)
 print(declaration)
