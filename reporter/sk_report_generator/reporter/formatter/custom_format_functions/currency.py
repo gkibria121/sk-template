@@ -46,19 +46,21 @@ class BDT:
             int_part = re.search('\d+',value)[0]
             float_match = re.search(r'\.\d'+'{'+f"{precision}"+'}',value)
             float_part = float_match[0] if float_match else '.0'
-
             number_str = str(int_part)[::-1]
             formatted_number = self.get_format.run(number_str)
-
             value =  formatted_number[::-1]+float_part
 
         return self.go_next.run(value,unit,precision)
 
     def set_next(self,go_next):
         self.go_next = go_next
+
+
+
 class Default:
     def run(self,value,unit):
         return value
+
 
 class GetBDTFormat:
 

@@ -627,6 +627,51 @@ fl= {'ceil-precision': 2}
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
+        template = '''{{$x::{'datetime' : 'long'}}}'''
+        expected_report ='2023:07:16 08:06:55:261217'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
 
+        template = '''{{$x::{'datetime' : 'mid'}}}'''
+        expected_report ='2023:07:16 08:06 AM'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x::{'datetime' : 'short'}}}'''
+        expected_report ='08:06 AM'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+
+
+        template = '''{{$x::{'datetime' : 'long' ,'datetime_mode' : 24}}}'''
+        expected_report ='2023:07:16 08:06:55:261217'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x::{'datetime' : 'mid' ,'datetime_mode' : 24}}}'''
+        expected_report ='2023:07:16 08:06:55'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x::{'datetime' : 'short','datetime_mode' : 24}}}'''
+        expected_report ='08:06:55'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x::{'datetime' : 'long' ,'datetime_mode' : 12}}}'''
+        expected_report ='2023:07:16 08:06:55:261217'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x::{'datetime' : 'mid' ,'datetime_mode' : 12}}}'''
+        expected_report ='2023:07:16 08:06 AM'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x::{'datetime' : 'short','datetime_mode' : 12}}}'''
+        expected_report ='08:06 AM'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
 if __name__ == '__main__':
     unittest.main()

@@ -28,6 +28,6 @@ Controller = Controller()
 
 # data = Controller.get_data(text)
 data = {'$x': '1689473215.2612174'}
-template = '''{{$x::{'datetime' : '%H:%M:%S.%f','time_precision' : 3}}}'''
+template = '''{{$x::{'datetime' : 'short', 'datetime_mode' : 12}}}'''
 declaration = Controller.get_report(template, data)
 print(declaration)
