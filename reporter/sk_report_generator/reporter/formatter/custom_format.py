@@ -1,5 +1,6 @@
 from .custom_format_functions.floor import Floor
 from .custom_format_functions.currency import Currency
+from .custom_format_functions.datetime import Time
 from .custom_format_functions.round import Round
 from .custom_format_functions.ceil import Ceil
 from .custom_format_functions.str_continue import StrContinue
@@ -14,6 +15,7 @@ from .json_to_format_spec.type import TypeHandler
 from .process.custom_format_process import CustomFormatProcess
 from .default import Default
 
+
 class CustomFormat:
 
     def __init__(self):
@@ -21,6 +23,7 @@ class CustomFormat:
 
 
         self.floor = Floor()
+        self.time = Time()
         self.currency = Currency()
         self.ceil = Ceil()
         self.str_continue = StrContinue()
@@ -36,7 +39,8 @@ class CustomFormat:
         self.type = TypeHandler()
 
 
-        self.floor.set_successor(self.currency)
+        self.floor.set_successor(self.time)
+        self.time.set_successor(self.currency)
         self.currency.set_successor(self.round)
         self.round.set_successor(self.str_continue)
         self.str_continue.set_successor(self.ceil)

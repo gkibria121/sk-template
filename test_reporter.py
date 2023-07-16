@@ -604,5 +604,29 @@ fl= {'ceil-precision': 2}
         expected_report ='10,000,000.123'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
+
+
+        data = {'$x': '1689473215.2612174'}
+        template = '''{{$x::{'datetime' : '%Y-%m-%d'}}}'''
+        expected_report ='2023-07-16'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x::{'datetime' : '%H:%M:%S'}}}'''
+        expected_report ='08:06:55'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x::{'datetime' : '%H:%M:%S:%f'}}}'''
+        expected_report ='08:06:55:261217'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        template = '''{{$x::{'datetime' : '%H:%M:%S:%f','time_precision' : 3}}}'''
+        expected_report ='08:06:55:261'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+
 if __name__ == '__main__':
     unittest.main()
