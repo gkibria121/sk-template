@@ -9,7 +9,10 @@ from .formatter.pad import PadHandler
 from .formatter.precision import PrecisionHandler
 from .formatter.sign import SignHandler
 from .formatter.type import TypeHandler
-from .formatter.default import Default
+
+from .formatter.default import DefaultFormat
+from .formatter.default import DefaultHandle
+
 import regex as re
 
 
@@ -18,7 +21,8 @@ class Formatter(IReporter):
         self.successor = None
         self.floor = Floor()
         self.ceil = Ceil()
-        self.default = Default()
+        self.default_handle = DefaultHandle()
+        self.default_format = DefaultFormat()
         self.width_handler = WidthHandler()
         self.align = AlignHandler()
         self.fill = FillHandler()
@@ -64,7 +68,7 @@ class Formatter(IReporter):
     def set_successor(self, successor):
         self.successor = successor
         self.floor.set_successor(self.ceil)
-        self.ceil.set_successor(self.default)
+        self.ceil.set_successor(self.default_format)
 
         self.width_handler.set_successor(self.align)
         self.align.set_successor(self.fill)
@@ -73,7 +77,7 @@ class Formatter(IReporter):
         self.pad.set_successor(self.precision)
         self.precision.set_successor(self.sign)
         self.sign.set_successor(self.type)
-        self.type.set_successor(self.default)
+        self.type.set_successor(self.default_handle)
 
     def set_data(self, data):
         pass
