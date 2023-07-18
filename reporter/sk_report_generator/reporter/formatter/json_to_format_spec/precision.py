@@ -9,10 +9,11 @@ class PrecisionHandler(IFormatHandler):
 
     def handle(self, value, condition, format_specs, format_pattern):
         if 'precision' in format_specs:
-            format_pattern = re.sub(r'\{precision\}', str(format_specs['precision']), format_pattern)
-            del format_specs['precision']
-        else:
-            format_pattern = re.sub(r'\{precision\}', '', format_pattern)
+            if condition == None:
+
+                format_pattern = re.sub(r'\{precision\}', str(format_specs['precision']), format_pattern)
+                del format_specs['precision']
+        format_pattern = re.sub(r'\{precision\}', '', format_pattern)
 
         return self.successor.handle(value, condition, format_specs, format_pattern)
 

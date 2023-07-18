@@ -16,7 +16,7 @@ class ScriptRunner:
         sys.stdout = output_stream
         exec(code_string)
         sys.stdout = sys.__stdout__
-        captured_output = output_stream.getvalue().strip()
+        captured_output = output_stream.getvalue()
 
         return template_script, captured_output
 

@@ -1,7 +1,7 @@
-from sk_calculator import Calculator
-from sk_variable_handler.variable_handler import VariableHandler
+from calculator.sk_calculator import Calculator
+from variable.sk_variable_handler.variable_handler import VariableHandler
 from reporter.sk_report_generator import ReportGenerator
-from sk_declaration import DeclarationGenerator
+from declaration.sk_declaration import DeclarationGenerator
 
 
 class Controller:
@@ -27,7 +27,10 @@ class Controller:
 Controller = Controller()
 
 # data = Controller.get_data(text)
-data = {'$x': '1689473215.2612174'}
-template = '''{{$x::{'datetime' : 'short', 'datetime_mode' : 12}}}'''
+data = {'$x': {'name' : 'gkibria','age' : 24}}
+template = '''{{$x.age:c((x)=>type(x)==int),c2}}
+<format>
+c2 = {'align' : 'right', 'width' : 10}
+</format>'''
 declaration = Controller.get_report(template, data)
 print(declaration)

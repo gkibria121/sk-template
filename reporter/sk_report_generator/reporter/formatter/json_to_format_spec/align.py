@@ -8,17 +8,17 @@ class AlignHandler(IFormatHandler):
 
     def handle(self, value, condition, format_specs, format_pattern):
         if 'align' in format_specs:
-            align = format_specs['align']
-            if align == 'left':
-                align = '<'
-            if align == 'right':
-                align = '>'
-            if align == 'center':
-                align = '^'
-            format_pattern = re.sub(r'\{align\}', align, format_pattern)
-            del format_specs['align']
-        else:
-            format_pattern = re.sub(r'\{align\}', '', format_pattern)
+            if condition == None:
+                align = format_specs['align']
+                if align == 'left':
+                    align = '<'
+                if align == 'right':
+                    align = '>'
+                if align == 'center':
+                    align = '^'
+                format_pattern = re.sub(r'\{align\}', align, format_pattern)
+                del format_specs['align']
+        format_pattern = re.sub(r'\{align\}', '', format_pattern)
 
         return self.successor.handle(value, condition, format_specs, format_pattern)
 

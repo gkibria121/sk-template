@@ -11,7 +11,7 @@ class Default(IFormatter):
 
     def handle(self, value, condition, format_sepec, format_pattern):
 
-        digit = re.sub(r'[,.]','',value).isdigit()
+        digit = re.sub(r'[,.e\+\-]','',value).isdigit()
         if digit:
             format_pattern = re.sub(r'\{value\}', str(value), format_pattern)
         else:

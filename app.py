@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
-from sk_calculator import Calculator
-from sk_variable_handler.variable_handler import VariableHandler
+from calculator.sk_calculator import Calculator
+from variable.sk_variable_handler.variable_handler import VariableHandler
 from reporter.sk_report_generator import ReportGenerator
-from sk_declaration import DeclarationGenerator
+from declaration.sk_declaration import DeclarationGenerator
 
 
 class TinkerApp(tk.Frame):

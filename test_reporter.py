@@ -1,5 +1,5 @@
 from reporter.sk_report_generator import ReportGenerator
-from sk_calculator import Calculator
+from calculator.sk_calculator import Calculator
 import unittest
 class TestGetValues(unittest.TestCase):
 
@@ -196,12 +196,12 @@ class TestGetValues(unittest.TestCase):
     def test_scripts(self):
         data = {'$table': [{'id': 1, 'first_name': 'John', 'last_name': 'Doe', 'age': 30, 'department': 'Sales', 'salary': 50000.0, 'hire_date': '2020-01-15'}, {'id': 2, 'first_name': 'Jane', 'last_name': 'Smith', 'age': 35, 'department': 'HR', 'salary': 60000.0, 'hire_date': '2019-05-20'}, {'id': 3, 'first_name': 'Michael', 'last_name': 'Johnson', 'age': 28, 'department': 'IT', 'salary': 55000.0, 'hire_date': '2021-03-10'}, {'id': 4, 'first_name': 'Sarah', 'last_name': 'Williams', 'age': 32, 'department': 'Marketing', 'salary': 58000.0, 'hire_date': '2018-09-01'}, {'id': 5, 'first_name': 'David', 'last_name': 'Brown', 'age': 29, 'department': 'Finance', 'salary': 52000.0, 'hire_date': '2022-02-28'}]}
         template = '''<><<{{$table[0].id}}>> </>'''
-        expected_report = '''1'''
+        expected_report = '''1\n'''
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
         template = '''<><<{{$table[0].first_name}}>></>'''
-        expected_report = '''John'''
+        expected_report = '''John\n'''
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
@@ -209,7 +209,7 @@ class TestGetValues(unittest.TestCase):
 for item in {{$table}}:
     <<{item.id}>>
         </>'''
-        expected_report ='1\n2\n3\n4\n5'
+        expected_report ='1\n2\n3\n4\n5\n'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
@@ -278,7 +278,7 @@ for item in {{$table}}:
 for key,value in {{$person}}.items():
     <<{key:<10} : {value:<10}>>
 </>'''
-        expected_report ='name       : kibria    \nage        : 23        \ncity       : Dhaka     \ncountry    : Bangladesh'
+        expected_report ='name       : kibria    \nage        : 23        \ncity       : Dhaka     \ncountry    : Bangladesh\n'
         report = self.reporter.generate_report(template, data)
         self.assertEqual(report, expected_report)
 
@@ -575,6 +575,7 @@ fl= {'ceil-precision': 2}
         expected_report ='Gkibria is'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
+
     def test_currency(self):
         data = {'$x': '10000000'}
         template = '''{{$x::{'currency' : 'BDT'}}}'''
@@ -673,5 +674,48 @@ fl= {'ceil-precision': 2}
         expected_report ='08:06 AM'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
+
+    def test_scientific_notation(self):
+        data = {'$x': '10000000'}
+        template = '''{{$x::{'type' : 'e','precision' : '.2'}}}'''
+        expected_report ='1.00e+07'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+    def test_condition(self):
+
+        data = {'$x': {'name' : 'gkibria','age' : 24}}
+        template = '''{{$x.age:c((x)=>type(x)==int),c2}}<format>
+        c2 = {'align' : 'right', 'width' : 10}
+        </format>'''
+        expected_report ='        24'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x': {'name' : 'gkibria','age' : 24}}
+        template = '''{{$x.age:c((x)=>x>20),c2}}<format>
+        c2 = {'align' : 'right', 'width' : 10}
+        </format>'''
+        expected_report ='        24'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x': {'name' : 'gkibria','age' : 24}}
+        template = '''{{$x.name:c((x)=>type(x)==str),c2}}<format>
+        c2 = {'align' : 'right', 'width' : 10}
+        </format>'''
+        expected_report ='   gkibria'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+        data = {'$x': {'name' : 'gkibria','age' : 24}}
+        template = '''{{$x.name:c((x)=>x==24),c2}}<format>
+        c2 = {'align' : 'right', 'width' : 10}
+        </format>'''
+        expected_report ='gkibria'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+
 if __name__ == '__main__':
     unittest.main()
