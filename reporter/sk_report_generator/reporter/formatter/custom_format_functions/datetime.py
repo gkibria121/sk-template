@@ -32,7 +32,9 @@ class LongDate:
 
     def run(self,value,format_sepec):
         if format_sepec['datetime'] =='long':
-            formatted_datetime = datetime.datetime.fromtimestamp(value).strftime('%Y:%m:%d %H:%M:%S:%f')
+            mask = '%Y:%m:%d %I:%M %p' if 'datetime_mode'  in format_sepec and  format_sepec['datetime_mode']==12 else '%Y:%m:%d %H:%M:%S:%f'
+
+            formatted_datetime = datetime.datetime.fromtimestamp(value).strftime(mask)
             value = formatted_datetime
 
         return self.go_next.run(value,format_sepec)

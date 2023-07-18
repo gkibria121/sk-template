@@ -36,6 +36,9 @@ class Formatter(IReporter):
         self.successor = successor
 
 
+
+
+
     def set_data(self, data):
         pass
 

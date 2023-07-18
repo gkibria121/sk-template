@@ -27,10 +27,7 @@ class Controller:
 Controller = Controller()
 
 # data = Controller.get_data(text)
-data = {'$x': {'name' : 'gkibria','age' : 24}}
-template = '''{{$x.age:c((x)=>type(x)==int),c2}}
-<format>
-c2 = {'align' : 'right', 'width' : 10}
-</format>'''
+data = {'$x': 'gkibria'}
+template = '''{{$x::{'align' : 'right' , 'width' : 20}}}'''
 declaration = Controller.get_report(template, data)
 print(declaration)
