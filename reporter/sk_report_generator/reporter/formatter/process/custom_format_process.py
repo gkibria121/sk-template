@@ -18,6 +18,8 @@ class CustomFormatProcess:
             condition =self.get_condition.run(value,condition[2])
 
             format_spec_list = matches[1:]
+        else:
+            condition = True
         for key in format_spec_list:
             format_specs.update(format_class_list[key])
 
@@ -29,9 +31,6 @@ class GetCondition:
 
         match = re.search(pattern,condition)
 
-        if not match:
-            return None
-
         try:
             exec(f'{match[1]} = {value}')
         except NameError:
@@ -39,9 +38,6 @@ class GetCondition:
 
 
         if eval(f'{match[2]}'):
-            return None
-        else:
             return True
 
-
-        return ''
+        return False

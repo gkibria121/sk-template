@@ -719,7 +719,36 @@ fl= {'ceil-significance': 2}
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
+    def test_condition_format(self):
 
+        data = {'$x': 40.6}
+        template = '''{{$x:c((x)=>x!=40.6),c2,fl}}
+<format>
+c2 = {'align': 'center','width': 10, 'fill' : 0}
+fl= {'floor-significance': 2}
+</format>'''
+        expected_report ='40.6\n'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+        data = {'$x': 40.6}
+        template = '''{{$x:c((x)=>x!=40.6),c2,fl}}
+<format>
+c2 = {'align': 'center','width': 10, 'fill' : 0}
+fl= {'ceil-significance': 2}
+</format>'''
+        expected_report ='40.6\n'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
+
+    def test_mask(self):
+
+        data = {'$x': 1234567890}
+        template = '''{{$x:c2}}<format>
+        c2 = {'mask' : '###,##,##,###'}
+        </format>'''
+        expected_report ='123,45,67,890'
+        report =self.reporter.generate_report(template,data)
+        self.assertEqual(report,expected_report)
 
 if __name__ == '__main__':
     unittest.main()

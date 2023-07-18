@@ -6,10 +6,10 @@ class Default(IFormatter):
     def __init__(self):
         self.value = None
 
-    def format(self, value, condition, format_sepec, format_pattern=''):
+    def format(self, value, format_sepec, format_pattern=''):
         return value
 
-    def handle(self, value, condition, format_sepec, format_pattern):
+    def handle(self, value, format_sepec, format_pattern):
 
         digit = re.sub(r'[,.e\+\-]','',value).isdigit()
         if digit:

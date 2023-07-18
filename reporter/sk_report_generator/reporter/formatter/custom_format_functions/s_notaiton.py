@@ -8,13 +8,12 @@ class ScientificNotation(IFormatter):
 
     def format(self,value,condition,format_sepec):
         if 'scientific_notation' in format_sepec:
-            if condition == None:
-                if format_sepec['scientific_notation'] == True:
-                    value = float(value)
-                    value = format(value,'e')
-                if format_sepec['scientific_notation'] == False:
-                    value = float(value)
-                    value = format(value,'f')
+            if format_sepec['scientific_notation'] == True:
+                value = float(value)
+                value = format(value,'e')
+            if format_sepec['scientific_notation'] == False:
+                value = float(value)
+                value = format(value,'f')
 
         if 'scientific_precision' in format_sepec:
 

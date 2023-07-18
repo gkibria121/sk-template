@@ -1,4 +1,5 @@
 from .custom_format_functions.floor import Floor
+from .custom_format_functions.mask import Mask
 from .custom_format_functions.currency import Currency
 from .custom_format_functions.datetime import Time
 from .custom_format_functions.round import Round
@@ -37,13 +38,15 @@ class CustomFormat:
         self.sign = SignHandler()
         self.round = Round()
         self.type = TypeHandler()
+        self.mask = Mask()
 
 
         self.floor.set_successor(self.time)
         self.time.set_successor(self.currency)
         self.currency.set_successor(self.round)
         self.round.set_successor(self.str_continue)
-        self.str_continue.set_successor(self.ceil)
+        self.str_continue.set_successor(self.mask)
+        self.mask.set_successor(self.ceil)
         self.ceil.set_successor(self.default)
 
 
@@ -64,9 +67,10 @@ class CustomFormat:
 
         if len(format_class_list)!=0:
             condition, format_specs = self.custom_format_process.run(value,format_spec, format_class_list)
-            format_pattern = '{{value}:{fill}{align}{sign}{pad}{width}{grouping_option}{precision}{base}}'
-            default_format_value, format_specs = self.width_handler.handle(value, condition, format_specs,format_pattern)
-            value = self.floor.format(default_format_value, condition, format_specs)
+            if condition:
+                format_pattern = '{{value}:{fill}{align}{sign}{pad}{width}{grouping_option}{precision}{base}}'
+                default_format_value, format_specs = self.width_handler.handle(value, format_specs,format_pattern)
+                value = self.floor.format(default_format_value, format_specs)
 
 
 

@@ -26,8 +26,9 @@ class Controller:
 
 Controller = Controller()
 
-# data = Controller.get_data(text)
-data = {'$x': 'gkibria'}
-template = '''{{$x::{'align' : 'right' , 'width' : 20}}}'''
+data = {'$x': 1234567890}
+template = '''{{$x:c2}}<format>
+c2 = {'mask' : '###,##,##,###'}
+</format>'''
 declaration = Controller.get_report(template, data)
 print(declaration)

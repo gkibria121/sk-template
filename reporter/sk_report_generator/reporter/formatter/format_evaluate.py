@@ -3,7 +3,7 @@ from .default_format import DefaultFormat
 from .custom_format import CustomFormat
 from .format_default import FormatDefault
 from .process.template_to_format_list import TemplateToFormatList
-class Format:
+class FormatEvaluate:
 
 
     def __init__(self):

@@ -11,14 +11,13 @@ class Currency(IFormatter):
 
 
 
-    def format(self,value,condition,format_sepec):
+    def format(self,value,format_sepec):
 
         if 'currency' in format_sepec:
-            if condition == None:
-                precision = format_sepec['currency_precision'] if 'currency_precision' in format_sepec else '2'
-                value = self.bdt.run(value,format_sepec['currency'],precision)
+            precision = format_sepec['currency_precision'] if 'currency_precision' in format_sepec else '2'
+            value = self.bdt.run(value,format_sepec['currency'],precision)
 
-        return self.successor.format(value,condition,format_sepec)
+        return self.successor.format(value,format_sepec)
 
     def set_successor(self,successor):
         self.successor= successor
