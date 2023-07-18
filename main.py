@@ -26,7 +26,7 @@ class Controller:
 
 Controller = Controller()
 
-data = {'$x': 'gkibria is my name'}
+data = {'$x': 1234567890.1234567890}
 template = '''{{$x:c2}}<format>
 c2 = {'mask' : '########,###,###,####'}
 </format>'''
