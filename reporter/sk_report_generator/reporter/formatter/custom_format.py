@@ -64,7 +64,7 @@ class CustomFormat:
 
         if len(format_class_list)!=0:
             condition, format_specs = self.custom_format_process.run(value,format_spec, format_class_list)
-            format_pattern = '{{value}:{fill}{align}{sign}{pad}{width}{grouping_option}{precision}{type}}'
+            format_pattern = '{{value}:{fill}{align}{sign}{pad}{width}{grouping_option}{precision}{base}}'
             default_format_value, format_specs = self.width_handler.handle(value, condition, format_specs,format_pattern)
             value = self.floor.format(default_format_value, condition, format_specs)
 

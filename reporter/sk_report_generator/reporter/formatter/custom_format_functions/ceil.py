@@ -7,9 +7,9 @@ class Ceil(IFormatter):
         self.value = None
 
     def format(self, value, condition, format_sepec):
-        if 'ceil-precision' in format_sepec:
+        if 'ceil-significance' in format_sepec:
             if condition is None:
-                precision = float(format_sepec['ceil-precision'])
+                precision = float(format_sepec['ceil-significance'])
                 value = float(value)
                 mod = value % precision
 

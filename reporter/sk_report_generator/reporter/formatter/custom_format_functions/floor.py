@@ -7,9 +7,9 @@ class Floor(IFormatter):
 
 
     def format(self,value,condition,format_sepec):
-        if 'floor-precision' in format_sepec:
+        if 'floor-significance' in format_sepec:
             if condition == None:
-                precision = float(format_sepec['floor-precision'])
+                precision = float(format_sepec['floor-significance'])
                 value = float(value)
                 mod = value%precision
 

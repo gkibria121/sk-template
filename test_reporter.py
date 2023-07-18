@@ -467,7 +467,7 @@ Kibria'''
         template = '''{{$x:c2,fl}}
 <format>
 c2 = {'align': 'center','width': 10, 'fill' : 0}
-fl= {'floor-precision': 2}
+fl= {'floor-significance': 2}
 </format>'''
         expected_report ='40.0\n'
         report =self.reporter.generate_report(template,data)
@@ -476,7 +476,7 @@ fl= {'floor-precision': 2}
         data = {'$x': 41.9}
         template = '''{{$x:fl}}
 <format>
-fl= {'floor-precision': 2}
+fl= {'floor-significance': 2}
 </format>'''
         expected_report ='40.0\n'
         report =self.reporter.generate_report(template,data)
@@ -486,7 +486,7 @@ fl= {'floor-precision': 2}
         template = '''{{$x:c2,fl}}
 <format>
 c2 = {'align': 'center','width': 10, 'fill' : 0}
-fl= {'ceil-precision': 2}
+fl= {'ceil-significance': 2}
 </format>'''
         expected_report ='42.0\n'
         report =self.reporter.generate_report(template,data)
@@ -495,7 +495,7 @@ fl= {'ceil-precision': 2}
         data = {'$x': 41.9}
         template = '''{{$x:fl}}
 <format>
-fl= {'ceil-precision': 2}
+fl= {'ceil-significance': 2}
 </format>'''
         expected_report ='42.0\n'
         report =self.reporter.generate_report(template,data)
@@ -503,7 +503,7 @@ fl= {'ceil-precision': 2}
 
         data = {'$x': 40.6}
         template = '''{{$x::{'align': 'left','fill' : '#','width' : 10}}}
-{{$x::{'align': 'right','fill' : '0','width' : 10,'floor-precision' : 2}}}
+{{$x::{'align': 'right','fill' : '0','width' : 10,'floor-significance' : 2}}}
 '''
         expected_report ='40.6######\n40.0\n'
         report =self.reporter.generate_report(template,data)
@@ -678,7 +678,7 @@ fl= {'ceil-precision': 2}
 
     def test_scientific_notation(self):
         data = {'$x': '10000000'}
-        template = '''{{$x::{'type' : 'e','precision' : '.2'}}}'''
+        template = '''{{$x::{'base' : 'e','precision' : '.2'}}}'''
         expected_report ='1.00e+07'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)

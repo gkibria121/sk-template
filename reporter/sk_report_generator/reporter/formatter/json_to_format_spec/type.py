@@ -8,11 +8,11 @@ class TypeHandler(IFormatHandler):
         self.successor = None
 
     def handle(self, value, condition, format_specs, format_pattern):
-        if 'type' in format_specs:
+        if 'base' in format_specs:
             if condition==None:
-                format_pattern = re.sub(r'\{type\}', str(format_specs['type']), format_pattern)
-                del format_specs['type']
-        format_pattern = re.sub(r'\{type\}', '', format_pattern)
+                format_pattern = re.sub(r'\{base\}', str(format_specs['base']), format_pattern)
+                del format_specs['base']
+        format_pattern = re.sub(r'\{base\}', '', format_pattern)
 
         return self.successor.handle(value, condition, format_specs, format_pattern)
 
