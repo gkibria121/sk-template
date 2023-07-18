@@ -26,9 +26,9 @@ class Controller:
 
 Controller = Controller()
 
-data = {'$x': 1234567890}
+data = {'$x': 'gkibria is my name'}
 template = '''{{$x:c2}}<format>
-c2 = {'mask' : '###,##,##,###'}
+c2 = {'mask' : '########,###,###,####'}
 </format>'''
 declaration = Controller.get_report(template, data)
 print(declaration)
