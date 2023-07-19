@@ -11,12 +11,12 @@ class CustomFunction(IFunction):
     def evaluate(self,match):
         if match[0] in self.functions:
             try:
-                function = eval(f'{match[0]}')
-                value = eval(f'{match[1]}')
-                result = function(value)
-                return round(deg,9)
-            except ValueError:
-                self.error_handler.set_error(f'Math Error : Math Domain Error at {match[0]}({match[1]})')
+                function = f'{match[0]}'
+                value = f'{match[1]}'
+                result = eval(f'{function}({value})')
+                return result
+            except NameError:
+                self.error_handler.set_error(f'Syntax Error: Function is not defined {match[0]}()')
 
         if(self.error_handler.get_error()):
             return self.error_handler.get_error()

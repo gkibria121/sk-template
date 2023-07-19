@@ -49,7 +49,7 @@ class Validation(IOperation):
 
     def evaluate(self,expression):
 
-        if '[' in expression or '{' in expression:
+        if '[' in str(expression) or '{' in str(expression):
             return expression
 
         self.error_handler.set_expression(expression)

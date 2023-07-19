@@ -18,8 +18,8 @@ class OperatorErrorChecker(IValidation):
 
 
         self.opc1.set_successor(self.opc2)
-        self.opc2.set_successor(self.opc3)
-        self.opc3.set_successor(self.opc4)
+        self.opc2.set_successor(self.opc4)
+##        self.opc3.set_successor(self.opc4)
         self.opc4.set_successor(self.opc5)
         self.opc5.set_successor(self.default)
 

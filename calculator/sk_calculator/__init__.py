@@ -20,6 +20,7 @@ class Calculator:
     def __init__(self):
         self.error_handle = ErrorHandle()
         self.default = Default()
+
         self.division = Division()
         self.power = Power()
         self.mod = Mod()
