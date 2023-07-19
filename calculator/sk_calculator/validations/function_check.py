@@ -6,7 +6,8 @@ class FunctionErrorChecker(IValidation):
 
     def check_error(self, expression):
         self.function_handler = FunctionHandler()
-        self.valid_functions = {key for key, value in vars(self.function_handler).items() if '__' not in key}
+        self.custom_function = self.function_handler.custom.functions
+        self.valid_functions = [key for key, value in vars(self.function_handler).items() if '__' not in key]+self.custom_function
         function_pattern = r'([a-zA-Z]+\d*)(\((?>[^()a-zA-Z]|(?2))*([a-zA-Z]+)?\))'
 
         matches = regex.findall(function_pattern, expression)

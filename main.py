@@ -26,9 +26,11 @@ class Controller:
 
 Controller = Controller()
 
-data = {'$x': 1234567890.1234567890}
-template = '''{{$x:c2}}<format>
-c2 = {'mask' : '########,###,###,####'}
-</format>'''
-declaration = Controller.get_report(template, data)
-print(declaration)
+print(Controller.get_data('x= c1(1+2)'))
+
+##data = {'$x': 1234567890.1234567890}
+##template = '''{{$x:c2}}<format>
+##c2 = {'mask' : '########,###,###,####'}
+##</format>'''
+##declaration = Controller.get_report(template, data)
+##print(declaration)

@@ -14,6 +14,7 @@ from .operations.power import Power
 from .operations.mod import Mod
 
 
+
 class Calculator:
 
     def __init__(self):

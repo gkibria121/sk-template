@@ -22,6 +22,7 @@ from ..function.log import Log
 from ..function.ln import Ln
 from ..function.default import Default
 from ..controller.error import ErrorHandle
+from ..function.custom_function.custom_function import CustomFunction
 
 class FunctionHandler(IOperation):
 
@@ -39,6 +40,7 @@ class FunctionHandler(IOperation):
         self.log = Log()
         self.ln = Ln()
         self.exp = Exp()
+        self.custom = CustomFunction()
 
         ## inverse trigonometric functinos
         self.asin = Asin()
@@ -66,7 +68,8 @@ class FunctionHandler(IOperation):
         self.acos.set_successor(self.atan)
         self.atan.set_successor(self.acosec)
         self.acosec.set_successor(self.asec)
-        self.asec.set_successor(self.acot)
+        self.asec.set_successor(self.custom)
+        self.custom.set_successor(self.acot)
         self.acot.set_successor(self.__default)
 
     def evaluate(self,expression):
@@ -119,6 +122,7 @@ class FunctionHandler(IOperation):
         self.acosec.set_error_handler(self.__error_handler)
         self.asec.set_error_handler(self.__error_handler)
         self.acot.set_error_handler(self.__error_handler)
+        self.custom.set_error_handler(self.__error_handler)
 
     def set_recorder(self,recorder):
 
