@@ -26,11 +26,15 @@ class Controller:
 
 Controller = Controller()
 
-print(Controller.get_data('x= c1(1+2)'))
+##print(Controller.get_data('x= c1(1+2)'))
 
-##data = {'$x': 1234567890.1234567890}
-##template = '''{{$x:c2}}<format>
-##c2 = {'mask' : '########,###,###,####'}
-##</format>'''
-##declaration = Controller.get_report(template, data)
-##print(declaration)
+data = {'$x': 1234567890.1234567890}
+template = '''
+<>
+def run(number):
+    return number
+print(run(1))
+</>
+'''
+declaration = Controller.get_report(template, data)
+print(declaration)
