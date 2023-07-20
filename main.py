@@ -28,10 +28,11 @@ Controller = Controller()
 
 ##print(Controller.get_data('x= c1(1+2)'))
 
-data = {'$x': {'name' : 'kibria','age' : 23 , 'city' : 'Dhaka', 'country'  : 'Bangladesh'}}
+data = {'$x': [1,2,3,4,5,6,7,8]}
 template =  '''
-{{$x.foreach((x,y)=>{
-print(x)
-})}}'''
+ ------------------------------
+|{{$x[0]:^30}}|
+ ------------------------------
+'''
 declaration = Controller.get_report(template, data)
 print(declaration)

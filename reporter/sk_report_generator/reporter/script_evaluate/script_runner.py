@@ -1,7 +1,6 @@
 import io
 import sys
 
-
 class ScriptRunner:
 
     def __init__(self):
