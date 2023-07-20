@@ -13,6 +13,7 @@ class CustomFunction(IFunction):
             try:
                 function = f'{match[0]}'
                 value = f'{match[1]}'
+                exec(self.scripts)
                 result = eval(f'{function}({value})')
                 return result
             except NameError:
@@ -31,3 +32,6 @@ class CustomFunction(IFunction):
 
     def set_error_handler(self,handler):
         self.error_handler = handler
+
+    def set_scripts(self,scripts):
+        self.scripts = scripts

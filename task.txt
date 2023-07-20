@@ -1,0 +1,3 @@
+True|False = valid|invalid, yes|no
+
+json display = foreach,tree,table,table with border

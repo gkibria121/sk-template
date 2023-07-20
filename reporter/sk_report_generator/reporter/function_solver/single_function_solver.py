@@ -20,6 +20,7 @@ from .function.lower import LowerCase
 from .function.camel import CamelCase
 from .function.snake import SnakeCase
 from .function.range import Range
+from .function.foreach import Foreach
 
 
 class SingleFunctionSOlver:
@@ -48,6 +49,7 @@ class SingleFunctionSOlver:
         self.camel = CamelCase()
         self.snake = SnakeCase()
         self.range = Range()
+        self.foreach = Foreach()
 
 
 
@@ -71,7 +73,8 @@ class SingleFunctionSOlver:
         self.snake.set_next(self.range)
         self.range.set_next(self.set)
 
-        self.set.set_next(self.sum)
+        self.set.set_next(self.foreach)
+        self.foreach.set_next(self.sum)
         self.sum.set_next(self.default)
 
 

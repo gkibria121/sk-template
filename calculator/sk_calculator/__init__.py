@@ -87,5 +87,9 @@ class Calculator:
         result = int(self.expression) if str(self.expression).endswith('.0') else self.expression
         return result
 
+    def set_scripts(self,scripts):
+        self.function.set_scripts(scripts)
+
+
 
 __all__ = ['controller', 'function', 'operations', 'process', 'validations', 'Calculator']

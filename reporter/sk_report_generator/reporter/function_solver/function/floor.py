@@ -10,9 +10,9 @@ class Floor:
             if condition =='':
                 value =math.floor(value)
             else:
-                precision = float(condition)
+                significance = float(condition)
                 value = float(value)
-                mod = value % precision
+                mod = value % significance
 
                 if mod == 0:
                     value = str(value)

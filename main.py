@@ -28,13 +28,10 @@ Controller = Controller()
 
 ##print(Controller.get_data('x= c1(1+2)'))
 
-data = {'$x': 1234567890.1234567890}
-template = '''
-<>
-def run(number):
-    return number
-print(run(1))
-</>
-'''
+data = {'$x': {'name' : 'kibria','age' : 23 , 'city' : 'Dhaka', 'country'  : 'Bangladesh'}}
+template =  '''
+{{$x.foreach((x,y)=>{
+print(x)
+})}}'''
 declaration = Controller.get_report(template, data)
 print(declaration)

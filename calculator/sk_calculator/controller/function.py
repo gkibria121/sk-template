@@ -127,5 +127,7 @@ class FunctionHandler(IOperation):
     def set_recorder(self,recorder):
 
             self.__recorder = recorder
+    def set_scripts(self,scripst):
+        self.custom.set_scripts(scripst)
 
 
