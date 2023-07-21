@@ -5,6 +5,7 @@ import sys
 class Foreach:
     def __init__(self):
         self.get_data_from_variable =GetDataFromVariable()
+        self.data = None
     def set_next(self,go_next):
         self.go_next = go_next
 
@@ -20,8 +21,8 @@ class Foreach:
                 match = re.search(pattern,condition)
                 result = ''
 
-                for index,item in enumerate(value):
-                    data = self.get_data_from_variable.run(item,match[1],index)
+                for index,key_value in enumerate(value):
+                    data = self.get_data_from_variable.run(self.data,match[1],key_value,index)
                     template = match[3]
                     report = self.reporter.generate_report(template, data)
                     result = result + report
@@ -36,7 +37,8 @@ class Foreach:
         self.reporter = reporter
 
 
-
+    def set_data(self,data):
+        self.data = data
 
 
 class GetDataFromVariable:
@@ -45,8 +47,10 @@ class GetDataFromVariable:
         pass
 
 
-    def run(self,value,variable,index):
-        return {variable : value, '$index'  : index}
+    def run(self,data,key,value,index):
+        return_value =data
+        return_value.update({key : value, '$index'  : index})
+        return return_value
 
 
 

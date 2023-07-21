@@ -894,7 +894,58 @@ index : 4
 '''
         report =self.reporter.generate_report(template,data)
         self.assertRegex(report,expected_report)
+        data = {'$x':
+            {
+                "name": "Sophia Brown",
+                "age": 20,
+                "gender": "Female",
+                "major": "Psychology",
+                "gpa": 3.9
+            }
+        }
+        template =  '''{{$x.foreach(($key)=>{
+             ------------------------------
+            |{{eval($x.$key)::{'align' : 'center','width' : 30,'end' : ''}'}}|})}}
+             ------------------------------
+'''
 
+        expected_report ='''
+     ------------------------------
+    |         Sophia Brown         |
+     ------------------------------
+    |              20              |
+     ------------------------------
+    |            Female            |
+     ------------------------------
+    |          Psychology          |
+     ------------------------------
+    |             3.9              |
+     ------------------------------'''
+        report =self.reporter.generate_report(template,data)
+        self.assertRegex(report,expected_report)
+
+
+
+        data = {'$x':
+            [
+            {
+                "$z": "Sophia Brown"
+            }
+            ]
+        }
+        template =  '''{{$x.foreach(($key)=>{
+             ------------------------------
+            |{{$key.foreach(($key2)=>{{{eval($key.$key2)}}})::{'align' : 'center','width' : 30,'end' : ''}'}}|})}}
+             ------------------------------
+        '''
+
+        expected_report ='''
+     ------------------------------
+    |         Sophia Brown         |
+     ------------------------------
+'''
+        report =self.reporter.generate_report(template,data)
+        self.assertRegex(report,expected_report)
 
 
 if __name__ == '__main__':

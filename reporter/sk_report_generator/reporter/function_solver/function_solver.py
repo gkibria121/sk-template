@@ -41,7 +41,7 @@ class ProcessFunctionCalling:
         pass
     def run(self,function_calling):
 
-        pattern = r'(?:(?<!:)(?:\.([^\W\d][\w]*))\b(?!\())'
+        pattern = r'(?:(?<!:)(?:\.([^\d][\w]*))\b(?!\())'
         function_calling = re.sub(pattern, lambda match: f'["{match.group(1)}"]', function_calling)
 
         return function_calling

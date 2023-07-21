@@ -1,4 +1,5 @@
 from .custom_format_functions.floor import Floor
+from .custom_format_functions.end import End
 from .custom_format_functions.mask import Mask
 from .custom_format_functions.currency import Currency
 from .custom_format_functions.datetime import Time
@@ -39,6 +40,7 @@ class CustomFormat:
         self.round = Round()
         self.type = TypeHandler()
         self.mask = Mask()
+        self.end = End()
 
 
         self.floor.set_successor(self.time)
@@ -46,7 +48,8 @@ class CustomFormat:
         self.currency.set_successor(self.round)
         self.round.set_successor(self.str_continue)
         self.str_continue.set_successor(self.mask)
-        self.mask.set_successor(self.ceil)
+        self.mask.set_successor(self.end)
+        self.end.set_successor(self.ceil)
         self.ceil.set_successor(self.default)
 
 

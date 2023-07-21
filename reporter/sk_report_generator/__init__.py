@@ -31,6 +31,7 @@ class ReportGenerator:
         self.function_evaluate.set_data(self.data)
         self.script_evaluate.set_data(self.data)
         self.format.set_data(self.data)
+        self.function_evaluate.function_solver.single_obj_solver.foreach.set_data(self.data)
 
     def set_reporter(self,reporter):
         self.function_evaluate.function_solver.single_obj_solver.foreach.set_reporter(reporter)
