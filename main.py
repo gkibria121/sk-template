@@ -17,6 +17,7 @@ class Controller:
         return self.variable.get_result(self.declaration_process.process(declaration_string))
 
     def get_report(self, template, data):
+        self.reporter.set_reporter(self.reporter)
         return self.reporter.generate_report(template, data)
 
     def get_declarations(self, text):
@@ -28,11 +29,21 @@ Controller = Controller()
 
 ##print(Controller.get_data('x= c1(1+2)'))
 
-data = {'$x': [1,2,3,4,5,6,7,8]}
+data = {'$x':
+    {
+        "name": "Sophia Brown",
+        "age": 20,
+        "gender": "Female",
+        "major": "Psychology",
+        "gpa": 3.9
+    }
+}
 template =  '''
- ------------------------------
-|{{$x[0]:^30}}|
- ------------------------------
+{{$x.foreach(($key)=>{
+    ------------------------------
+    |{{$key::{'align' : 'center','width' : 30}}}|
+     ------------------------------
+})}}
 '''
 declaration = Controller.get_report(template, data)
 print(declaration)

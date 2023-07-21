@@ -5,6 +5,9 @@ class TestGetValues(unittest.TestCase):
 
     def setUp(self):
         self.reporter =ReportGenerator()
+        self.reporter.function_evaluate.function_solver.single_obj_solver.foreach.set_reporter(self.reporter)
+
+        self.maxDiff = None
 
 
 
@@ -749,6 +752,150 @@ fl= {'ceil-significance': 2}
         expected_report ='123,45,67,890'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
+
+    def test_foreach(self):
+
+        data = {'$x': [
+            {
+                "name": "John Smith",
+                "age": 20,
+                "gender": "Male",
+                "major": "Computer Science",
+                "gpa": 3.8
+            },
+            {
+                "name": "Emily Johnson",
+                "age": 21,
+                "gender": "Female",
+                "major": "Mechanical Engineering",
+                "gpa": 3.5
+            },
+            {
+                "name": "Michael Williams",
+                "age": 19,
+                "gender": "Male",
+                "major": "Biology",
+                "gpa": 3.2
+            },
+            {
+                "name": "Sophia Brown",
+                "age": 20,
+                "gender": "Female",
+                "major": "Psychology",
+                "gpa": 3.9
+            }
+        ]}
+        template =  '''
+        {{$x.foreach(($y)=>{
+         ------------------------------
+        |{{$y.name:^30}}|
+         ------------------------------
+        })}}'''
+        expected_report ='''
+
+ ------------------------------
+|          John Smith          |
+ ------------------------------
+
+ ------------------------------
+|        Emily Johnson         |
+ ------------------------------
+
+ ------------------------------
+|       Michael Williams       |
+ ------------------------------
+
+ ------------------------------
+|         Sophia Brown         |
+ ------------------------------
+'''
+
+        report =self.reporter.generate_report(template,data)
+        self.assertRegex(report,expected_report)
+        data = {'$x':
+            {
+                "name": "Sophia Brown",
+                "age": 20,
+                "gender": "Female",
+                "major": "Psychology",
+                "gpa": 3.9
+            }
+        }
+        template =  '''
+        {{$x.foreach(($key)=>{
+         ------------------------------
+        |{{$key::{'align' : 'center','width' : 30}}}|
+         ------------------------------
+        })}}
+        '''
+        expected_report ='''
+
+ ------------------------------
+|             name             |
+ ------------------------------
+
+ ------------------------------
+|             age              |
+ ------------------------------
+
+ ------------------------------
+|            gender            |
+ ------------------------------
+
+ ------------------------------
+|            major             |
+ ------------------------------
+
+ ------------------------------
+|             gpa              |
+ ------------------------------
+
+'''
+        report =self.reporter.generate_report(template,data)
+        self.assertRegex(report,expected_report)
+        template =  '''
+        {{$x.foreach(($key)=>{
+        index : {{$index}}
+            ------------------------------
+            |{{$key::{'align' : 'center','width' : 30}}}|
+             ------------------------------
+        })}}
+        '''
+        expected_report ='''
+
+
+
+index : 0
+    ------------------------------
+    |             name             |
+     ------------------------------
+
+index : 1
+    ------------------------------
+    |             age              |
+     ------------------------------
+
+index : 2
+    ------------------------------
+    |            gender            |
+     ------------------------------
+
+index : 3
+    ------------------------------
+    |            major             |
+     ------------------------------
+
+index : 4
+    ------------------------------
+    |             gpa              |
+     ------------------------------
+
+
+'''
+        report =self.reporter.generate_report(template,data)
+        self.assertRegex(report,expected_report)
+
+
 
 if __name__ == '__main__':
     unittest.main()
