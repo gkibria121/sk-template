@@ -29,17 +29,21 @@ Controller = Controller()
 
 ##print(Controller.get_data('x= c1(1+2)'))
 
-data = {'$x':
-    [
-    {
-        "$z": "Sophia Brown"
-    }
-    ]
-}
-template =  '''{{$x.foreach(($key)=>{
-     ------------------------------
-    |{{$key.foreach(($key2)=>{{{eval($key.$key2)}}})::{'align' : 'center','width' : 30,'end' : ''}'}}|})}}
-     ------------------------------
-'''
+data = {'$x': [
+             [
+            {
+                "name": "John Smith",
+                "age": 20,
+                "gender": "Male",
+                "major": "Computer Science",
+                "gpa": 3.8
+            }
+            ]
+        ]}
+template =  '''
+{{$x.foreach(($y)=>{
+{{$y.foreach(($z)=>{
+{{$z.foreach(($a)=>{
+{{$a}}})}}})}}})}}'''
 declaration = Controller.get_report(template, data)
 print(declaration)
