@@ -3,7 +3,7 @@ from variable.sk_variable_handler.variable_handler import VariableHandler
 from reporter.sk_report_generator import ReportGenerator
 from declaration.sk_declaration import DeclarationGenerator
 
-
+import json
 class Controller:
 
     def __init__(self):
@@ -29,21 +29,8 @@ Controller = Controller()
 
 ##print(Controller.get_data('x= c1(1+2)'))
 
-data = {'$x': [
-             [
-            {
-                "name": "John Smith",
-                "age": 20,
-                "gender": "Male",
-                "major": "Computer Science",
-                "gpa": 3.8
-            }
-            ]
-        ]}
-template =  '''
-{{$x.foreach(($y)=>{
-{{$y.foreach(($z)=>{
-{{$z.foreach(($a)=>{
-{{$a}}})}}})}}})}}'''
+data ='{"$x": 1}'
+data = json.loads(data)
+template = '''{{$x}}'''
 declaration = Controller.get_report(template, data)
 print(declaration)

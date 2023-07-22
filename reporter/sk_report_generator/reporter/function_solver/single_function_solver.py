@@ -123,7 +123,19 @@ class GetIndexValue:
 
     def run(self,value,index):
         if type(value) == list:
-            return eval(f"{value}{index}")
+            value = value
+            index_list = re.split(r'(?<=[\]])(?=[\[])',index)
+
+            for index in index_list:
+                if re.sub('[\[\]\"]','',index).isdigit() or type(value)==dict:
+                    value = eval(f"{value}{index}")
+                else :
+                    value = eval(f'[item{index} for index,item in enumerate(value)]')
+
+
+            return value
+
+
         if type(value) == dict:
             indexd = re.sub(r'[\[\]]','',index)
             if indexd.isdigit():

@@ -31,6 +31,7 @@ class FunctionSolver:
         self.single_obj_solver.set_data(data)
 
     def get_obj(self, name):
+        print(name)
 
         return self.data[name]
 
