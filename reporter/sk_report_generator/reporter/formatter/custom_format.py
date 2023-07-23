@@ -16,7 +16,8 @@ from .json_to_format_spec.precision import PrecisionHandler
 from .json_to_format_spec.sign import SignHandler
 from .json_to_format_spec.type import TypeHandler
 from .process.custom_format_process import CustomFormatProcess
-from .default import Default
+from .custom_format_functions.default import DefaultCustomFormat
+from .json_to_format_spec.dufault import DefaultFormat
 
 
 class CustomFormat:
@@ -30,7 +31,8 @@ class CustomFormat:
         self.currency = Currency()
         self.ceil = Ceil()
         self.str_continue = StrContinue()
-        self.default = Default()
+        self.default1 = DefaultCustomFormat()
+        self.default2 = DefaultFormat()
         self.width_handler = WidthHandler()
         self.align = AlignHandler()
         self.fill = FillHandler()
@@ -54,7 +56,7 @@ class CustomFormat:
         self.mask.set_successor(self.bool)
         self.bool.set_successor(self.end)
         self.end.set_successor(self.ceil)
-        self.ceil.set_successor(self.default)
+        self.ceil.set_successor(self.default1)
 
 
 
@@ -65,7 +67,7 @@ class CustomFormat:
         self.pad.set_successor(self.sign)
         self.sign.set_successor(self.type)
         self.type.set_successor(self.precision)
-        self.precision.set_successor(self.default)
+        self.precision.set_successor(self.default2)
 
     def set_process(self,process):
         self.process = process

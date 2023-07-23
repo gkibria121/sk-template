@@ -1,5 +1,5 @@
-from ..sk_variable_handler.variable_handler import VariableHandler
-from ..calculator.sk_calculator import Calculator
+from sk_variable_handler.variable_handler import VariableHandler
+from sk_calculator import Calculator
 import unittest
 
 

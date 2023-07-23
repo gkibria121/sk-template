@@ -1,13 +1,10 @@
-from ..base import IFormatter
+from ..base import IFormatter2
 import regex as re
 
 
-class Default(IFormatter):
+class DefaultFormat(IFormatter2):
     def __init__(self):
         self.value = None
-
-    def format(self, value, format_sepec, format_pattern=''):
-        return value
 
     def handle(self, value, format_sepec, format_pattern):
 

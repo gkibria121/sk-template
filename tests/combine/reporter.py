@@ -1,5 +1,5 @@
-from ..reporter.sk_report_generator import ReportGenerator
-from ..calculator.sk_calculator import Calculator
+from sk_report_generator import ReportGenerator
+from calculator.sk_calculator import Calculator
 import unittest
 class TestGetValues(unittest.TestCase):
 

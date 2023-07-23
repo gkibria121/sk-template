@@ -1,6 +1,5 @@
 from .base import IReporter
 from .formatter.process.template_format_process import TemplateFormatProcess
-from .formatter.default import Default
 from .formatter.format_evaluate import FormatEvaluate
 from .formatter.process.format_tag_remove import FormatTagRemover
 import regex as re
@@ -9,7 +8,7 @@ import regex as re
 class Formatter(IReporter):
     def __init__(self):
         self.successor = None
-        self.default = Default()
+
         self.template_process = TemplateFormatProcess()
         self.remove_format_tag = FormatTagRemover()
         self.format = FormatEvaluate()
