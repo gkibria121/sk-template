@@ -24,9 +24,9 @@ class FloorSignificance:
         if 'floor-significance' in format_sepec:
             precision = float(format_sepec['floor-significance'])
             value = float(value)
-            mod = value%precision
+            mod = round(value%precision,9)
 
-            if mod ==0:
+            if mod ==0 or mod==precision:
                 value = str(value)
             else:
                 value = str(value-mod)

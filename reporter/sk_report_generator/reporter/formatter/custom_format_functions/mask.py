@@ -9,6 +9,8 @@ class Mask(IFormatter):
     def format(self,value,format_sepec):
 
         if 'mask' in format_sepec:
+            value = str(value)
+
             mask = format_sepec['mask']
             pattern,sub_pattern = self.mask.run(mask)
             value = self.eval_mask.run(value,pattern,sub_pattern)
@@ -21,6 +23,7 @@ class GetPattern:
 
 
     def run(self,mask):
+
         matches = re.findall(r'[#]+',mask)
         pattern = ''
         for match in matches:
@@ -30,7 +33,7 @@ class GetPattern:
         return pattern,mask_pattern
 
 class EvaluateMask:
-    def run(self,phone_number,pattern,mask_pattern):
+    def run(self,value,pattern,mask_pattern):
 
-        masked_number = re.sub(pattern, mask_pattern, phone_number)
-        return masked_number
+        masked_value = re.sub(pattern, mask_pattern, value)
+        return masked_value

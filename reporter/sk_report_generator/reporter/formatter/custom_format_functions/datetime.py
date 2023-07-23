@@ -28,6 +28,8 @@ class Time(IFormatter):
 
 
 class LongDate:
+    def __init__(self):
+        self.go_next = None
 
     def run(self,value,format_sepec):
         if format_sepec['datetime'] =='long':
@@ -43,6 +45,8 @@ class LongDate:
 
 
 class MidDate:
+    def __init__(self):
+        self.go_next = None
 
     def run(self,value,format_sepec):
 
@@ -59,6 +63,8 @@ class MidDate:
         self.go_next = go_next
 
 class ShortDate:
+    def __init__(self):
+        self.go_next = None
 
     def run(self,value,format_sepec):
         if format_sepec['datetime'] =='short':
@@ -73,6 +79,8 @@ class ShortDate:
         self.go_next = go_next
 
 class Defualt:
+    def __init__(self):
+        self.go_next = None
 
     def run(self,value,format_sepec):
 
