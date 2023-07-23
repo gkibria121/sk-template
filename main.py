@@ -29,8 +29,9 @@ Controller = Controller()
 
 ##print(Controller.get_data('x= c1(1+2)'))
 
-data ='{"$x": 1}'
+data ='{"$x": true, "$y" : false}'
 data = json.loads(data)
-template = '''{{$x}}'''
+template = '''{{$x::{'bool' : 'available|not_available'}}}
+{{$y::{'bool' : 'available|not_available'}}}'''
 declaration = Controller.get_report(template, data)
 print(declaration)

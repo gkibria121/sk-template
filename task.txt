@@ -1,4 +1,4 @@
 write testcase for every class
 True|False = valid|invalid, yes|no
 
-json display = foreach,tree,table,table with border
+json display =tree,table,table with border

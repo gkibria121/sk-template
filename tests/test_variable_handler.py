@@ -1,6 +1,6 @@
-from sk_variable_handler.variable_handler import VariableHandler
-from sk_declaration import DeclarationGenerator
-from sk_calculator import Calculator
+from .sk_variable_handler.variable_handler import VariableHandler
+from .sk_declaration import DeclarationGenerator
+from .sk_calculator import Calculator
 import unittest
 class TestGetValues(unittest.TestCase):
     def setUp(self):
