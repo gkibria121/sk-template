@@ -1,5 +1,4 @@
 import unittest
-
 from sk_report_generator.reporter.formatter.process.template_format_process import TemplateFormatProcess
 
 
@@ -13,6 +12,10 @@ class TestTemplateFormatProcess(unittest.TestCase):
         template = "{{$x::{'width' : 1}}}"
         result = self.template_format_process.run(template)
         self.assertEqual(result,"{{$x:customAutoClass0}}<format>\ncustomAutoClass0 = {'width' : 1}</format>")
+
+        template = "{{$x::{'width' : 1,'align' : 'center'}}}"
+        result = self.template_format_process.run(template)
+        self.assertEqual(result,"{{$x:customAutoClass0}}<format>\ncustomAutoClass0 = {'width' : 1,'align' : 'center'}</format>")
 
 
 if __name__ == '__main__':
