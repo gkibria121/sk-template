@@ -29,7 +29,11 @@ Controller = Controller()
 
 ##print(Controller.get_data('x= c1(1+2)'))
 
-data ={"$x": '8801521254580'}
-template = '''{{$x::{'mask' : '#,#'}}}'''
+data ={"$x": 2}
+template = '''{{$x:c((x)=> x>1),c2}}
+<format>
+c2 = {'base' : 'b' }
+c3 = {'base' : 'b' }
+</format>'''
 declaration = Controller.get_report(template, data)
 print(declaration)

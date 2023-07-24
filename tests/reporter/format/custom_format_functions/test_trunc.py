@@ -32,5 +32,11 @@ class TestTrunc(unittest.TestCase):
         result = self.trunc.format(value,format_spec)
         self.assertEqual(result, '100.999999999')
 
+
+        value = 100.999999999
+        format_spec =  {'trunc' : 0}
+
+        result = self.trunc.format(value,format_spec)
+        self.assertEqual(result, '100.0')
 if __name__ == "__main__":
     unittest.main()
