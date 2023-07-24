@@ -3,16 +3,16 @@ import math
 
 
 
-class Reverse:
+class LowerCase:
     def set_next(self,go_next):
         self.go_next = go_next
 
     def run(self,value,method,condition):
 
 
-        if method =='reverse':
+        if method =='lower':
 
             if condition =='':
-                value.reverse()
+                value =value.lower()
 
         return self.go_next.run(value,method,condition)

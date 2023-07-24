@@ -13,6 +13,6 @@ class Reverse:
         if method =='reverse':
 
             if condition =='':
-                value.reverse()
+                value =value.reverse()
 
         return self.go_next.run(value,method,condition)
