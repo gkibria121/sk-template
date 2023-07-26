@@ -21,4 +21,5 @@ class Len:
                     value= eval(f"len([{match[1]} for {match[1]} in value if {match[2]} ])")
 
 
+
         return self.go_next.run(value,method,condition)

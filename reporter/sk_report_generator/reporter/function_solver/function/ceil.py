@@ -1,6 +1,7 @@
 import regex as re
 import math
 from .modules.get_arg import GetArg
+from .modules.check_condition import CheckCondition
 
 
 class Ceil:
@@ -10,6 +11,7 @@ class Ceil:
     def __init__(self):
         self.get_ceil = GetCeil()
         self.get_significance = GetArg()
+        self.check_condition = CheckCondition()
 
     def run(self,value,method,condition):
 
@@ -17,19 +19,12 @@ class Ceil:
         if method =='ceil':
 
             if condition =='':
-                value =str(math.ceil(value)/1.0)
+                value =math.ceil(value)/1.0
             if condition !='':
-                pattern = r'\((\w+)\)=>((?:([^(),])|(\((?2)\)))*)'
-                match = re.search(pattern,condition)
-                if match:
-                    exec(f"{match[1]} = value")
-                    if eval(f"{match[2]}"):
-                        significance = self.get_significance.run(condition)
-                        value = self.get_ceil.run(value,significance)
-                    else:
-                        value = str(value)
-                else:
-                    value = self.get_ceil.run(value,condition)
+                if self.check_condition.run(value,condition):
+                    significance = self.get_significance.run(condition)
+                    value = self.get_ceil.run(value,significance)
+
 
         return self.go_next.run(value,method,condition)
 
@@ -45,7 +40,7 @@ class GetCeil:
         mod = value % precision
 
         if mod == 0:
-            value = str(float(value))
+            value =float(value)
         else:
-            value = str(float(value + precision - mod))
+            value = float(value + precision - mod)
         return value

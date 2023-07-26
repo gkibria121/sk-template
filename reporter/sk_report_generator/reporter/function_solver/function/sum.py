@@ -18,4 +18,5 @@ class Sum:
                 if match:
                     value= eval(f"sum([{match[1]} for {match[1]} in value if {match[2]} ])")
 
+
         return self.go_next.run(value,method,condition)

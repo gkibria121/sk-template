@@ -13,7 +13,14 @@ class SnakeCase:
         if method =='snake':
 
             if condition =='':
-                pattern = r'\s+'
-                value =re.sub(pattern,'_' , value.lower())
+                # convert Camel Case to Snake Case
+                value = re.sub(r'(?<=[a-z])(?=[A-Z])','_',value)
+
+                # convert  to Snake Case
+                value =re.sub( r'(?<=\b)(\s+)(?=\w)','_' , value.lower())
+
+                # remove extra space
+                value =re.sub(r'\s*','' , value)
 
         return self.go_next.run(value,method,condition)
+

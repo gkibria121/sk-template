@@ -23,4 +23,5 @@ class Max:
 
 
 
+
         return self.go_next.run(value,method,condition)

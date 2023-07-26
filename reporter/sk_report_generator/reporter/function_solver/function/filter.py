@@ -9,36 +9,18 @@ class Filter:
     def run(self,value,method,condition):
 
         if method == 'filter':
+            if condition=='':
+                pass
+            if condition!='':
+                pattern = r'\s*\((\w+)\)\s*=>\s*(.*)'
+                match = re.search(pattern,condition)
+                if match:
+                    if type(value) == list:
+                        value = eval(f"[{match[1]} for {match[1]} in value if {match[2]}]")
 
-            pattern = r'\s*\(([\w\,]+)\)\s*=>\s*(.*)'
-            match = re.search(pattern,condition)
-            if match:
-                event =match[1]
-                condition = match[2]
-                if type(value) == list:
+                    if type(value) == set:
+                        value = eval(f"{{{match[1]} for {match[1]} in value if {match[2]}}}")
 
-                    temp = []
-                    for item in value:
-                        exec(f"{event} = {item}")
-                        filt = eval(f"{condition}")
-                        if filt:
-                            temp.append(item)
-
-
-                    value = temp
-
-                if type(value) == set:
-
-                    temp = set()
-                    for item in value:
-                        exec(f"{event} = {item}")
-                        filt = eval(f"{condition}")
-                        if filt:
-                            temp.add(item)
-                    value = temp
-
-
-            value = eval(f"{value}[{condition}]")
 
 
         return self.go_next.run(value,method,condition)

@@ -1,25 +1,37 @@
-import regex as re
-import math
+from sk_report_generator.reporter.function_solver.function.slice import Slice
+from sk_report_generator.reporter.function_solver.function.default import MethodDefault
+import unittest
 
+class TestSlice(unittest.TestCase):
 
+    def setUp(self):
+        self.slice = Slice()
+        self.slice.set_next(MethodDefault())
 
+    def test_slice(self):
+        value = [1,2,3,4]
+        method = 'slice'
+        condition = '1'
+        result = self.slice.run(value,method,condition)
+        self.assertEqual(result,[2, 3, 4])
 
-class Slice:
-    def set_next(self,go_next):
-        self.go_next = go_next
+        value = [1,2,3,4]
+        method = 'slice'
+        condition = '4'
+        result = self.slice.run(value,method,condition)
+        self.assertEqual(result,[])
 
-    def run(self,value,method,condition):
+        value = [1,2,3,4]
+        method = 'slice'
+        condition = '1,3'
+        result = self.slice.run(value,method,condition)
+        self.assertEqual(result,[2, 3])
 
-        if method == 'slice':
+        value = [1,2,3,4]
+        method = 'slice'
+        condition = '-1'
+        result = self.slice.run(value,method,condition)
+        self.assertEqual(result,[4, 3, 2, 1])
 
-            if len(condition) == 1 :
-                condition = condition+':'
-            if condition == '-1':
-                condition = '::-1'
-            if len(condition)>1:
-                condition = condition.replace(',',':')
-
-            value = eval(f"{value}[{condition}]")
-
-
-        return self.go_next.run(value,method,condition)
+if __name__=='__main__':
+    unittest.main()

@@ -29,7 +29,7 @@ Controller = Controller()
 
 ##print(Controller.get_data('x= c1(1+2)'))
 
-data ={"$x":[1,2,3]}
-template = '''{{$x.count(abc)}}'''
+data ={"$x": '4.2'}
+template = '''{{$x.len()}}'''
 declaration = Controller.get_report(template, data)
 print(declaration)

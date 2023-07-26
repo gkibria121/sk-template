@@ -1,26 +1,27 @@
-import regex as re
-import math
+from sk_report_generator.reporter.function_solver.function.max import Max
+from sk_report_generator.reporter.function_solver.function.default import MethodDefault
+import unittest
+
+class TestMax(unittest.TestCase):
+
+    def setUp(self):
+        self.max = Max()
+        self.max.set_next(MethodDefault())
+
+    def test_max(self):
+        value = [1,2,3,4]
+        method = 'max'
+        condition = ''
+        result = self.max.run(value,method,condition)
+        self.assertEqual(result,4)
 
 
-class Max:
+    def test_max_with_condition(self):
+        value = [1,2,3,4]
+        method = 'max'
+        condition = '(x)=>x<4'
+        result = self.max.run(value,method,condition)
+        self.assertEqual(result,3)
 
-    def set_next(self,go_next):
-        self.go_next = go_next
-
-    def run(self,value,method,condition):
-
-
-        if method =='max':
-
-            if condition =='':
-                value =max(value)
-            else:
-                pattern = r'\s*\((\w+)\)\s*=>\s*(.*)'
-                match = re.search(pattern,condition)
-                if match:
-
-                    value = eval(f"max([{match[1]} for {match[1]} in value if {match[2]} ])")
-
-
-
-        return self.go_next.run(value,method,condition)
+if __name__=="__main__":
+    unittest.main()

@@ -1,3 +1,4 @@
+from .modules.check_condition import CheckCondition
 import regex as re
 import math
 
@@ -8,6 +9,7 @@ class CamelCase:
         self.go_next = go_next
     def __init__(self):
         self.convert_to_camel= ConvertToCamel()
+        self.check_condition = CheckCondition()
 
     def run(self,value,method,condition):
 
@@ -17,12 +19,8 @@ class CamelCase:
             if condition =='':
                 value = self.convert_to_camel.run(value)
             if condition !='':
-                pattern = r'\s*\((\w+)\)\s*=>\s*(.*)'
-                match = re.search(pattern,condition)
-                if match:
-                    exec(f"{match[1]} = value")
-                    if eval(f"{match[2]}"):
-                        value = self.convert_to_camel.run(value)
+                if self.check_condition.run(value,condition):
+                    value = self.convert_to_camel.run(value)
         return self.go_next.run(value,method,condition)
 
 

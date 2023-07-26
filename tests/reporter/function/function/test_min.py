@@ -1,27 +1,27 @@
-import regex as re
-import math
+from sk_report_generator.reporter.function_solver.function.min import Min
+from sk_report_generator.reporter.function_solver.function.default import MethodDefault
+import unittest
+
+class TestMin(unittest.TestCase):
+
+    def setUp(self):
+        self.min = Min()
+        self.min.set_next(MethodDefault())
+
+    def test_max(self):
+        value = [1,2,3,4]
+        method = 'min'
+        condition = ''
+        result = self.min.run(value,method,condition)
+        self.assertEqual(result,1)
 
 
+    def test_max_with_condition(self):
+        value = [1,2,3,4]
+        method = 'min'
+        condition = '(x)=>x!=1'
+        result = self.min.run(value,method,condition)
+        self.assertEqual(result,2)
 
-class Min:
-
-    def set_next(self,go_next):
-        self.go_next = go_next
-
-    def run(self,value,method,condition):
-
-
-        if method =='min':
-
-            if condition =='':
-                value =min(value)
-            else:
-                pattern = r'\s*\((\w+)\)\s*=>\s*(.*)'
-                match = re.search(pattern,condition)
-                if match:
-
-                    value = eval(f"min([{match[1]} for {match[1]} in value if {match[2]} ])")
-
-
-
-        return self.go_next.run(value,method,condition)
+if __name__=="__main__":
+    unittest.main()

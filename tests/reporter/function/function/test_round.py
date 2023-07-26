@@ -1,18 +1,42 @@
-import regex as re
-import math
+from sk_report_generator.reporter.function_solver.function.round import Round
+from sk_report_generator.reporter.function_solver.function.default import MethodDefault
+import unittest
 
+class TestSet(unittest.TestCase):
 
+    def setUp(self):
+        self.round = Round()
+        self.round.set_next(MethodDefault())
 
-class Round:
-    def set_next(self,go_next):
-        self.go_next = go_next
+    def test_round(self):
+        value = 10.1111111111111
+        method = 'round'
+        condition = '9'
+        result = self.round.run(value,method,condition)
+        self.assertEqual(result,10.111111111)
 
-    def run(self,value,method,condition):
+        value = 10.12345678
 
+        condition = '3'
+        result = self.round.run(value,method,condition)
+        self.assertEqual(result,10.123)
 
-        if method =='round':
+        condition = '6'
+        result = self.round.run(value,method,condition)
+        self.assertEqual(result,10.123457)
 
-            if condition !='':
-                value =round(value,int(condition))
+    def test_round_with_condition(self):
 
-        return self.go_next.run(value,method,condition)
+        value = 10.12345678
+        method = 'round'
+        condition = '(x)=>x>10 ,6'
+        result = self.round.run(value,method,condition)
+        self.assertEqual(result,10.123457)
+
+        value = 10.12345678
+        method = 'round'
+        condition = '(x)=>x==10 ,6'
+        result = self.round.run(value,method,condition)
+        self.assertEqual(result,10.12345678)
+if __name__=='__main__':
+    unittest.main()
