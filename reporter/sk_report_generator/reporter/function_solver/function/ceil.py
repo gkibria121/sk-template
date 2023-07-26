@@ -1,6 +1,6 @@
 import regex as re
 import math
-
+from .modules.get_arg import GetArg
 
 
 class Ceil:
@@ -9,7 +9,7 @@ class Ceil:
 
     def __init__(self):
         self.get_ceil = GetCeil()
-        self.get_significance = GetSignigicance()
+        self.get_significance = GetArg()
 
     def run(self,value,method,condition):
 
@@ -33,16 +33,12 @@ class Ceil:
 
         return self.go_next.run(value,method,condition)
 
-class GetSignigicance:
-    def run(self,condition):
-        condition = re.sub(r'\((\w+)\)=>((?:([^(),])|(\((?2)\)))*)','',condition)
-        if re.sub(r'[+-.]','',condition).isdigit():
-            num = condition.replace(',','')
-            return num
+
 
 
 
 class GetCeil:
+
     def run(self,value,significance):
         precision = float(significance)
         value = float(value)
