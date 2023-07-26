@@ -30,14 +30,16 @@ class Range:
 class DefaultRange:
 
 
-    def run(self,string,args):
+    def run(self,array,args):
         if len(args) ==1:
-            string = string[0:int(args[0])]
+            array = array[int(args[0]):]
 
-        if len(args)==2 and args[1].isdigit():
-            string = string[int(args[0]):int(args[1])]
+        if len(args)==2 and re.sub(r'[-+]','',args[1]).isdigit():
+            array = array[int(args[0]):int(args[1])]
+        if len(args)==3 and re.sub(r'[-+]','',args[1]).isdigit() and re.sub(r'[-+]','',args[2]).isdigit():
+            array = array[int(args[0]):int(args[1]):int(args[2])]
 
-        return self.go_next.run(string,args)
+        return self.go_next.run(array,args)
 
     def set_next(self,go_next):
         self.go_next = go_next
@@ -49,25 +51,26 @@ class CustomRange:
 
     def run(self,string,args):
 
-        if len(args) ==2 and not args[1].isdigit():
+        if len(args) ==2 and not re.sub(r'[-+]','',args[1]).isdigit():
             if (args[1]=='c'):
-                string = string[0:int(args[0])]
+                string = string[int(args[0]):]
             if ((args[1]=='w')):
-                string = re.search(r'^\b(\s*\w+){'+args[0]+'}',string)
-                if string:
-                    string = string.group(0)
-
-
-
+                wordlist = re.split(r'\s+',string)
+                string =' '.join(wordlist[int(args[0]):])
 
         if len(args) ==3:
             if (args[2]=='c'):
                 string = string[int(args[0]):int(args[1])]
             if ((args[2]=='w')):
-                string = re.sub(r'^\b(\s*\w+\s*){'+args[0]+'}','',string)
-                steps = int(args[1])-int(args[0])
-                string = re.search(r'^\b(\s*\w+\s*){'+str(steps)+'}',string).group(0)
+                wordlist = re.split(r'\s+',string)
+                string = ' '.join(wordlist[int(args[0]):int(args[1])])
 
+        if len(args) ==4:
+            if (args[3]=='c'):
+                string = string[int(args[0]):int(args[1]):int(args[2])]
+            if ((args[3]=='w')):
+                wordlist = re.split(r'\s+',string)
+                string =' '.join( wordlist[int(args[0]):int(args[1]):int(args[2])])
         return self.go_next.run(string,args)
 
     def set_next(self,go_next):

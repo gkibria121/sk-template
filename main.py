@@ -29,7 +29,7 @@ Controller = Controller()
 
 ##print(Controller.get_data('x= c1(1+2)'))
 
-data ={"$x": '4.2'}
-template = '''{{$x.len()}}'''
+data ={"$x": "hi there how are you?"}
+template = '''{{$x.range(1,4,-1,w)}}'''
 declaration = Controller.get_report(template, data)
 print(declaration)
