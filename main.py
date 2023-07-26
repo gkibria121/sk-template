@@ -30,6 +30,9 @@ Controller = Controller()
 ##print(Controller.get_data('x= c1(1+2)'))
 
 data ={"$x": "hi there how are you?"}
-template = '''{{$x.range(1,4,-1,w)}}'''
+template = '''<>
+for i in range(1,100):
+    <<{i}>>
+        </>'''
 declaration = Controller.get_report(template, data)
 print(declaration)
