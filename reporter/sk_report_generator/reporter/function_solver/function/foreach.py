@@ -17,7 +17,7 @@ class Foreach:
         if method =='foreach':
 
             if condition !='':
-                pattern = r'\(([\w,$]+)\)\=\>(\{(([^{}]|(?2))*)\})'
+                pattern = r'\(([\w,$]+)\)\s*\=\s*\>\s*(\{(([^{}]|(?2))*)\})'
                 match = re.search(pattern,condition)
                 result = ''
 

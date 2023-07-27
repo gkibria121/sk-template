@@ -6,7 +6,7 @@ class ScriptProcess:
     def __init__(self):
         self.successor = None
         self.go_next = None
-        self.script_print_process = ScriptPrintProcess()
+
 
     def run(self, script):
         template_script, row_script = script
@@ -25,6 +25,9 @@ class ScriptProcess:
 
     def set_next(self, go_next):
         self.go_next = go_next
+
+    def set_script_print_process(self,script_print_process):
+        self.script_print_process = script_print_process
 
 
 class ScriptPrintProcess:

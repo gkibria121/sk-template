@@ -13,6 +13,8 @@ class Controller:
         self.reporter = ReportGenerator()
         self.declaration_process = DeclarationGenerator()
 
+        self.reporter.set_reporter(self.reporter)
+
     def get_data(self, declaration_string):
         return self.variable.get_result(self.declaration_process.process(declaration_string))
 
@@ -31,7 +33,9 @@ Controller = Controller()
 
 data = {'$x' : [{"name": "John Doe","age": 30,"occupation": "Engineer"},{"name": "Jane Smith","age": 25,"occupation": "Teacher"},{"name": "Michael Johnson","age": 40, "occupation": "Doctor"},{"name": "Emily Williams","age": 22,"occupation": "Student"}]}
 template = '''
-{{$x.name}}
+{{$x.foreach(($y)=>{
+{{$y.name}}
+})}}
 '''
 declaration = Controller.get_report(template, data)
 print(declaration)

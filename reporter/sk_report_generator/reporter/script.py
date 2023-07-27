@@ -2,6 +2,7 @@ import regex as re
 from .script_evaluate.script_runner import ScriptRunner
 from .script_evaluate.script_replacer import ScriptReplacer
 from .script_evaluate.script_process import ScriptProcess
+from .script_evaluate.script_process import ScriptPrintProcess
 from .base import IReporter
 
 
@@ -11,6 +12,7 @@ class ScriptEvaluator(IReporter):
         self.successor = None
         self.data = None
         self.process = ScriptProcess()
+        self.process.set_script_print_process(ScriptPrintProcess())
         self.script_runner = ScriptRunner()
         self.script_replacer = ScriptReplacer()
 

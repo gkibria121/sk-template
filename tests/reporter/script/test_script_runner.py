@@ -1,26 +1,44 @@
-import io
-import sys
+from sk_report_generator.reporter.script_evaluate.script_runner import ScriptRunner
+import unittest
 
-class ScriptRunner:
+class TestScriptRunner(unittest.TestCase):
 
-    def __init__(self):
-        self.successor = None
-        self.go_next = None
+    def setUp(self):
+        self.script_runner = ScriptRunner()
 
-    def run(self, scripts):
-        template_script, row_script = scripts
+    def test_script_replacer_single_line_script(self):
+        # Test running a single-line script
+        template_script = '<<print("Hello, world!")>>'
+        row_script = 'print("Hello, world!")'
+        scripts = (template_script, row_script)
+        result = self.script_runner.run(scripts)
+        self.assertEqual(result, (template_script, 'Hello, world!\n'))
 
-        code_string = row_script
-        output_stream = io.StringIO()
-        sys.stdout = output_stream
-        exec(code_string)
-        sys.stdout = sys.__stdout__
-        captured_output = output_stream.getvalue()
+    def test_script_replacer_multiline_script(self):
+        # Test running a multi-line script
+        template_script = '<<for i in range(3):\n    print(i)>>'
+        row_script = 'for i in range(3):\n    print(i)'
+        scripts = (template_script, row_script)
+        result = self.script_runner.run(scripts)
+        expected_output = '0\n1\n2\n'
+        self.assertEqual(result, (template_script, expected_output))
 
-        return template_script, captured_output
+    def test_script_replacer_syntax_error(self):
+        # Test a script with syntax error
+        template_script = '<<print("Hello, world!")>>'
+        row_script = 'prnt("Hello, world!")'
+        scripts = (template_script, row_script)
+        with self.assertRaises(NameError):
+            self.script_runner.run(scripts)
 
-    def set_succesor(self, successor):
-        self.successor = successor
+    def test_script_replacer_long_running_script(self):
+        # Test a long-running script
+        template_script = '<<import time\nfor i in range(5):\n    time.sleep(1)\n    print(i)>>'
+        row_script = 'import time\nfor i in range(5):\n    time.sleep(1)\n    print(i)'
+        scripts = (template_script, row_script)
+        result = self.script_runner.run(scripts)
+        expected_output = '0\n1\n2\n3\n4\n'
+        self.assertEqual(result, (template_script, expected_output))
 
-    def set_next(self, go_next):
-        self.go_next = go_next
+if __name__ == '__main__':
+    unittest.main()

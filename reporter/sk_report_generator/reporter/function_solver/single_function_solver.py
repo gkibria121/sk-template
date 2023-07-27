@@ -83,7 +83,7 @@ class SingleFunctionSOlver:
     def run(self,object_name,methods):
 
 
-        pattern = r'\.(\w+)(\((?:(?:[^()]+)|(?2))*\))|((?:\[[\w\"]+\])+)'
+        pattern = r'\.(\w+)\s*(\((?:(?:[^()]+)|(?2))*\))|((?:\[[\w\"]+\])+)'
         matches = re.findall(pattern, methods)
 
         value = self.get_object_value.run(object_name)
