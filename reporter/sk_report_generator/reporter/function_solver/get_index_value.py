@@ -1,3 +1,4 @@
+import regex as re
 class GetIndexValue:
 
     def __init__(self):

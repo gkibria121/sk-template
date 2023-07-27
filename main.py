@@ -29,10 +29,9 @@ Controller = Controller()
 
 ##print(Controller.get_data('x= c1(1+2)'))
 
-data ={"$x": "hi there how are you?"}
-template = '''<>
-for i in range(1,100):
-    <<{i}>>
-        </>'''
+data = {'$x' : [{"name": "John Doe","age": 30,"occupation": "Engineer"},{"name": "Jane Smith","age": 25,"occupation": "Teacher"},{"name": "Michael Johnson","age": 40, "occupation": "Doctor"},{"name": "Emily Williams","age": 22,"occupation": "Student"}]}
+template = '''
+{{$x.name}}
+'''
 declaration = Controller.get_report(template, data)
 print(declaration)

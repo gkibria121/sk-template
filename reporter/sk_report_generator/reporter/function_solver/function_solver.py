@@ -12,7 +12,7 @@ class FunctionSolver:
     def solve(self, function_calling):
 
         function_calling = self.process_function_calling.run(function_calling)
-        single_object_pattern = r'((\$\w+)(\..*))'
+        single_object_pattern = r'((\$\w+)((?:\.\w+(\(((?:[^()])|(?4))*\)))|(?:(?:\[\W?\w+\W?\])+))*)'
         single_boject_list = re.findall(single_object_pattern, function_calling)
 
         for single_object in single_boject_list:
