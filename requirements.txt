@@ -1,6 +1,7 @@
 sk_calculator
 sk_variable_handler
 sk_report_generator
-sk_declaration
+sk_random_variable
+sk_table_handler
 nltk
 pytest
