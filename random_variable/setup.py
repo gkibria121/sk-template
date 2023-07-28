@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='sk_random_variable',
-    version='0.0.2',
+    version='0.0.1',
     description='A simple calculator program',
     author='gkibria',
     long_description=long_description,

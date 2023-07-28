@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name='sk_variable_handler',
-    version='0.0.2',
+    version='1.0.101',
     description='A simple Variable Handling  program',
     author='gkibria',
     long_description=long_description,
