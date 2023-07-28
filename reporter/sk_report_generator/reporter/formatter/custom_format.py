@@ -82,8 +82,8 @@ class CustomFormat:
 
         if len(format_class_list)!=0:
             condition = self.get_condition.run(value,format_spec)
-            format_specs = self.get_format_spce.run(format_spec, format_class_list)
-            if condition:
+            format_specs = self.get_format_spce.run(format_spec, format_class_list,condition)
+            if condition or len(format_specs)!=0:
                 format_pattern = '{fill}{align}{sign}{pad}{width}{grouping_option}{precision}{base}'
                 format_pattern, format_specs = self.width_handler.handle(format_specs,format_pattern)
                 default_format_value = self.evaluate_default_format.run(value,format_pattern)

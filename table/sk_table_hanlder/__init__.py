@@ -54,14 +54,15 @@ class TableHandler:
         condition = self.index_process(condition)
         data_stucture.update({variable : []})
         index = 0
+        list_len = len(data)
 
         for parent_index,value in enumerate(data):
 
             exec(f"{placeholder} = value")
-            if eval(f"{condition}"):
+            if condition =='' or eval(f"{condition}"):
                 item =return_value
                 item = self.index_process(item)
-                item = self.process_ref(item,index,parent_index)
+                item = self.process_ref(item,index,parent_index,list_len)
                 item = self.put_value(data_stucture,item)
                 item = eval(item)
                 result.append(item)
@@ -86,34 +87,32 @@ class TableHandler:
 
         return item
 
-    def process_ref(self,item,index,parent_index):
+    def process_ref(self,item,index,parent_index,list_len):
 
         item = re.sub(r'\$index\b',str(index),item)
         item = re.sub(r'\$parent_index\b',str(index),item)
         pattern = r'((\$[^$]+)?(\<([^|]+)\|([^|]+)\>))'
-        item = re.sub(pattern, lambda match: f"{match.group(2)}{match.group(4)}" if  self.index_validation(match.group(4))  else f"{match.group(5)}", item)
+        item = re.sub(pattern, lambda match: f"{match.group(2)}{match.group(4)}" if  self.index_validation(match.group(4),list_len)  else f"{match.group(5)}", item)
 
         return item
 
-    def index_validation(self,text):
+    def index_validation(self,text,list_len):
         pattern = r'\[([^\[\]]+)\]'
         matches = re.findall(pattern,text)
         for match in matches:
-            if eval(f"type({match})==int and {match}<=-1"):
+            if eval(f"type({match})==int and ({match}<=-1 or {match}>={list_len})"):
                 return False
         return True
 
 
 
 
-table_text = '''
-$table= [{"radius" : 10},{"radius" : 100}];
-$table2 = $table(x)=>(x.radius>10){ {'area' : x.radius*x.radius*3.1416 , 'radius' : x.radius , 'increasing_number' : x.radius+$table<[$parent_index].radius|0> } };
-'''
-
-table = TableHandler()
-
-print(table.run(table_text))
-
+##variables = '''
+##        $table= [{'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}];
+##        $table2 = $table(x)=>{ {'number' : $table<[$parent_index-1].number|1>+$table<[$parent_index+1].number|1> } };'''
+##table = TableHandler()
+##
+##print(table.run(variables))
+##
 
 

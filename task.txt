@@ -3,12 +3,3 @@ json display =tree,table with border
 
 
 conditional formatting
-
-table to calculated table using foreach
-
-
-table = [{'radius' : 1 },{'radius' : 2 },{'radius' : 3 }]
-
-table2 = table(x,index) => { (where(x.radius>2))? { 'radius' : x.radius , 'area' : x.radius*radius*3.1416 'sum' : x+table[index-1,-1]} }
-
-table3 = table2(x)=>{...}
