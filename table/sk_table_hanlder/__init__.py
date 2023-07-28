@@ -14,21 +14,22 @@ class TableHandler:
         return data
 
     def solve_table(self,data,declarations):
-        pattern = r'((\$\w+)\s*\((\w+)\)\s*=>\s*(\((.*?)\))?\s*(\{(([^{}]|(?6))*)\}))'
+        pattern = r'(\$\w+)\s*=\s*((\$\w+)\s*\((\w+)\)\s*=>\s*(\((.*?)\))?\s*(\{(([^{}]|(?7))*)\}))'
 
         matches = re.findall(pattern,declarations)
         replace = ''
         for match in matches:
-            replace = match[0]
+            replace = match[1]
 
-            variable = match[1]
-            placeholder = match[2]
-            condition = match[4]
-            return_value =  match[6]
+            variable = match[0]
+            template_variable = match[2]
+            placeholder = match[3]
+            condition = match[5]
+            return_value =  match[7]
 
-            value = self.get_table_value(data,variable,placeholder,condition,return_value)
+            value = self.get_table_value(data,template_variable,variable,placeholder,condition,return_value)
 
-            declarations = re.sub(re.escape(replace),value,declarations)
+            declarations = re.sub(re.escape(replace),str(value),declarations)
 
         return declarations
 
@@ -44,30 +45,70 @@ class TableHandler:
         return declaration_text
 
 
-    def get_table_value(self,data,variable,placeholder,condition,return_value):
+    def get_table_value(self,data_stucture,template_variable,variable,placeholder,condition,return_value):
 
-        data = data[variable]
+        data = data_stucture[template_variable]
 
-        for index,value in enumerate(data):
+        result = []
+
+        condition = self.index_process(condition)
+        data_stucture.update({variable : []})
+        index = 0
+
+        for parent_index,value in enumerate(data):
+
             exec(f"{placeholder} = value")
+            if eval(f"{condition}"):
+                item =return_value
+                item = self.index_process(item)
+                item = self.process_ref(item,index,parent_index)
+                item = self.put_value(data_stucture,item)
+                item = eval(item)
+                result.append(item)
+                data_stucture.update({variable : result})
+                index = index+1
 
 
+        return result
 
-        return return_value
+    def index_process(self,code):
 
+        pattern =r'(?:\.([^\d][\w]*))\b(?!\()'
 
+        code = re.sub(pattern, lambda match: f'["{match.group(1)}"]', code)
+        return code
 
+    def put_value(self,data_structure,item):
 
+        for key,value in data_structure.items():
 
+            item = re.sub(re.escape(key)+r'\b',str(value),item)
 
+        return item
+
+    def process_ref(self,item,index,parent_index):
+
+        item = re.sub(r'\$index\b',str(index),item)
+        item = re.sub(r'\$parent_index\b',str(index),item)
+        pattern = r'((\$[^$]+)?(\<([^|]+)\|([^|]+)\>))'
+        item = re.sub(pattern, lambda match: f"{match.group(2)}{match.group(4)}" if  self.index_validation(match.group(4))  else f"{match.group(5)}", item)
+
+        return item
+
+    def index_validation(self,text):
+        pattern = r'\[([^\[\]]+)\]'
+        matches = re.findall(pattern,text)
+        for match in matches:
+            if eval(f"type({match})==int and {match}<=-1"):
+                return False
+        return True
 
 
 
 
 table_text = '''
-$x = "hi there";
-$table = [{"name" : "kibria", "age" : 23},{"name" : "mehedi", "age" : 23}];
-$table2 = $table(x) => (x.radius>2) {  { 'radius' : x.radius , 'area' : x.radius*radius*3.1416, 'sum' : x+$table[index-1,-1]} };
+$table= [{"radius" : 10},{"radius" : 100}];
+$table2 = $table(x)=>(x.radius>10){ {'area' : x.radius*x.radius*3.1416 , 'radius' : x.radius , 'increasing_number' : x.radius+$table<[$parent_index].radius|0> } };
 '''
 
 table = TableHandler()
