@@ -4,6 +4,7 @@ from calculator.sk_calculator import Calculator
 from variable.sk_variable_handler.variable_handler import VariableHandler
 from reporter.sk_report_generator import ReportGenerator
 from random_variable.sk_random_variable import RandomVariableGenerator
+from table.sk_table_hanlder import TableHandler
 
 
 class TinkerApp(tk.Tk):
@@ -13,6 +14,7 @@ class TinkerApp(tk.Tk):
         self.variable = VariableHandler()
         self.variable.set_calculator(self.calculator)
         self.reporter = ReportGenerator()
+        self.table_handler = TableHandler()
         self.declaration_process = RandomVariableGenerator()
 
         self.title("Reporting Template")
@@ -95,7 +97,9 @@ class TinkerApp(tk.Tk):
 
     def get_data(self):
         variable = self.variable_text.get("1.0", "end-1c")
-        data_stucture = self.variable.get_result(self.declaration_process.process(variable))
+        random_variable = self.declaration_process.process(variable)
+        solved_table = self.table_handler.run(random_variable)
+        data_stucture =self.variable.get_result(solved_table)
         self.ds.delete(1.0, tk.END)  # Clear previous content
         self.ds.insert(tk.END, data_stucture)  # Insert processed content
 
