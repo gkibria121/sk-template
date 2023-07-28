@@ -1,7 +1,7 @@
 import regex as re
 from .random_value import RandomValue
 
-class DeclarationGenerator:
+class RandomVariableGenerator:
 
     def __init__(self):
         self.reandom_value = RandomValue()
@@ -20,15 +20,14 @@ class DeclarationGenerator:
 
 
     def get_declaration_list(self,template):
-        pattern = r'(?:\n)?(.*?)(?:=)(.*)'
+        pattern = r'(\$\w+)\s*=\s*([^;]+)\;'
 
         declaration_list = re.findall(pattern,template)
         temp = []
         for variable,expression in declaration_list:
             temp += [(variable.replace(' ',''),expression)]
 
-        declaration_list = temp
-        return declaration_list
+        return temp
 
     def call_random_functions(self,declaration_list):
         temp = []
@@ -53,14 +52,6 @@ class DeclarationGenerator:
     def process_list(self,declaration_list):
         declarations_text =''
         for variable,expression in declaration_list:
-            variable = variable if variable.startswith('$')  else '$'+variable
-
-            for v,e in declaration_list:
-                v = v.replace('$','') if v.startswith('$')  else v
-                expression = re.sub(r'(?=\b|\s|^)([^\$])'+re.escape(v)+r'(?=\b|\s|$)',f'${v}',expression)
-
-
-
             declarations_text += f"{variable} = {expression};\n"
         return declarations_text
     def get_help(self):
@@ -107,27 +98,27 @@ class DeclarationGenerator:
    - Returns: Random JSON data.
 Example:
     input:
-x = random_data()
+$x = random_data();
 
-y = random_word()
+$y = random_word();
 
-z = random_list()
+$z = random_list();
 
-a = random_nested_list()
+$a = random_nested_list();
 
-b = random_nested_object()
+$b = random_nested_object();
 
-c = random_json()
+$c = random_json();
 
-k = random_list(0,1,5)
+$k = random_list(0,1,5);
 
-q = random_list(start =1,end = 10, length = 3)
-w = random_nested_list(dimensions = [2,3,3])
-r = random_nested_object(keys = ['x','y','z','a','b','c'],values = [2,3,4,5,6])
-t = random_json(depth=2)
+$q = random_list(start =1,end = 10, length = 3);
+$w = random_nested_list(dimensions = [2,3,3]);
+$r = random_nested_object(keys = ['x','y','z','a','b','c'],values = [2,3,4,5,6]);
+$t = random_json(depth=2);
 
 $a = 1+ random_json   ();
-x =1+ random_digit()
+$x =1+ random_digit();
 
 output :
 $x =  {'nosewheel': [None, None]};
@@ -147,35 +138,3 @@ The program assigns the generated random data to variables using the assignment 
  '''
 
         return text
-
-##declaration = DeclarationGenerator()
-##declaration.generate
-##('''
-##
-##x = random_data()
-##
-##y = random_word()
-##
-##z = random_list()
-##
-##a = random_nested_list()
-##
-##b = random_nested_object()
-##
-##c = random_json()
-##
-##k = random_list(0,1,5)
-##
-##q = random_list(start =1,end = 10, length = 3)
-##w = random_nested_list(dimensions = [2,3,3])
-##r = random_nested_object(keys = ['x','y','z','a','b','c'],values = [2,3,4,5,6])
-##t = random_json(depth=2)
-##
-##$a = 1+ random_json   ();
-##x =1+ random_digit()
-
-##''')
-
-
-
-

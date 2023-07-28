@@ -3,7 +3,7 @@ from tkinter import ttk
 from calculator.sk_calculator import Calculator
 from variable.sk_variable_handler.variable_handler import VariableHandler
 from reporter.sk_report_generator import ReportGenerator
-from declaration.sk_declaration import DeclarationGenerator
+from random_variable.sk_random_variable import RandomVariableGenerator
 
 
 class TinkerApp(tk.Frame):
@@ -12,7 +12,7 @@ class TinkerApp(tk.Frame):
         self.variable = VariableHandler()
         self.variable.set_calculator(self.calculator)
         self.reporter = ReportGenerator()
-        self.declaration_process = DeclarationGenerator()
+        self.declaration_process = RandomVariableGenerator()
 
         super().__init__(master)
         self.master = master
