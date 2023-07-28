@@ -43,11 +43,14 @@ Controller = Controller()
 data = {'$x' : 1}
 
 template = '''
-{{$x:((x)=>x==1),c1,c3}}
+{{$x:((x)=>x==1),c1,c4}}
+{{$x:((x)=>x==1),c2,c4|c3,c4}}
+{{$x:((x)=>x!=1),c2,c4|c3,c4}}
 <format>
-c1= {'align' : 'right' }
-c2 = {'align' : 'center'}
-c3 = {'width' : 30, 'fill' : '#'}
+c1= {'align' : 'center' }
+c2 = {'align' : 'left'}
+c3 = {'align' : 'right'}
+c4 = {'width' : 30, 'fill' : '0'}
 </format>
 '''
 declaration = Controller.get_report(template, data)
