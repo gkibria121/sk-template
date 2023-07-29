@@ -5,6 +5,7 @@ from random_variable.sk_random_variable import RandomVariableGenerator
 from table.sk_table_hanlder import TableHandler
 
 import json
+
 class Controller:
 
     def __init__(self):
@@ -39,7 +40,6 @@ $x = ['1+2', eval(1+2+sin(90))];
 '''))
 
 data = {'$x' : 1}
-
 template = '''
 {{$x:((x)=>x==1),c1,c4}}
 {{$x:((x)=>x==1),c2,c4|c3,c4}}

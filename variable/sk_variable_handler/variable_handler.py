@@ -4,6 +4,7 @@ import json
 
 
 class VariableHandler:
+
     def __init__(self):
         self.calculator = None
 
