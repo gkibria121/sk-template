@@ -35,7 +35,6 @@ class Controller:
 Controller = Controller()
 
 print(Controller.get_data('''
-
 $x = ['1+2', eval(1+2+sin(90))];
 '''))
 
