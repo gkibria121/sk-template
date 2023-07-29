@@ -1,3 +1,5 @@
 
 json display =tree,table with border
 
+$parent_index = x.index
+
