@@ -10,7 +10,7 @@ class TableHandler:
         pattern = '(\$\w+)\s*=\s*([^=;]+)\;'
         matches = re.findall(pattern,variable_declarations)
         for variable,value in matches:
-            data[variable] = eval(value)
+            data[variable] = eval(value) if 'eval' not in value else value
         return data
 
     def solve_table(self,data,declarations):
@@ -64,7 +64,8 @@ class TableHandler:
                 item = self.index_process(item)
                 item = self.process_ref(item,index,parent_index,list_len)
                 item = self.put_value(data_stucture,item)
-                item = eval(item)
+
+                item = eval(item) if 'eval' not in item else item
                 result.append(item)
                 data_stucture.update({variable : result})
                 index = index+1
