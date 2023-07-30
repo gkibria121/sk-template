@@ -1,5 +1,5 @@
 import regex as re
-
+from sk_calculator import Calculator
 import json
 
 
@@ -173,9 +173,12 @@ class VariableHandler:
 
         return resolved_variables
 
-    def get_result(self, declarations):
+    def update_declarations_text(self,declaration_list,declarations_text):
 
-        declarations = self.remove_comments(declarations)
+        return declaration_list
+    def get_result(self, declarations_text):
+
+        declarations = self.remove_comments(declarations_text)
 
         self.declaration_list = self.declare(declarations)
 
@@ -183,5 +186,14 @@ class VariableHandler:
 
         self.declaration_list = self.resolve_recursive_variables(self.declaration_list)
         self.declaration_list = self.solve_nested_variables(self.declaration_list)
+        declarations_text  = self.update_declarations_text(declarations_text,self.declaration_list)
 
         return self.declaration_list
+
+variable = '''
+$x = 1;
+'''
+
+data= VariableHandler()
+data.set_calculator(Calculator())
+print(data.get_result(variable))

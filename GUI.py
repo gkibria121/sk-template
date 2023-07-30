@@ -1,10 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
 from calculator.sk_calculator import Calculator
-from variable.sk_variable_handler.variable_handler import VariableHandler
+from data.variable.sk_variable_handler.variable_handler import VariableHandler
 from reporter.sk_report_generator import ReportGenerator
-from random_variable.sk_random_variable import RandomVariableGenerator
-from table.sk_table_hanlder import TableHandler
+from data.random_variable.sk_random_variable import RandomVariableGenerator
+from data.table.sk_table_hanlder import TableHandler
 
 
 class TinkerApp(tk.Tk):
