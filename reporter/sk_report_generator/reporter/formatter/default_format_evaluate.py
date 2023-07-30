@@ -7,7 +7,7 @@ class DefaultFormat:
             value = str(value)
             digit = re.sub(r'[,.e\+\-]','',value).isdigit()
             if digit:
-                f_value = value
+                f_value = eval(value)
             else:
                 f_value = f'"{value}"'
 

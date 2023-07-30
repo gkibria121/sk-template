@@ -4,14 +4,14 @@ class GetCondition:
         pattern = r'\(\((\w+)\)=>((?:([^()])|(\((?2)\)))*)\)'
 
         match = re.search(pattern,condition)
+        if match:
+            try:
+                exec(f'{match[1]} = {value}')
+            except NameError:
+                exec(f'{match[1]} = "{value}"')
 
-        try:
-            exec(f'{match[1]} = {value}')
-        except NameError:
-            exec(f'{match[1]} = "{value}"')
 
+            if eval(f'{match[2]}'):
+                return True
 
-        if eval(f'{match[2]}'):
-            return True
-
-        return False
+        return True

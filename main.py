@@ -1,28 +1,21 @@
 from calculator.sk_calculator import Calculator
-from variable.sk_variable_handler.variable_handler import VariableHandler
+from data.sk_data.data import DataStructure
 from reporter.sk_report_generator import ReportGenerator
-from random_variable.sk_random_variable import RandomVariableGenerator
-from table.sk_table_hanlder import TableHandler
-
 import json
 
 class Controller:
 
     def __init__(self):
         self.calculator = Calculator()
-        self.variable = VariableHandler()
-        self.variable.set_calculator(self.calculator)
         self.reporter = ReportGenerator()
-        self.random_variable_generator = RandomVariableGenerator()
-
-        self.table_hanlder = TableHandler()
+        self.data_structure = DataStructure()
+        self.data_structure.set_calculator(self.calculator)
 
         self.reporter.set_reporter(self.reporter)
 
     def get_data(self, declaration_string):
-        random_variable = self.random_variable_generator.process(declaration_string)
-        solved_table = self.table_hanlder.run(random_variable)
-        return self.variable.get_result(solved_table)
+        data_structure = self.data_structure.run(declaration_string)
+        return data_structure
 
     def get_report(self, template, data):
         self.reporter.set_reporter(self.reporter)
@@ -35,21 +28,13 @@ class Controller:
 
 Controller = Controller()
 
-print(Controller.get_data('''
-$x = ['1+2', eval(1+2+sin(90))];
-'''))
+data = Controller.get_data('''
+$x = 5;$y = $x+3;$z = $y*2;
+''')
+print(data)
 
-data = {'$x' : 1}
 template = '''
-{{$x:((x)=>x==1),c1,c4}}
-{{$x:((x)=>x==1),c2,c4|c3,c4}}
-{{$x:((x)=>x!=1),c2,c4|c3,c4}}
-<format>
-c1= {'align' : 'center' }
-c2 = {'align' : 'left'}
-c3 = {'align' : 'right'}
-c4 = {'width' : 30, 'fill' : '0'}
-</format>
+{{$z:b}}
 '''
 declaration = Controller.get_report(template, data)
 print(declaration)

@@ -1,21 +1,16 @@
 import tkinter as tk
 from tkinter import ttk
 from calculator.sk_calculator import Calculator
-from data.variable.sk_variable_handler.variable_handler import VariableHandler
-from reporter.sk_report_generator import ReportGenerator
-from data.random_variable.sk_random_variable import RandomVariableGenerator
-from data.table.sk_table_hanlder import TableHandler
-
+from data.sk_data.data import DataStructure
+from sk_report_generator import ReportGenerator
 
 class TinkerApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.calculator = Calculator()
-        self.variable = VariableHandler()
-        self.variable.set_calculator(self.calculator)
+        self.data_structure = DataStructure()
+        self.data_structure.set_calculator(self.calculator)
         self.reporter = ReportGenerator()
-        self.table_handler = TableHandler()
-        self.declaration_process = RandomVariableGenerator()
 
         self.title("Reporting Template")
         self.geometry("800x600")
@@ -97,9 +92,8 @@ class TinkerApp(tk.Tk):
 
     def get_data(self):
         variable = self.variable_text.get("1.0", "end-1c")
-        random_variable = self.declaration_process.process(variable)
-        solved_table = self.table_handler.run(random_variable)
-        data_stucture =self.variable.get_result(solved_table)
+
+        data_stucture =self.data_structure.run(variable)
         self.ds.delete(1.0, tk.END)  # Clear previous content
         self.ds.insert(tk.END, data_stucture)  # Insert processed content
 
