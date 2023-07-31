@@ -1,14 +1,11 @@
 import re
-from sk_calculator import Calculator
-from regex_finder.regex_pattern import RegexMaker
 import json
-import time
 
 class VariableHandler:
 
     def __init__(self):
         self.calculator = None
-        self.regex_finder = RegexMaker()
+        self.regex_makeer = None
 
     def set_calculator(self, calculator):
 
@@ -56,13 +53,11 @@ class VariableHandler:
 
     def eval_value(self,value):
 
-        t1 = time.time()
-        expression =self.is_expression(value)
-        t2 = time.time()
-        print(t2-t1)
 
+        expression = re.sub(r'\s*','',value)
+        is_expression = self.is_expression(expression)
         if expression:
-            value = self.solve_expression(value)
+            value = self.solve_expression(expression)
 
         if self.is_object(value):
             value = str(eval(value))
@@ -76,14 +71,8 @@ class VariableHandler:
         solve_variables = self.solve_variables(declarations)
         return solve_variables
 
-    def solve_functions(self,expression):
-        pattern = r'(ep:\s*[\'\"]([^\'\"]+)[\'\"]\s*)'
-
-        expression = re.sub(pattern,lambda match : str(self.calculator.evaluate(match[2])),expression)
-        return expression
-
     def is_expression(self,value):
-        pattern = self.regex_finder.make('expression')
+        pattern = self.regex_maker.make('expression')
         expression = re.search(pattern,value)
         if expression:
             return True
@@ -103,23 +92,24 @@ class VariableHandler:
 
     def solve_expression(self,expression):
 
-        pattern = self.regex_finder.make('expression')
+        pattern = self.regex_maker.make('expression')
 
         expression = re.sub(pattern,lambda match: str(self.calculator.evaluate(match[0])),expression)
         return expression
 
 
-
+    def set_regex_maker(self,regex_maker):
+        self.regex_maker = regex_maker
 
 variable = '''
 $a = 1+10,10;
 $x = ["5+2+sin(90)"];
 $y = $x+[3];$z = $y+[2];
-$phone = "880152+1254580";
+$phone = "8801521254580";
 $name = "my name is kibria125";
 $x = 1+2;
 '''
 
-data= VariableHandler()
-data.set_calculator(Calculator())
-print(data.process(variable))
+##data= VariableHandler()
+##data.set_calculator(Calculator())
+##print(data.process(variable))
