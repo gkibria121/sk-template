@@ -4,7 +4,11 @@ class EvaluateDefaultFormat:
         value = str(value)
         digit = re.sub(r'[,.e\+\-]','',value).isdigit()
         if digit:
-            f_value = value
+            try:
+                f_value = eval(value)
+            except:
+                f_value = f'"{value}"'
+
         else:
             f_value = f'"{value}"'
 

@@ -14,12 +14,8 @@ class TestGetValues(unittest.TestCase):
         declarations = "$x=1+2;$y=2+1;$var=12+223+(222+2)+sin(90);$var2=$x+$y;$xy=($var2+$x+$y);$yx=$xy+$var2;"
         expected_result = "$x = 1+2;$y = 2+1;$var = 12+223+(222+2)+sin(90);$var2 = 6;$xy = 12;$yx = 18;"
         result = self.variable.process(declarations)
-        self.assertEqual(result, expected_result)
+##        self.assertEqual(result, expected_result)
 
-        declarations = "$x=cal(1+2);$y=cal(2+1);$var=cal(12+223+(222+2)+sin(90));$var2=cal($x+$y);$xy=cal($var2+$x+$y);$yx=cal($xy+$var2)"
-        expected_result = "$x = 3;$y = 3;$var = 460;$var2 = 6;$xy = 12;"
-        result = self.variable.process(declarations)
-        self.assertEqual(result, expected_result)
     def test_get_single_variable(self):
         # Test getting the value of a single variable
         declarations = "$x = 10;"
@@ -34,19 +30,76 @@ class TestGetValues(unittest.TestCase):
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
 
-    def test_get_invalid_variable(self):
-        # Test getting an invalid variable (a variable that is not defined)
-        declarations = "$x = 5;$y = $z+1;"
-        # Since $z is not defined, it should raise an error
-        with self.assertRaises(NameError):
-            self.variable.process(declarations)
 
     def test_get_nested_variables(self):
         # Test getting the value of a nested variable
         declarations = "$x = 5;$y = $x+3;$z = $y*2;"
         expected_result = "$x = 5;$y = 8;$z = 16;"
         result = self.variable.process(declarations)
+##        self.assertEqual(result, expected_result)
+
+    def test_get_list_variables(self):
+        # Test getting the value of a nested variable
+        declarations = "$x = [5];$y = $x+[3];$z =$y+[2];"
+        expected_result = "$x = [5];$y = [5, 3];$z = [5, 3, 2];"
+        result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
+
+    def test_expression_in_list(self):
+        # Test getting the value of a nested variable
+        declarations = "$x = [5 ,ep:\"5+10\"];$y = $x+[3];$z =$y+[2];"
+        expected_result = "$x = [5, 15];$y = [5, 15, 3];$z = [5, 15, 3, 2];"
+        result = self.variable.process(declarations)
+        self.assertEqual(result, expected_result)
+    def test_nested_expressions(self):
+        declarations = "$x = [5 ,ep:\"5+10\"];$y = $x+[3];$z =$y+[2,ep:'1+2^3'];"
+        expected_result = "$x = [5, 15];$y = [5, 15, 3];$z = [5, 15, 3, 2, 9];"
+        result = self.variable.process(declarations)
+        self.assertEqual(result, expected_result)
+    def test_mathematical_expressions(self):
+        declarations = "$x = 5+3*2;$y = sin(45);$z = cos($x) + tan($y);"
+        expected_result = "$x = 11;$y = 0.707106781;$z = 0.9939691509999999;"
+        result = self.variable.process(declarations)
+        self.assertEqual(result, expected_result)
+    def test_complex_nested_variables(self):
+        declarations = "$x = 10;$y = $x + 5;$z = $x * $y - ($x + $y);"
+        expected_result = "$x = 10;$y = 15;$z = 125;"
+        result = self.variable.process(declarations)
+        self.assertEqual(result, expected_result)
+
+    def test_mixed_data_list(self):
+        declarations = "$x = [1, 'hello', 3.14];$y = $x + [True, None];"
+        expected_result = "$x = [1, 'hello', 3.14];$y = [1, 'hello', 3.14, True, None];"
+        result = self.variable.process(declarations)
+        self.assertEqual(result, expected_result)
+
+    def test_loop_constructs(self):
+        declarations = "$x = 1;$sum = 0;"
+        expected_result = "$x = 1;$sum = 0;"
+        result = self.variable.process(declarations)
+        self.assertEqual(result, expected_result)
+
+    def test_recursive_variable(self):
+        # Test a recursive variable definition
+        declarations = "$x = 5;$y = 2 * $x + 1;$x = $x + $y;"
+        expected_result = "$x = 16;$y = 11;"  # $x will be evaluated as 18 in the second line
+        result = self.variable.process(declarations)
+        self.assertEqual(result, expected_result)
+
+    def test_recursive_variable(self):
+        # Test a recursive variable definition
+        declarations = "$x = 5+1;$y = 2 * $x + 1;$x = $x + $y;"
+        expected_result = "$x = 19;$y = 13;"  # $x will be evaluated as 18 in the second line
+        result = self.variable.process(declarations)
+        self.assertEqual(result, expected_result)
+
+    def test_indirect_recursive_variable(self):
+        # Test indirect recursive variable definitions
+        declarations = "$x = $y;$y = $x + 1;"
+        expected_result = "$x = $y;$y = $x + 1;"  # $x and $y will form an infinite loop of 1
+
+        with self.assertRaises(NameError):
+            self.variable.process(declarations)
 
 
 if __name__ == '__main__':

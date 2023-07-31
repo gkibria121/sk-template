@@ -27,10 +27,9 @@ class Controller:
 
 
 Controller = Controller()
-data = {'$person': {'name' : 'kibria','age' : 23 , 'city' : 'Dhaka', 'country'  : 'Bangladesh'}}
+data = {'$phone': '01521254580'}
 template = '''
-{{$person[0]:<10}} : {{$person.name:<10}}{{$person[1]:<10}} : {{$person.age:<10}}
-{{$person[2]:<10}} : {{$person.city:<10}}{{$person[3]:<10}} : {{$person.country:<10}}
+{{$phone::{'mask' : '+88###########'}}}
 '''
 declaration = Controller.get_report(template, data)
 print(declaration)

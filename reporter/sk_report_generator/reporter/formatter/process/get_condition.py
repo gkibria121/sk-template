@@ -13,5 +13,7 @@ class GetCondition:
 
             if eval(f'{match[2]}'):
                 return True
+            else:
+                return False
 
         return True

@@ -32,7 +32,7 @@ class VariableHandler:
         for match in matches:
             variable_in_expression =re.search(r'\$\w+',match[2])
             if  not variable_in_expression:
-                solved_expression[match[1]] = match[2]
+                solved_expression[match[1]] =self.eval_value(match[2])
 
             if variable_in_expression:
                 temp_expression = match[2]
@@ -41,9 +41,9 @@ class VariableHandler:
                 variable_in_solved_expression =re.search(r'\$\w+',temp_expression)
 
                 if not variable_in_solved_expression:
-                    solved_expression[match[1]]= temp_expression
+                    solved_expression[match[1]]=self.eval_value(temp_expression)
                 else:
-                    raise ValueError(variable_in_solved_expression[0]+" Not defined")
+                    raise NameError(variable_in_solved_expression[0]+" Not defined")
 
         text = ''
         for key,value in solved_expression.items():
@@ -51,43 +51,59 @@ class VariableHandler:
 
         return text
 
-    def evaluate_functions(self,variables):
-        pattern = r'((cal)(\(([^()]|(?3))*\)))'
-        matchs = re.findall(pattern,variables)
-        while matchs:
-            for match in matchs:
-                solved = match[0]
-                if match[1]=='cal' or match[1]=='calculate':
-                    solved = self.calculator.evaluate(match[2])
-                    variables = re.sub(re.escape(match[0]),str(solved),variables)
-                variables = re.sub(re.escape(match[0]),str(solved),variables)
-            matchs = re.findall(pattern,variables)
 
-        pattern = r'((eval)(\(([^()]|(?3))*\)))'
-        matchs = re.findall(pattern,variables)
-        while matchs:
-            for match in matchs:
-                solved = match[0]
-                if match[1] =='eval' or match[1] =='evaluate':
-                    solved = str(eval(match[2]))
-                variables = re.sub(re.escape(match[0]),str(solved),variables)
-            matchs = re.findall(pattern,variables)
+    def eval_value(self,value):
+        value = self.solve_functions(value)
+        if self.is_object(value):
+            value = str(eval(value))
+        elif self.is_expression(value):
+            value = str(self.calculator.evaluate(value))
 
-        return variables
+
+        return value
 
     def process(self, declarations_text):
 
         declarations = self.remove_comments(declarations_text)
         solve_variables = self.solve_variables(declarations)
-        processed_output = self.evaluate_functions(solve_variables)
+        return solve_variables
+
+    def solve_functions(self,expression):
+        pattern = r'(ep:\s*[\'\"]([^\'\"]+)[\'\"]\s*)'
+
+        expression = re.sub(pattern,lambda match : str(self.calculator.evaluate(match[2])),expression)
+        return expression
+
+    def is_expression(self,value):
+        pattern = r'[\'\"][^\'\"]+[\'\"]'
+        if not re.search(pattern,value):
+            return True
+
+        return False
+
+    def is_object(self,value):
+
+        pattern = r'[\{\}\[\]\]]'
+        if re.search(pattern,value):
+            return True
+
+        return False
 
 
-        return processed_output
+
+
+
+
 
 variable = '''
-$x=cal(1+2);$y=cal(2+1);$var=cal(12+223+(222+2)+sin(90));$var2=cal($x+$y);$xy=cal($var2+$x+$y);$yx=cal($xy+$var2)
+$a = 1+2;
+$x = [ep:"5+2+sin(90)"];
+$y = $x+[3];$z = $y+[2];
+$phone = "880152+1254580";
+$name = "my name is kibria1+2";
+$x = 1+2;
 '''
 
-data= VariableHandler()
-data.set_calculator(Calculator())
-print(data.process(variable))
+##data= VariableHandler()
+##data.set_calculator(Calculator())
+##print(data.process(variable))

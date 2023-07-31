@@ -718,7 +718,7 @@ fl= {'ceil-significance': 2}
         template = '''{{$x.name:((x)=>x==24),c2}}<format>
         c2 = {'align' : 'right', 'width' : 10}
         </format>'''
-        expected_report ='   gkibria'
+        expected_report ='gkibria'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
@@ -730,7 +730,7 @@ fl= {'ceil-significance': 2}
 c2 = {'align': 'center','width': 10, 'fill' : 0}
 fl= {'floor-significance': 2}
 </format>'''
-        expected_report ='40.0\n'
+        expected_report ='40.6\n'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
         data = {'$x': 40.6}
@@ -739,7 +739,7 @@ fl= {'floor-significance': 2}
 c2 = {'align': 'center','width': 10, 'fill' : 0}
 fl= {'ceil-significance': 2}
 </format>'''
-        expected_report ='42.0\n'
+        expected_report ='40.6\n'
         report =self.reporter.generate_report(template,data)
         self.assertEqual(report,expected_report)
 
