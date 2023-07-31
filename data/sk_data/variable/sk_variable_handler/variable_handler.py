@@ -1,12 +1,14 @@
-import regex as re
+import re
 from sk_calculator import Calculator
+from regex_finder.regex_pattern import RegexMaker
 import json
-
+import time
 
 class VariableHandler:
 
     def __init__(self):
         self.calculator = None
+        self.regex_finder = RegexMaker()
 
     def set_calculator(self, calculator):
 
@@ -53,11 +55,17 @@ class VariableHandler:
 
 
     def eval_value(self,value):
-        value = self.solve_functions(value)
+
+        t1 = time.time()
+        expression =self.is_expression(value)
+        t2 = time.time()
+        print(t2-t1)
+
+        if expression:
+            value = self.solve_expression(value)
+
         if self.is_object(value):
             value = str(eval(value))
-        elif self.is_expression(value):
-            value = str(self.calculator.evaluate(value))
 
 
         return value
@@ -75,8 +83,9 @@ class VariableHandler:
         return expression
 
     def is_expression(self,value):
-        pattern = r'[\'\"][^\'\"]+[\'\"]'
-        if not re.search(pattern,value):
+        pattern = self.regex_finder.make('expression')
+        expression = re.search(pattern,value)
+        if expression:
             return True
 
         return False
@@ -92,18 +101,25 @@ class VariableHandler:
 
 
 
+    def solve_expression(self,expression):
+
+        pattern = self.regex_finder.make('expression')
+
+        expression = re.sub(pattern,lambda match: str(self.calculator.evaluate(match[0])),expression)
+        return expression
+
 
 
 
 variable = '''
-$a = 1+2;
-$x = [ep:"5+2+sin(90)"];
+$a = 1+10,10;
+$x = ["5+2+sin(90)"];
 $y = $x+[3];$z = $y+[2];
 $phone = "880152+1254580";
-$name = "my name is kibria1+2";
+$name = "my name is kibria125";
 $x = 1+2;
 '''
 
-##data= VariableHandler()
-##data.set_calculator(Calculator())
-##print(data.process(variable))
+data= VariableHandler()
+data.set_calculator(Calculator())
+print(data.process(variable))

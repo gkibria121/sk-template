@@ -1,10 +1,10 @@
 import re
 import pyperclip
-class RegexFinder:
-    def get(self,name):
+class RegexMaker:
+    def make(self,name):
         return eval(f'self.{name}()')
 
-    def expression(self,level=2):
+    def expression(self):
         floating_point = r'([-+])*\d+(\.\d+)?'
         function_name = r'[a-zA-Z_](\w+)?'
         operators = r'[-+*\/^]+'
@@ -41,24 +41,14 @@ class RegexFinder:
         expresssion_with_node_5 = f'({expression_node_5})(({operators})({expression_node_5}))*'
 
 
+        pattern = f"({expresssion_with_node_5})"
 
-        pyperclip.copy(expresssion_with_node)
-
-
-
+        return pattern
 
 
-##        pattern = f'((?:{expression_elements})|(?:(?:{operators})))+'
-
-        return
-
-    def json_pattern(self):
-        json_pattern = r'[\{\}\[\]\]]'
-
-        return json_pattern
-
-regex_finder = RegexFinder()
-pattern = regex_finder.get('expression')
+regex_finder = RegexMaker()
+pattern = regex_finder.make('expression')
+pyperclip.copy(pattern)
 
 
 

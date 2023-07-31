@@ -5,3 +5,4 @@ sk_random_variable
 sk_table_handler
 nltk
 pytest
+pyperclip
