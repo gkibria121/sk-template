@@ -1,25 +1,22 @@
 from .variable.sk_variable_handler.variable_handler import VariableHandler
 from .random_variable.sk_random_variable import RandomVariableGenerator
 from .table.sk_table_hanlder import TableHandler
+from sk_regex import RegexMaker
 import regex as re
 
 class DataStructure:
     def __init__(self):
         self.random = RandomVariableGenerator()
         self.variable = VariableHandler()
+        self.variable.set_regex_maker(RegexMaker())
         self.table = TableHandler()
-
-        self.process = []
-        self.process.append(self.random)
-        self.process.append(self.variable)
-        self.process.append(self.table)
 
 
     def run(self,data_text):
-        for process in self.process:
-            data_text = self.random.process(data_text)
-            data_text = self.variable.process(data_text)
-            data_text = self.table.process(data_text)
+
+        data_text = self.random.process(data_text)
+        data_text = self.variable.process(data_text)
+        data_text = self.table.process(data_text)
         data_structure = self.get_data_structure(data_text)
         return data_structure
     def get_data_structure(self,solved_table):
