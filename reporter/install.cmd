@@ -1,3 +1,3 @@
 pip install .
 rmdir /s /q "build"
-rmdir /s /q "sk_reporter.egg-info"
+rmdir /s /q "sk_report_generator.egg-info"

@@ -17,7 +17,7 @@ class FunctionSolver:
 
         for single_object in single_boject_list:
 
-            reslut = self.single_obj_solver.run(single_object[1],single_object[2])
+            reslut = self.single_obj_solver.run(single_object[1],single_object[0])
 
             function_calling = re.sub(re.escape(single_object[0]) + r'(?=\s|\b|$)', str(reslut), function_calling)
 

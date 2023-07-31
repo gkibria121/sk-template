@@ -20,7 +20,10 @@ class TestGetEvaluateDefaultFormat(unittest.TestCase):
         format_spec = '#^30'
         result = self.default_format_evaluate.run(value,format_spec,format_class_list={})
         self.assertEqual(result,'##############2###############')
-
+        value = 'gkibria'
+        format_spec = '#^30'
+        result = self.default_format_evaluate.run(value,format_spec,format_class_list={})
+        self.assertEqual(result,'###########gkibria############')
 
 
 if __name__ == '__main__':

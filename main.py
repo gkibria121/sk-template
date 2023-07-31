@@ -27,14 +27,10 @@ class Controller:
 
 
 Controller = Controller()
-
-data = Controller.get_data('''
-$x = 5;$y = $x+3;$z = $y*2;
-''')
-print(data)
-
+data = {'$person': {'name' : 'kibria','age' : 23 , 'city' : 'Dhaka', 'country'  : 'Bangladesh'}}
 template = '''
-{{$z:b}}
+{{$person[0]:<10}} : {{$person.name:<10}}{{$person[1]:<10}} : {{$person.age:<10}}
+{{$person[2]:<10}} : {{$person.city:<10}}{{$person[3]:<10}} : {{$person.country:<10}}
 '''
 declaration = Controller.get_report(template, data)
 print(declaration)
