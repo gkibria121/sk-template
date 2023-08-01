@@ -14,7 +14,7 @@ class TestGetValues(unittest.TestCase):
         self.variable.set_regex_maker(RegexMaker())
 
     def test_get_result(self):
-        declarations = "$x=1+2;$y=2+1;$var=12+223+(222+2)+sin(90);$var2=$x+$y;$xy=($var2+$x+$y);$yx=$xy+$var2;"
+        declarations = "$x=@'1+2';$y=@'2+1';$var=@'12+223+(222+2)+sin(90)';$var2=@'$x+$y';$xy=@'($var2+$x+$y)';$yx=@'$xy+$var2';"
         expected_result = "$x = 3;$y = 3;$var = 460;$var2 = 6;$xy = 12;$yx = 18;"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
@@ -36,7 +36,7 @@ class TestGetValues(unittest.TestCase):
 
     def test_get_nested_variables(self):
         # Test getting the value of a nested variable
-        declarations = "$x = 5;$y = $x+3;$z = $y*2;"
+        declarations = "$x = 5;$y = @'$x+3';$z = @'$y*2';"
         expected_result = "$x = 5;$y = 8;$z = 16;"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
@@ -50,22 +50,22 @@ class TestGetValues(unittest.TestCase):
 
     def test_expression_in_list(self):
         # Test getting the value of a nested variable
-        declarations = "$x = [5 ,\"5+10\"];$y = $x+[3];$z =$y+[2];"
-        expected_result = "$x = [5, '15'];$y = [5, '15', 3];$z = [5, '15', 3, 2];"
+        declarations = "$x = [5 ,@\"5+10\"];$y = $x+[3];$z =$y+[2];"
+        expected_result = "$x = [5, 15];$y = [5, 15, 3];$z = [5, 15, 3, 2];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
     def test_nested_expressions(self):
-        declarations = "$x = [5 , \"5+10\"];$y = $x+[3];$z =$y+[2, '1+2^3'];"
-        expected_result = "$x = [5, '15'];$y = [5, '15', 3];$z = [5, '15', 3, 2, '9'];"
+        declarations = "$x = [5 , @\"5+10\"];$y = @'$x+[3]';$z =$y+[2, @'1+2^3'];"
+        expected_result = "$x = [5, 15];$y = [5, 15, 3];$z = [5, 15, 3, 2, 9];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
     def test_mathematical_expressions(self):
-        declarations = "$x = 5+3*2;$y = sin(45);$z = cos($x) + tan($y);"
+        declarations = "$x = @'5+3*2';$y = @'sin(45)';$z = @'cos($x) + tan($y)';"
         expected_result = "$x = 11;$y = 0.707106781;$z = 0.9939691509999999;"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
     def test_complex_nested_variables(self):
-        declarations = "$x = 10;$y = $x + 5;$z = $x * $y - ($x + $y);"
+        declarations = "$x = 10;$y = @'$x + 5';$z = @'$x * $y - ($x + $y)';"
         expected_result = "$x = 10;$y = 15;$z = 125;"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
@@ -91,7 +91,7 @@ class TestGetValues(unittest.TestCase):
 
     def test_recursive_variable(self):
         # Test a recursive variable definition
-        declarations = "$x = 5+1;$y = 2 * $x + 1;$x = $x + $y;"
+        declarations = "$x = @'5+1';$y = @'2 * $x + 1';$x = @'$x + $y';"
         expected_result = "$x = 19;$y = 13;"  # $x will be evaluated as 18 in the second line
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)

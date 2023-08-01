@@ -1,11 +1,10 @@
-import re
+import regex as re
 import json
-
+from sk_calculator import Calculator
 class VariableHandler:
 
     def __init__(self):
         self.calculator = None
-        self.regex_makeer = None
 
     def set_calculator(self, calculator):
 
@@ -52,12 +51,9 @@ class VariableHandler:
 
 
     def eval_value(self,value):
-
-
-        expression = re.sub(r'\s*','',value)
-        is_expression = self.is_expression(expression)
-        if expression:
-            value = self.solve_expression(expression)
+        is_expression = self.is_expression(value)
+        if is_expression:
+            value = self.solve_expression(value)
 
         if self.is_object(value):
             value = str(eval(value))
@@ -72,7 +68,7 @@ class VariableHandler:
         return solve_variables
 
     def is_expression(self,value):
-        pattern = self.regex_maker.make('expression')
+        pattern = r'\@((\"([^\"]+)\")|(\'([^\']+)\'))'
         expression = re.search(pattern,value)
         if expression:
             return True
@@ -92,24 +88,17 @@ class VariableHandler:
 
     def solve_expression(self,expression):
 
-        pattern = self.regex_maker.make('expression')
+        pattern = r'\@((\"([^\"]+)\")|(\'([^\']+)\'))'
 
-        expression = re.sub(pattern,lambda match: str(self.calculator.evaluate(match[0])),expression)
+        expression = re.sub(pattern,lambda match: str(self.calculator.evaluate(match[3])) if match[5] ==None else str(self.calculator.evaluate(match[5])),expression)
         return expression
 
 
     def set_regex_maker(self,regex_maker):
         self.regex_maker = regex_maker
 
-variable = '''
-$a = 1+10,10;
-$x = ["5+2+sin(90)"];
-$y = $x+[3];$z = $y+[2];
-$phone = "8801521254580";
-$name = "my name is kibria125";
-$x = 1+2;
-'''
+variable = "$x = [5 , @'5+10'];$y = $x+[3];$z =$y+[2, @'1+2^3'];"
 
-##data= VariableHandler()
-##data.set_calculator(Calculator())
-##print(data.process(variable))
+data= VariableHandler()
+data.set_calculator(Calculator())
+print(data.process(variable))
