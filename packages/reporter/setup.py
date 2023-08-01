@@ -4,9 +4,9 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name='sk_variable_handler',
-    version='1.0.101',
-    description='A simple Variable Handling  program',
+    name='sk_report_generator',
+    version='1.0.102',
+    description='A simple Reporting program',
     author='gkibria',
     long_description=long_description,
     long_description_content_type="text/markdown",  # Specify the content type as Markdown
@@ -14,7 +14,7 @@ setup(
     packages=find_packages(),
     install_requires=['regex'],
     python_requires='>=3.6',
-    keywords='python, report generator',
+    keywords='python, calculator, python calculator, gk calculator, advanced calculator',
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

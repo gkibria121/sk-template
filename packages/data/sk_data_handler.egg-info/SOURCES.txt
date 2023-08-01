@@ -1,0 +1,10 @@
+LICENSE.txt
+README.md
+setup.py
+sk_data_handler/__init__.py
+sk_data_handler/data.py
+sk_data_handler.egg-info/PKG-INFO
+sk_data_handler.egg-info/SOURCES.txt
+sk_data_handler.egg-info/dependency_links.txt
+sk_data_handler.egg-info/requires.txt
+sk_data_handler.egg-info/top_level.txt

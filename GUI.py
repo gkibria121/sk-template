@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
-from calculator.sk_calculator import Calculator
-from data.sk_data.data import DataStructure
+from sk_calculator import Calculator
+from sk_data_handler.data import DataStructure
 from sk_report_generator import ReportGenerator
 
 class TinkerApp(tk.Tk):

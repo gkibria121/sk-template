@@ -3,3 +3,19 @@ json display =tree,table with border
 
 $parent_index = x.index
 
+        variables = '''
+
+        $table1= [{"item" : 'rice',"quantity" : 22,'unit' : 'kg'}];
+        $table2= [{"item" :'rice', "price" : 55}];
+        //OnetoOne and oneToMany (agrigate function)
+
+        $table3 = $<table1,table2,table3>(x,y:x.item=y.item , z: x.item=z.item, a: x.item=a.item )=>{ 'name' : x.item , 'cost' : x.quantity*y.price ,'unit' : x.unit };
+
+        C->(A,B)=>{C.Name=A.Name, C.Cost=A.Quantity*B.Rate where }
+        '''
+        resutl = self.table_hanlder.process(variables)
+
+        self.assertEqual(resutl,'''
+        $table= [{"age" : 20},{"age" : 22}];
+        $table2 = [1, 1];
+        ''')

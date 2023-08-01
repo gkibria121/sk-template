@@ -3,6 +3,7 @@ sk_variable_handler
 sk_report_generator
 sk_random_variable
 sk_table_handler
+sk_data_handler
 nltk
 pytest
 pyperclip

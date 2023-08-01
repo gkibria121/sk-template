@@ -110,7 +110,7 @@ class TableHandler:
     def process_table(self,declarations):
         declarations  = re.sub(r'(\$)<(\w+)>',lambda catch: catch[1]+catch[2],declarations)
         return declarations
-
+##$table3 = $<table1,table2>(x,y:x.item=y.item)=>{ 'name' : x.item , 'cost' : x.quantity*y.price ,'unit' : x.unit };
 
 ##
 ##variables = '''

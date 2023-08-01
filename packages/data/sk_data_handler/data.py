@@ -1,6 +1,6 @@
-from .variable.sk_variable_handler.variable_handler import VariableHandler
-from .random_variable.sk_random_variable import RandomVariableGenerator
-from .table.sk_table_hanlder import TableHandler
+from sk_variable_handler.variable_handler import VariableHandler
+from sk_random_variable import RandomVariableGenerator
+from sk_table_hanlder import TableHandler
 from sk_regex import RegexMaker
 import regex as re
 

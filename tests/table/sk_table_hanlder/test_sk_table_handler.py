@@ -6,16 +6,7 @@ class TestTableHandler(unittest.TestCase):
         self.table_hanlder = TableHandler()
 
     def test_table_hanlder(self):
-        variables = '''
-        $table= [{"age" : 20},{"age" : 22}];
-        $table2 = $<table>(x)=>(x.age>10){ 1 };
-        '''
-        resutl = self.table_hanlder.process(variables)
 
-        self.assertEqual(resutl,'''
-        $table= [{"age" : 20},{"age" : 22}];
-        $table2 = [1, 1];
-        ''')
 
         variables = '''
         $table= [{"age" : 20},{"age" : 22}];
@@ -91,3 +82,6 @@ class TestTableHandler(unittest.TestCase):
 
 if __name__=='__main__':
     unittest.main()
+
+
+
