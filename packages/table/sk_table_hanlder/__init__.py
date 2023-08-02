@@ -5,89 +5,125 @@ class TableHandler:
     def __init__(self):
         self.data = {}
 
-    def get_data(self,variable_declarations):
+    def get_data(self,data_structure,tables):
         data = {}
-        pattern = '(\$\w+)\s*=\s*([^=;]+)\;'
-        matches = re.findall(pattern,variable_declarations)
-        for variable,value in matches:
-            data[variable] = eval(value) if 'eval' not in value else value
+        for table in tables:
+            data[table] = data_structure[table]
         return data
 
-    def solve_table(self,data,declarations):
-        pattern = r'(\$\w+)\s*=\s*((\$\w+)\s*\((\w+)\)\s*=>\s*(\((.*?)\))?\s*(\{(([^{}]|(?7))*)\}))'
+    def solve_table(self,variable_tokens):
 
-        matches = re.findall(pattern,declarations)
-        replace = ''
-        for match in matches:
-            replace = match[1]
+        temp_data = {}
 
-            variable = match[0]
-            template_variable = match[2]
-            placeholder = match[3]
-            condition = match[5]
-            return_value =  match[7]
+        for variable in variable_tokens:
+            if '$' not in variable[1]:
+                temp_data.update({variable[0]: eval(variable[1])})
+            else:
+                value =self.solve_single_table(temp_data,variable)
+                temp_data.update({variable[0] : value} )
 
-            value = self.get_table_value(data,template_variable,variable,placeholder,condition,return_value)
+        return temp_data
 
-            declarations = re.sub(re.escape(replace),str(value),declarations)
+    def solve_single_table(self,data,variable):
 
-        return declarations
+        pattern = r'\$<((\w+)(,\w+)*)>(\(((\w+)(,\w+\:[^,)]+)*)\))=>(\((([^()]|(?8))*)\))?(\{(([^{}]|(?11))*)\})'
+        match = re.search(pattern,variable[1])
+        if match:
+            tables = [f'${item}' for index,item in enumerate(re.split(r',',match[1])) if item!='' and item!='\n']
+            parent_table = f"${match[2]}"
+            lookup_conditions = match[5]
+            condition = match[9]
+            return_data = match[12]
+            value = self.get_table_value(data,tables,parent_table,lookup_conditions,condition,return_data)
+            return value
+
+        return
+
+
+
 
 
     def process(self,variable_declarations):
+        variable_tokens = self.get_variable_tokens(variable_declarations)
 
-        procced_table = self.process_table(variable_declarations)
+        declaration_list = self.solve_table(variable_tokens)
+        declaration_text = self.create_declaration_text(declaration_list)
 
-        data = self.get_data(variable_declarations)
 
-
-        declaration_text = self.solve_table(data,procced_table)
 
 
         return declaration_text
 
 
-    def get_table_value(self,data_stucture,template_variable,variable,placeholder,condition,return_value):
+    def create_declaration_text(self,declaration_list):
+        declaration_text = ''
+        for key,value in declaration_list.items():
+            declaration_text+= f'{key} = {value};'
 
-        data = data_stucture[template_variable]
+        return declaration_text
 
-        result = []
 
-        condition = self.index_process(condition)
-        data_stucture.update({variable : []})
+
+    def get_variable_tokens(self,declarations):
+
+
+        pattern = r'(\$\w+\s*=\s*[^;]+);'
+        tokens = [self.get_key_value(item) for index,item in enumerate( re.split(pattern,declarations)) if item !='' and item !='\n']
+        return tokens
+
+
+
+    def get_table_value(self,data,tables,parent_table,lookup_conditions,condition,return_data):
+        data = self.get_data(data,tables)
+        parent_data = data[parent_table]
+        lookup_tables = tables[1:]
+        parent_table_placeholer = re.search(r'(\w+)(?!\:|\.)',lookup_conditions)[1]
+        lookup_table_placeholer_with_condition = re.findall(r'(\w+)\:([^,]+)',lookup_conditions)
+
+        temp = []
         index = 0
-        list_len = len(data)
+        while index<len(parent_data):
 
-        for parent_index,value in enumerate(data):
-
-            exec(f"{placeholder} = value")
-            if condition =='' or eval(f"{condition}"):
-                item =return_value
-                item = self.index_process(item)
-                item = self.process_ref(item,index,parent_index,list_len)
-                item = self.put_value(data_stucture,item)
-
-                item = eval(item) if 'eval' not in item else item
-                result.append(item)
-                data_stucture.update({variable : result})
-                index = index+1
+            index2= 0
+            exec(f"{parent_table_placeholer} = {parent_data[index]}")
+            while index2<len(lookup_table_placeholer_with_condition):
+                exec(f"{lookup_table_placeholer_with_condition[index2][0]} = self.get_lookup_placholder_value(data,lookup_tables[index2],lookup_table_placeholer_with_condition[index2],parent_table_placeholer,{parent_table_placeholer}),")
+                index2 = index2+1
+            if condition==None or eval(condition):
+                temp.append(eval(return_data))
 
 
-        return result
+
+
+            index = index+1
+
+        return temp
+
+    def get_lookup_placholder_value(self,data,lookup_table_name,lookup_placholder_condition,parent_table_placeholder,parent_table_placeholder_value):
+
+        table_data = data[lookup_table_name]
+
+        temp = []
+
+        for column in table_data:
+            condition =  self.index_process(lookup_placholder_condition[1])
+            condition = re.sub(r'(?=\b)'+re.escape(lookup_placholder_condition[0])+r'(?=\b)',str(column) ,condition)
+            condition = re.sub(r'(?=\b)'+re.escape(parent_table_placeholder)+r'(?=\b)',str(parent_table_placeholder_value) ,condition)
+            if eval(condition):
+                temp+=[column]
+
+        return temp
+
 
     def index_process(self,code):
-
         pattern =r'(?:\.([^\d][\w]*))\b(?!\()'
-
         code = re.sub(pattern, lambda match: f'["{match.group(1)}"]', code)
         return code
 
     def put_value(self,data_structure,item):
 
         for key,value in data_structure.items():
-
             item = re.sub(re.escape(key)+r'\b',str(value),item)
-
         return item
 
     def process_ref(self,item,index,parent_index,list_len):
@@ -96,7 +132,6 @@ class TableHandler:
         item = re.sub(r'\$parent_index\b',str(index),item)
         pattern = r'((\$[^$]+)?(\<([^|]+)\|([^|]+)\>))'
         item = re.sub(pattern, lambda match: f"{match.group(2)}{match.group(4)}" if  self.index_validation(match.group(4),list_len)  else f"{match.group(5)}", item)
-
         return item
 
     def index_validation(self,text,list_len):
@@ -107,18 +142,24 @@ class TableHandler:
                 return False
         return True
 
-    def process_table(self,declarations):
-        declarations  = re.sub(r'(\$)<(\w+)>',lambda catch: catch[1]+catch[2],declarations)
-        return declarations
-##$table3 = $<table1,table2>(x,y:x.item=y.item)=>{ 'name' : x.item , 'cost' : x.quantity*y.price ,'unit' : x.unit };
 
-##
-##variables = '''
-##        $table= [{'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}, {'number': 1}, {'number': 0}];
-##        $table2 = $<table>(x)=>{ {'number' : $table<[$parent_index-1].number|1>+$table<[$parent_index+1].number|1> } };'''
-##table = TableHandler()
-##
-##print(table.process(variables))
+    def get_key_value(self,item):
+        pattern = r'(\$\w+)\s*=([^;]+)'
+        if len(re.findall(pattern,item))>0:
+            return re.findall(pattern,item)[0]
+        return
+##$table4 = $<table,table3,table2>(x,z:x.number==z.number,y:x.number==y.number)=>{ {'name' : x.item , 'cost' : x.quantity*y.price ,'unit' : x.unit} };
+##$table2 = $<table>(x)=>{ {'number' : $<table><[$parent_index-1].number|1>+$<table><[$parent_index+1].number|1> } };
+
+variables = '''
+$table1 = [{'item' : 'apple'},{'item' : 'mobile'}];
+$table2 = [{'item' : 'apple' , 'quantity' : 20},{'item' : 'mobile','quantity' : 10 }];
+$table3 = [{'item' : 'apple' , 'price' : 21},{'item' : 'mobile','price' : 51 }];
+$table4 = $<table1,table2,table3>(x,y:y.item==x.item,z:z.item==x.item)=>{  1 }
+'''
+table = TableHandler()
+
+print(table.process(variables))
 
 
 

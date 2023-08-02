@@ -97,8 +97,8 @@ class VariableHandler:
     def set_regex_maker(self,regex_maker):
         self.regex_maker = regex_maker
 
-variable = "$x = [5 , @'5+10'];$y = $x+[3];$z =$y+[2, @'1+2^3'];"
-
-data= VariableHandler()
-data.set_calculator(Calculator())
-print(data.process(variable))
+##variable = "$x=@'1+2';$y=@'2+1';$var=@'12+223+(222+2)+sin(90)';$var2= $x+$y;$xy=($var2+$x+$y);$yx=$xy+$var2;"
+##
+##data= VariableHandler()
+##data.set_calculator(Calculator())
+##print(data.process(variable))
