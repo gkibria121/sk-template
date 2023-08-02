@@ -1,16 +1,33 @@
 import tkinter as tk
 from tkinter import ttk
-from sk_calculator import Calculator
-from sk_data_handler.data import DataStructure
-from sk_report_generator import ReportGenerator
+from packages.calculator.sk_calculator import Calculator
+from packages.data.sk_data_handler.data import DataStructure
+from packages.reporter.sk_report_generator import ReportGenerator
+from packages.variable.sk_variable_handler.variable_handler import VariableHandler
+from packages.random_variable.sk_random_variable import RandomVariableGenerator
+from packages.table.sk_table_hanlder import TableHandler
 
 class TinkerApp(tk.Tk):
     def __init__(self):
         super().__init__()
+        #config
         self.calculator = Calculator()
         self.data_structure = DataStructure()
-        self.data_structure.set_calculator(self.calculator)
+        self.variable = VariableHandler()
+        self.random = RandomVariableGenerator()
+        self.table_handler = TableHandler()
         self.reporter = ReportGenerator()
+
+
+        self.variable.set_calculator(self.calculator)
+
+        self.data_structure.set_random(self.variable)
+        self.data_structure.set_variable(self.random)
+        self.data_structure.set_table_handler(self.table_handler)
+
+
+
+        #app
 
         self.title("Reporting Template")
         self.geometry("800x600")
