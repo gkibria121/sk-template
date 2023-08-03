@@ -71,7 +71,8 @@ $table2 = [{'number': 2}, {'number': 0}, {'number': 2}, {'number': 0}, {'number'
         variables = '''
         $table1 = [{'item' : 'mobile'},{'item' : 'apple'}];
         $table2 = [{'item' : 'mobile','quantity' : 10},{'item' : 'apple','quantity' : 20}];
-        $table3 =[{'item' : 'mobile','price' : 100},{'item' : 'apple','price' : 50}];
+        $table3 = [{'item' : 'mobile','price' : 100},{'item' : 'apple','price' : 50}];
+        $table4 = $<table1,table2,table3>(x,y:y.item==x.item,z:z.item==x.item)=>{ {'item' : x.item,'cost' : y.quantity*z.price } };
         $table4 = $<table1,table2,table3>(x,y:y.item==x.item,z:z.item==x.item)=>{ {'item' : x.item,'cost' : y[0].quantity*z[0].price } };
         '''
         result = self.table_hanlder.process(variables)
@@ -81,6 +82,34 @@ $table2 = [{'item': 'mobile', 'quantity': 10}, {'item': 'apple', 'quantity': 20}
 $table3 = [{'item': 'mobile', 'price': 100}, {'item': 'apple', 'price': 50}];
 $table4 = [{'item': 'mobile', 'cost': 1000}, {'item': 'apple', 'cost': 1000}];
 ''')
+    def  test_create_table_with_lookup_table(self):
+
+        variables = '''
+        $table2 = [{'item' : 'mobile','quantity' : 10},{'item' : 'apple','quantity' : 20}];
+        $table3 = [{'item' : 'mobile','price' : 100},{'item' : 'apple','price' : 50}];
+        $table4 = $<table2,table3>(x,y:y.item==x.item)=>{ {'item' : x.item,'cost' : x.quantity*y[0].price } };
+        '''
+        result = self.table_hanlder.process(variables)
+        self.maxDiff = None
+        self.assertEqual(result,'''$table2 = [{'item': 'mobile', 'quantity': 10}, {'item': 'apple', 'quantity': 20}];
+$table3 = [{'item': 'mobile', 'price': 100}, {'item': 'apple', 'price': 50}];
+$table4 = [{'item': 'mobile', 'cost': 1000}, {'item': 'apple', 'cost': 1000}];
+''')
+    def  no_test_create_table_with_lookup_table(self):
+
+        variables = '''
+        $table2 = [{'party' : 'x'},{'party' : 'y'}];
+        $table3 = [{'party' : 'x' , 'paid' : 10},{'party' : 'x' , 'paid' : 10},{'party' : 'y' , 'paid' : 30},{'party' : 'y' , 'paid' : 20}];
+        $table4 = $<table2,table3>(x,y:y.party==x.party)=>{ {'party' : x.party,'sum' : y.paid.sum() } };
+        '''
+        result = self.table_hanlder.process(variables)
+        self.maxDiff = None
+        self.assertEqual(result,'''$table1 = [{'item': 'mobile'}, {'item': 'apple'}];
+$table2 = [{'item': 'mobile', 'quantity': 10}, {'item': 'apple', 'quantity': 20}];
+$table3 = [{'item': 'mobile', 'price': 100}, {'item': 'apple', 'price': 50}];
+$table4 = [{'item': 'mobile', 'cost': 1000}, {'item': 'apple', 'cost': 1000}];
+''')
+
 
 
 

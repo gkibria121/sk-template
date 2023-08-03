@@ -38,10 +38,14 @@ class Controller:
         return declarations
 
 
-Controller = Controller()
-data = {'$phone': '01521254580'}
-template = '''
-{{$phone::{'mask' : '+88###########'}}}
+controller = Controller()
+data = '''
+$table1 = [{'item' : 'mobile'},{'item' : 'apple'}];
+$table2 = [{'item' : 'mobile','quantity' : 10},{'item' : 'apple','quantity' : 20}];
+$table3 = [{'item' : 'mobile','price' : 100},{'item' : 'apple','price' : 50}];
+$table4 = $<table1,table2,table3>(x,y:y.item==x.item,z:z.item==x.item)=>{ {'item' : x.item,'cost'  : y[0].quantity*z[0].price } };
 '''
-declaration = Controller.get_report(template, data)
+template = '''{{$table4}}'''
+data = controller.get_data(data)
+declaration = controller.get_report(template, data)
 print(declaration)

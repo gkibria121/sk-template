@@ -1,0 +1,9 @@
+LICENSE.txt
+README.md
+setup.py
+sk_regex_maker/__init__.py
+sk_regex_maker.egg-info/PKG-INFO
+sk_regex_maker.egg-info/SOURCES.txt
+sk_regex_maker.egg-info/dependency_links.txt
+sk_regex_maker.egg-info/requires.txt
+sk_regex_maker.egg-info/top_level.txt

@@ -1,21 +1,7 @@
 
 json display =tree,table with border
 
-$parent_index = x.index
+        $table4 = $<table1,table2,table3>(x,y:y.item==x.item,z:z.item==x.item)=>{ {'item' : x.item,'cost' : y.quantity*z.price } };
 
-        variables = '''
-
-        $table1= [{"item" : 'rice',"quantity" : 22,'unit' : 'kg'}];
-        $table2= [{"item" :'rice', "price" : 55}];
-        //OnetoOne and oneToMany (agrigate function)
-
-        $table3 = $<table1,table2,table3>(x,y:x.item=y.item , z: x.item=z.item, a: x.item=a.item )=>{ 'name' : x.item , 'cost' : x.quantity*y.price ,'unit' : x.unit };
-
-        C->(A,B)=>{C.Name=A.Name, C.Cost=A.Quantity*B.Rate where }
-        '''
-        resutl = self.table_hanlder.process(variables)
-
-        self.assertEqual(resutl,'''
-        $table= [{"age" : 20},{"age" : 22}];
-        $table2 = [1, 1];
-        ''')
+when attribute call with out aggrigate function it is the first value of the array
+when attribute call with aggrigate it will treat as list

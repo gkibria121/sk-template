@@ -55,8 +55,8 @@ class VariableHandler:
         if is_expression:
             value = self.solve_expression(value)
 
-        if self.is_object(value):
-            value = str(eval(value))
+##        if self.is_object(value):
+##            value = str(eval(value))
 
 
         return value
