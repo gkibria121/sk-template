@@ -1,7 +1,20 @@
 
-json display =tree,table with border
+##json display =tree,table with border
 
-        $table4 = $<table1,table2,table3>(x,y:y.item==x.item,z:z.item==x.item)=>{ {'item' : x.item,'cost' : y.quantity*z.price } };
+where/select/group/sort/join/aggregate
 
-when attribute call with out aggrigate function it is the first value of the array
-when attribute call with aggrigate it will treat as list
+$table4 = $<table1:x?,table2:y?,table3:z?>(y.item==x.item,z.item==x.item)=> select(){ {'item' : x.item,'cost' : y.quantity*z.price } }  -> where( 'cost'> 200 ) ;
+
+$table5 = $<table1:x?,table2:y?,table3:z?>(y.item==x.item,z.item==x.item)=> select(){ {'item' : x.item,'stock' : y.stock_in.sum()-y.stcok_out.sum() } };
+
+
+
+
+
+
+
+
+
+using pymongo
+create a class to modify json 
+create an class instance to perform json operations
