@@ -9,6 +9,7 @@ class SkMongo:
         self.pipeline = []
         self.primary_table = ''
         self.tables =''''''
+        self.lookup ={}
 
     def set_table(self,name):
         self.tables = self.tables +f'''
@@ -50,6 +51,16 @@ class SkMongo:
         self.sort = {'$sort': sort}
         self.pipeline.append(self.sort)
 
+    def join(self,right,local,foreign):
+        self.lookup ={
+        '$lookup' : {
+        'from' : right,
+        'localField' : local,
+        'foreignField' : foreign,
+        'as' :  right if right.endswith('s') else f"{right}s"
+        }
+        }
+        self.pipeline.append(self.lookup)
 
     def run(self):
 
@@ -77,24 +88,31 @@ print(result)
 
         return script
 
-
-
-
+    def clear(self):
+        self.project = {}
+        self.match = {}
+        self.pipeline = []
+        self.primary_table = ''
+        self.tables =''''''
+        self.lookup = {}
 
 sk_mongo = SkMongo()
-sk_mongo.set_primary_table('x')
-sk_mongo.set_table('x')
-sk_mongo.set_table('y')
-sk_mongo.insert_data('x',[{'x' :1 ,'cat' : 1 },{'x' : 2,'cat' : 1 }])
-sk_mongo.insert_data('y',[{'y' :1 },{'y' : 2}])
-sk_mongo.insert_data('y',{'y' :3 })
+
+sk_mongo.set_primary_table('post')
+sk_mongo.set_table('comment')
+sk_mongo.set_table('post')
+comments = open('comments.txt','r').read()
+posts = open('posts.txt','r').read()
+sk_mongo.insert_data('comment',eval(comments))
+sk_mongo.insert_data('post',eval(posts))
+##sk_mongo.join('x','y','id','id')
 
 
-
-sk_mongo.where({"x" : 2})
-sk_mongo.select({"x" : "$x" , '_id' : 0 })
-##sk_mongo.sort({'name' : 1})
-##sk_mongo.group({'_id' :'$cat' , 'x' : '$x'})
+sk_mongo.where({"userId" : {'$in' : [1]}})
+sk_mongo.select({"id" : 1 , "userId" : "$userId" , '_id' : 0 , 'title' : '$title' })
+##sk_mongo.sort({'id' : -1})
+##sk_mongo.group({'_id' :{'userId' : '$userId'} , 'totalId' : {'$sum' : '$id'} })
+sk_mongo.join('comment' , 'id' , 'postId')
 
 result = sk_mongo.run()
 
