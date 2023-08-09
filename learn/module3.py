@@ -105,10 +105,7 @@ comments = open('comments.txt','r').read()
 posts = open('posts.txt','r').read()
 sk_mongo.insert_data('comment',eval(comments))
 sk_mongo.insert_data('post',eval(posts))
-##sk_mongo.join('x','y','id','id')
-
-
-sk_mongo.where({"userId" : {'$in' : [1]}})
+sk_mongo.where({"userId" : 1})
 sk_mongo.select({"id" : 1 , "userId" : "$userId" , '_id' : 0 , 'title' : '$title' })
 ##sk_mongo.sort({'id' : -1})
 ##sk_mongo.group({'_id' :{'userId' : '$userId'} , 'totalId' : {'$sum' : '$id'} })
