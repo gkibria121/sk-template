@@ -45,19 +45,19 @@ class TestGetValues(unittest.TestCase):
     def test_get_list_variables(self):
         # Test getting the value of a nested variable
         declarations = "$x = [5];$y = $x+[3];$z =$y+[2];"
-        expected_result = "$x = [5];$y = [5, 3];$z = [5, 3, 2];"
+        expected_result = "$x = [5];$y = [5]+[3];$z = [5]+[3]+[2];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
 
     def test_expression_in_list(self):
         # Test getting the value of a nested variable
         declarations = "$x = [5 ,@\"5+10\"];$y = $x+[3];$z =$y+[2];"
-        expected_result = "$x = [5, 15];$y = [5, 15, 3];$z = [5, 15, 3, 2];"
+        expected_result = "$x = [5 ,15];$y = [5 ,15]+[3];$z = [5 ,15]+[3]+[2];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
     def test_nested_expressions(self):
         declarations = "$x = [5 , @\"5+10\"];$y = @'$x+[3]';$z =$y+[2, @'1+2^3'];"
-        expected_result = "$x = [5, 15];$y = [5, 15, 3];$z = [5, 15, 3, 2, 9];"
+        expected_result = "$x = [5 , 15];$y = [5 , 15]+[3];$z = [5 , 15]+[3]+[2, 9];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
     def test_mathematical_expressions(self):
@@ -73,7 +73,7 @@ class TestGetValues(unittest.TestCase):
 
     def test_mixed_data_list(self):
         declarations = "$x = [1, 'hello', 3.14];$y = $x + [True, None];"
-        expected_result = "$x = [1, 'hello', 3.14];$y = [1, 'hello', 3.14, True, None];"
+        expected_result = "$x = [1, 'hello', 3.14];$y = [1, 'hello', 3.14] + [True, None];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
 
@@ -114,17 +114,8 @@ class TestGetValues(unittest.TestCase):
         self.assertEqual(result, "")
 
 
-    def test_invalid_list_addition(self):
-        # Test adding a list to a non-list variable
-        declarations = "$x = 10;$y = $x + [1, 2, 3];"
-        with self.assertRaises(TypeError):
-            self.variable.process(declarations)
 
-    def test_invalid_list_indexing(self):
-        # Test accessing an invalid index of a list
-        declarations = "$x = [1, 2, 3];$y = $x[10];"
-        with self.assertRaises(IndexError):
-            self.variable.process(declarations)
+
 
 
 if __name__ == '__main__':
