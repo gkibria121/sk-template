@@ -1,7 +1,7 @@
 from mongomock import MongoClient
+import regex as re
 
-
-class SkMongo:
+class MongoController:
 
     def __init__(self):
         self.project = {}
@@ -11,10 +11,14 @@ class SkMongo:
         self.tables =''''''
         self.lookup ={}
 
-    def set_table(self,name):
-        self.tables = self.tables +f'''
-{name} = db["{name}"]
-'''
+    def set_table_data(self,name,data):
+
+        if not re.search(re.escape(f'{name} = db["{name}"]'),self.tables):
+            self.tables = self.tables +f"\n{name} = db['{name}']"
+            self.insert_data(name,data)
+
+        else:
+            self.insert_data(name,data)
 
     def insert_data(self,table,data):
         if type(data) == dict:
@@ -79,13 +83,12 @@ result = []
 
 for item in {self.primary_table}.aggregate({self.pipeline}):
     result.append(item)
-    print(item)
 
 
-#print(result)
+print(result)
 
 '''
-        exec(script)
+##        exec(script)
 
         return script
 
@@ -97,22 +100,22 @@ for item in {self.primary_table}.aggregate({self.pipeline}):
         self.tables =''''''
         self.lookup = {}
 
-sk_mongo = SkMongo()
-
-sk_mongo.set_primary_table('post')
-sk_mongo.set_table('comment')
-sk_mongo.set_table('post')
-comments = open('comments.txt','r').read()
-posts = open('posts.txt','r').read()
-sk_mongo.insert_data('comment',eval(comments))
-sk_mongo.insert_data('post',eval(posts))
-sk_mongo.where({"userId" : 1})
-sk_mongo.select({"id" : 1 , "userId" : "$userId" , '_id' : 0 , 'title' : '$title' })
+##sk_mongo = SkMongo()
+##
+##sk_mongo.set_primary_table('post')
+##sk_mongo.set_table('comment')
+##sk_mongo.set_table('post')
+##comments = open('comments.txt','r').read()
+##posts = open('posts.txt','r').read()
+##sk_mongo.insert_data('comment',eval(comments))
+##sk_mongo.insert_data('post',eval(posts))
+##sk_mongo.where({"userId" : 1})
+##sk_mongo.select({"id" : 1 , "userId" : "$userId" , '_id' : 0 , 'title' : '$title' })
 ##sk_mongo.sort({'id' : -1})
 ##sk_mongo.group({'_id' :{'userId' : '$userId'} , 'totalId' : {'$sum' : '$id'} })
 ##sk_mongo.join('comment' , 'id' , 'postId')
-
-result = sk_mongo.run()
+##
+##result = sk_mongo.run()
 
 ##print(result)
 

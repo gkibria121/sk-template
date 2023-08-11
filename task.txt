@@ -1,19 +1,36 @@
 
 ##json display =tree,table with border
 
-where/select/group/sort/join/aggregate
-
-$table4 = $<table1:x?,table2:y?,table3:z?>(y.item==x.item,z.item==x.item)=> select(){ {'item' : x.item,'cost' : y.quantity*z.price } }  -> where( 'cost'> 200 ) ;
-
-$table5 = $<table1:x?,table2:y?,table3:z?>(y.item==x.item,z.item==x.item)=> select(){ {'item' : x.item,'stock' : y.stock_in.sum()-y.stcok_out.sum() } };
+where/select/group/sort/join/     aggregate
 
 
 
+$table4 = $<table1:x?,table2:y?,table3:z?>(y.item==x.item,z.item==x.item)=> select({ {'item' : x.item,'cost' : y.quantity*z.price } }).where( x.cost > 200 ) ;
+
+$table5 = $<table1:x?,table2:y?>=>join(y.item=x.item,z.item=x.item)->select({'item' : x.item,'stock' : y.stock_in.sum()-y.stcok_out.sum() });
+//make a handler to convert
+$table5 = $<table1:x?,table2:y?>(y.item=x.item,z.item=x.item)=> select({'item' : x.item,'stock' : {'$subtract' : [ {'$sum' : '$y.stock_in'} , {'$add' : ['field' ,'field']} ] }
+ });
+{}
+{'name'  : 'kibria' , age : 23}
+{'name'  : 'kibria' , age : 22}
+{'name'  : 'kibria' , age : 22}
+{'name'  : 'kibria' , age : 23}
+{'name'  : 'kibria' , age : 24}
 
 
 
 
 
+{'_d' : {'age' : 22} , 'names' : ['mehedi' , 'kibria','tarif'] , 'gender' : ['F' , 'M'] }
+
+{'age' : 22 , 'names' : ['kibria','mehedi'] }
+
+{ '22' : [ {name : kibria , gender : M },{name : mehedi , gender : M}] }
+
+
+
+{ '22' : {name : ['kibria'] }  }
 
 using pymongo
 create a class to modify json 
