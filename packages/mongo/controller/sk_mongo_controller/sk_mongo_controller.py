@@ -55,16 +55,19 @@ class MongoController:
         self.sort = {'$sort': sort}
         self.pipeline.append(self.sort)
 
-    def join(self,right,local,foreign):
-        self.lookup ={
-        '$lookup' : {
-        'from' : right,
-        'localField' : local,
-        'foreignField' : foreign,
-        'as' :  right if right.endswith('s') else f"{right}s"
-        }
-        }
-        self.pipeline.append(self.lookup)
+    def join(self,joints):
+        for join in joints:
+            right,local,foreign = join
+
+            self.lookup ={
+            '$lookup' : {
+            'from' : right,
+            'localField' : local,
+            'foreignField' : foreign,
+            'as' :  right if right.endswith('s') else f"{right}s"
+            }
+            }
+            self.pipeline.append(self.lookup)
 
     def run(self):
 

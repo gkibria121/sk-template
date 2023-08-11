@@ -55,16 +55,19 @@ class MongoController:
         self.sort = {'$sort': sort}
         self.pipeline.append(self.sort)
 
-    def join(self,right,local,foreign):
-        self.lookup ={
-        '$lookup' : {
-        'from' : right,
-        'localField' : local,
-        'foreignField' : foreign,
-        'as' :  right if right.endswith('s') else f"{right}s"
-        }
-        }
-        self.pipeline.append(self.lookup)
+    def join(self,joints):
+        for join in joints:
+            right,local,foreign = join
+
+            self.lookup ={
+            '$lookup' : {
+            'from' : right,
+            'localField' : local,
+            'foreignField' : foreign,
+            'as' :  right if right.endswith('s') else f"{right}s"
+            }
+            }
+            self.pipeline.append(self.lookup)
 
     def run(self):
 
@@ -100,8 +103,8 @@ print(result)
         self.tables =''''''
         self.lookup = {}
 
-##sk_mongo = SkMongo()
-##
+##sk_mongo = MongoController()
+
 ##sk_mongo.set_primary_table('post')
 ##sk_mongo.set_table('comment')
 ##sk_mongo.set_table('post')
@@ -113,10 +116,10 @@ print(result)
 ##sk_mongo.select({"id" : 1 , "userId" : "$userId" , '_id' : 0 , 'title' : '$title' })
 ##sk_mongo.sort({'id' : -1})
 ##sk_mongo.group({'_id' :{'userId' : '$userId'} , 'totalId' : {'$sum' : '$id'} })
-##sk_mongo.join('comment' , 'id' , 'postId')
+##sk_mongo.join([('comment' , 'id' , 'postId'),('post' , 'id' , 'CommentId')])
 ##
 ##result = sk_mongo.run()
-
+##
 ##print(result)
 
 
