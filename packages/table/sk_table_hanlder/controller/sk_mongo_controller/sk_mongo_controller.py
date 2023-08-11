@@ -57,14 +57,14 @@ class MongoController:
 
     def join(self,joints):
         for join in joints:
-            right,local,foreign = join
+            from_table,right,local,foreign = join
 
             self.lookup ={
             '$lookup' : {
-            'from' : right,
+            'from' : from_table,
             'localField' : local,
             'foreignField' : foreign,
-            'as' :  right if right.endswith('s') else f"{right}s"
+            'as' :  right
             }
             }
             self.pipeline.append(self.lookup)
@@ -91,7 +91,6 @@ for item in {self.primary_table}.aggregate({self.pipeline}):
 print(result)
 
 '''
-##        exec(script)
 
         return script
 

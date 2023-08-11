@@ -64,7 +64,6 @@ class SingleTableSolver:
     def __init__(self):
         self.wrapper = MongoWrapper()
         self.wrapper.set_mongo_controller(MongoController())
-        self.evaluate_script = EvaluateScript()
 
     def run(self,data,variable):
         variable_name = variable[0]
@@ -80,7 +79,9 @@ class SingleTableSolver:
 
             script = self.wrapper.query(queries)
 
-            return self.evaluate_script.run(script)
+            result = self.wrapper.evaluate(script)
+
+            return result
 
         return -1
 
@@ -89,21 +90,6 @@ class SingleTableSolver:
         queries = [item for index,item in enumerate( re.split(r'->',queries)) if item!='']
 
         return queries
-
-import io
-import sys
-
-class EvaluateScript:
-
-    def run(self,script):
-        code_string = script
-        output_stream = io.StringIO()
-        sys.stdout = output_stream
-        exec(code_string)
-        sys.stdout = sys.__stdout__
-        captured_output = output_stream.getvalue().strip()
-
-        return captured_output
 
 
 
@@ -114,13 +100,9 @@ class EvaluateScript:
 
 variables = '''
         $table1 = [{'item' : 'mobile'},{'item' : 'apple'}];
-        $table2 = [{'items' : 'mobile','quantity' : 10},{'items' : 'apple','quantity' : 20}];
-        $table3 = [{'items' : 'mobile','price' : 100},{'items' : 'apple','price' : 50}];
-
-        $table4 = $<table1:x,table2:y,table3:z>join(y.items=x.item,z.items=x.item);
-
-
-
+        $table2 = [{'item' : 'mobile','quantity' : 10},{'item' : 'apple','quantity' : 20}];
+        $table3 = [{'item' : 'mobile','price' : 100},{'item' : 'apple','price' : 50}];
+        $table4 = $<table1:x,table2:y,table3:z>join(y:y.item=x.item,z:x.item=z.item);
         '''
 
 
