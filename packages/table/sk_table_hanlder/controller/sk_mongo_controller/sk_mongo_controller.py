@@ -68,6 +68,8 @@ class MongoController:
             }
             }
             self.pipeline.append(self.lookup)
+            if not right.endswith('_'):
+                self.pipeline.append({'$unwind' : f"${right}"})
 
     def run(self):
 
@@ -91,7 +93,7 @@ for item in {self.primary_table}.aggregate({self.pipeline}):
 print(result)
 
 '''
-
+        print(script)
         return script
 
     def clear(self):

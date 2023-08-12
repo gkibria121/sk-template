@@ -39,7 +39,7 @@ variables = '''
         $table1 = [{'item' : 'mobile'},{'item' : 'apple'}];
         $table2 = [{'item' : 'mobile','quantity' : 10},{'item' : 'apple','quantity' : 20}];
         $table3 = [{'item' : 'mobile','price' : 100},{'item' : 'apple','price' : 50}];
-        $table4 = $<table1:x,table2:y,table3:z>join(y:y.item=x.item,z:x.item=z.item)->where(y.quantity >= 10);
+        $table4 = $<table1:x,table2:y,table3:z>join(y:y.item=x.item,z:x.item=z.item)->where( x.item $in ["apple"] $or x.item == "mobile");
         '''
 
 
