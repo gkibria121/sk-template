@@ -6,6 +6,7 @@ from packages.reporter.sk_report_generator import ReportGenerator
 from packages.variable.sk_variable_handler.variable_handler import VariableHandler
 from packages.random_variable.sk_random_variable import RandomVariableGenerator
 from packages.table.sk_table_hanlder import TableHandler
+import json
 
 class TinkerApp(tk.Tk):
     def __init__(self):
@@ -112,7 +113,8 @@ class TinkerApp(tk.Tk):
 
         data_stucture =self.data_structure.run(variable)
         self.ds.delete(1.0, tk.END)  # Clear previous content
-        self.ds.insert(tk.END, data_stucture)  # Insert processed content
+        formated_data_structure = json.dumps(data_stucture,indent=4)
+        self.ds.insert(tk.END, formated_data_structure)  # Insert processed content
 
 
 if __name__ == "__main__":

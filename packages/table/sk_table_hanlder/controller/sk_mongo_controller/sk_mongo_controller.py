@@ -1,6 +1,6 @@
 from mongomock import MongoClient
 import regex as re
-
+import json
 class MongoController:
 
     def __init__(self):
@@ -21,13 +21,17 @@ class MongoController:
             self.insert_data(name,data)
 
     def insert_data(self,table,data):
+
+
+        documents = json.dumps(data, indent=4)
+
         if type(data) == dict:
             self.tables = self.tables +f'''
-{table}.insert_one({data})
+{table}.insert_one({documents})
 '''
         if type(data) == list:
             self.tables = self.tables +f'''
-{table}.insert_many({data})
+{table}.insert_many({documents})
 '''
     def set_primary_table(self,name):
         self.primary_table = name
@@ -117,23 +121,22 @@ class MongoController:
 
     def run(self):
 
+        if '$project' not in self.project:
+            self.pipeline.append({'$project' : {'_id' : 0}})
+
+        self.pipeline = json.dumps( self.pipeline, indent=4)
+
         script =  f'''
 from mongomock import MongoClient as MockMongoClient
 
 
 client = MockMongoClient()
-
 db = client['test_database']
-
 {self.tables}
-
-
 result = []
-
-for item in {self.primary_table}.aggregate({self.pipeline}):
+pipeline = {self.pipeline}
+for item in {self.primary_table}.aggregate(pipeline):
     result.append(item)
-
-
 print(result)
 
 '''
