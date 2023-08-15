@@ -13,9 +13,18 @@ class WhereProcess:
     def process(self,name,argument):
         if name == 'where':
 
-            argument = self.logic_process.process(argument)
+            pattern = r'(\(([^()]+)\))'
 
-            argument = self.primary_table_process(argument)
+            while True:
+                if re.search(pattern,argument):
+                    argument = re.sub(pattern,lambda match: self.logic_process.process(match[2]),argument)
+                else:
+                    argument = self.logic_process.process(argument)
+                    break
+
+
+            argument = self.argument_processor.process(argument)
+
 
 
         return self.go_next.process(name,argument)
@@ -26,9 +35,5 @@ class WhereProcess:
     def set_primary_table(self,table):
         self.primary_table = table
 
-    def primary_table_process(self,argument):
-
-        pattern = r'(((?<![\.\$])(\b)('+re.escape(self.primary_table)+r')\.))'
-        return re.sub(pattern,'', argument)
-
-
+    def set_argument_process(self,argument_processor):
+        self.argument_processor = argument_processor

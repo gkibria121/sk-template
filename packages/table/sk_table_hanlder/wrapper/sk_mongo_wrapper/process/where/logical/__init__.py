@@ -14,7 +14,11 @@ class LogicalOperatorsProcess:
 
     def process(self,argument):
 
-        return self.and_process.process(argument)
+        argument =self.and_process.process(argument)
+
+        argument = self.process_operators.run(argument)
+
+        return argument
 
 
     def set_process_operators(self,process):
@@ -25,11 +29,10 @@ class LogicalOperatorsProcess:
 
 class And:
     def process(self,argument):
+        pattern =r'((\W?(([\w\.]+)|(\d+(\.\d+)*))\W?([\W]+)\W?(([\w\.]+)|(\d+(\.\d+)*)))\W?|((\{([^{}]|(?13))*\})))\s*\$and\s*((?1))'
 
-        if re.search(r'\s*\$and\s*',argument):
-            result = [eval(self.process_operators.run(item)) for index,item in enumerate(  re.split(r'\s*\$and\s*',argument)) if item!='']
-            argument = f'{{ "$and" : {result} }}'
-
+        if re.search(pattern,argument):
+            argument = re.sub(pattern,lambda match: f'{{ "$and" : [{self.process_operators.run(match[1])},{self.process_operators.run(match[15])}]   }}',argument)
         return self.go_next.process(argument)
 
     def set_process_operators(self,process):
@@ -42,11 +45,13 @@ class And:
 class Or:
     def process(self,argument):
 
-        if re.search(r'\s*\$or\s*',argument):
-            result = [self.process_operators.run(item) for index,item in enumerate(  re.split(r'\s*\$or\s*',argument)) if item!='']
-            argument = f'{{ "$or" : {result} }}'
+        pattern =r'((\W?(([\w\.]+)|(\d+(\.\d+)*))\W?([\W]+)\W?(([\w\.]+)|(\d+(\.\d+)*)))\W?|((\{([^{}]|(?13))*\})))\s*\$or\s*((?1))'
+
+        if re.search(pattern,argument):
+            argument = re.sub(pattern,lambda match: f'{{ "$or" : [{self.process_operators.run(match[1])},{self.process_operators.run(match[15])}]   }}',argument)
 
         return self.go_next.process(argument)
+
 
     def set_process_operators(self,process):
         self.process_operators = process
@@ -60,15 +65,12 @@ class Or:
 class In:
     def process(self,argument):
 
-        if re.search(r'\s*\$in\s*',argument):
-            result = [self.process_operators.run(item) for index,item in enumerate(  re.split(r'\s*\$in\s*',argument)) if item!='']
 
-            key =result[0].replace(" ","")
+        pattern =r'((\W?(([\w\.]+)|(\d+(\.\d+)*))\W?([\W]+)\W?(([\w\.]+)|(\d+(\.\d+)*)))\W?|((\{([^{}]|(?13))*\})))\s*\$in\s*((?1))'
 
-            value = result[1]
+        if re.search(pattern,argument):
+            argument = re.sub(pattern,lambda match: f'{{ "{self.process_operators.run(match[1])}" : {{ "$in" : {{self.process_operators.run(match[15])}} }}  }}',argument)
 
-
-            argument = f'{{ "{key}" : {{ "$in" : {value} }} }}'
 
         return self.go_next.process(argument)
 
@@ -82,15 +84,11 @@ class In:
 class NotIn:
     def process(self,argument):
 
-        if re.search(r'\s*\$nin\s*',argument):
-            result = [self.process_operators.run(item) for index,item in enumerate(  re.split(r'\s*\$nin\s*',argument)) if item!='']
+        pattern =r'((\W?(([\w\.]+)|(\d+(\.\d+)*))\W?([\W]+)\W?(([\w\.]+)|(\d+(\.\d+)*)))\W?|((\{([^{}]|(?13))*\})))\s*\$nin\s*((?1))'
 
-            key =result[0].replace(" ","")
+        if re.search(pattern,argument):
+            argument = re.sub(pattern,lambda match: f'{{ "{self.process_operators.run(match[1])}" : {{ "$nin" : {{self.process_operators.run(match[15])}} }}  }}',argument)
 
-            value = result[1]
-
-
-            argument = f'{{ "{key}" : {{ "$nin" : {value} }} }}'
 
         return self.go_next.process(argument)
 

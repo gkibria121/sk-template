@@ -36,8 +36,11 @@ class MongoController:
     def select(self,project):
 
 
-        self.project = {'$project' : project}
-        self.pipeline.append(self.project)
+        if '$group' in self.group:
+            self.select_with_group(project)
+        else:
+            self.project = {'$project' : project}
+            self.pipeline.append(self.project)
 
     def where(self,match):
 
@@ -48,7 +51,6 @@ class MongoController:
     def group(self, group):
 
         self.group = {'$group':  group }
-        self.pipeline.append(self.group)
 
     def sort(self, sort):
 
@@ -70,6 +72,48 @@ class MongoController:
             self.pipeline.append(self.lookup)
             if not right.endswith('_'):
                 self.pipeline.append({'$unwind' : f"${right}"})
+
+
+    def select_with_group(self,project):
+            # merge group with select
+            temp_project ={}
+            temp_project.update(project)
+            temp_project['_id']  = self.group['$group']['_id']
+
+            temp = {}
+            uniqe_temp = {}
+
+            for key,value in temp_project.items():
+                if key!= '_id' and (type(value)==str or value==1) and value not in temp_project['_id'].values():
+                    temp2 = value  if value != 1 else f"${key}"
+                    temp[key] = {'$first' : temp2}
+                elif key=='_id':
+                    temp[key] = value
+                elif value in temp_project['_id'].values():
+
+                    uniqe_temp[key] = re.sub(r'(\$)\b','$_id.',value)
+
+                else:
+                    temp[key] = value
+
+            self.group['$group'] = temp
+            self.pipeline.append(self.group)
+
+
+
+
+            ## select with uniqe ides
+            temp  = {}
+            for key,value in project.items():
+                temp[key] = f'${key}'
+            if '_id' not in temp:
+                temp['_id'] = 0
+
+            temp.update(uniqe_temp)
+
+            self.project = {'$project' : temp}
+            self.pipeline.append(self.project)
+
 
     def run(self):
 
