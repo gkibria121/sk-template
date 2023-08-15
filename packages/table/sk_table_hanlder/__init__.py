@@ -33,13 +33,15 @@ class TableHandler:
 
 ##$table4 = $<table,table3,table2>(x,z:x.number==z.number,y:x.number==y.number)=>{ {'name' : x.item , 'cost' : x.quantity*y.price ,'unit' : x.unit} };
 ##$table2 = $<table>(x)=>{ {'number' : $<table><[$parent_index-1].number|1>+$<table><[$parent_index+1].number|1> } };
-##        $table4 = $<table2:x,table3:y>join(y.age=x.item,z.quantity=x.item)->where(x.quantity > 10 and x.item=3)->select({'item' : x.item,'stock' : y.stock_in.sum()-y.stcok_out.sum() });
-##        $table4 = $<table1:x,table2:y,table3:z>join(y:y.item=x.item,z:x.item=z.item)->where( ((x.item == x.item $or y.item!=x.item) $and (x.item!=y.item )) $or x.item == y.item );
 
+##        $table4 = $<table1:x,table2:y,table3:z>join(y:y.item=x.item,z_:x.item=z.item)->where( ((x.item == x.item $or y.item!=x.item) $and (x.item!=y.item )) $or x.item == y.item );
+##        $table4 = $<table1:x>group(x.age,x.name)->select({ 'totalId' : {'$sum' : "$y.id"}, 'name' : '$name' , 'age' : '$age' });
+##        $table4 = $<table1:x>sort(x.name=1,x.name=-1);
+##        $table4 = $<table1:x>sort(x.y.id=-1,x.name=-1);
 variables = '''
         $table1 = [{'name' : 'kibria' , 'age' : 23, 'y' : {'id' : 1}},{'name' : 'sumu' , 'age' : 23 , 'y' : {'id' : 1}},{'name' : 'mehedi' , 'age' : 21, 'y' : {'id' : 2}},{'name' : 'sithi' , 'age' : 21, 'y' : {'id' : 2}},];
 
-        $table4 = $<table1:x>group(x.age,x.name)->select({ 'totalId' : {'$sum' : "$y.id"}, 'name' : '$name' , 'age' : '$age' });
+        $table4 = $<table1:x>sort(x.y.id=-1,x.name=-1);
         '''
 
 
