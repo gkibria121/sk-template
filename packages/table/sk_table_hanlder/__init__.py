@@ -45,9 +45,9 @@ variables = '''
         '''
 
 
-table = TableHandler()
-
-print(table.process(variables))
+##table = TableHandler()
+##
+##print(table.process(variables))
 
 
 
