@@ -18,6 +18,7 @@ class TinkerApp(tk.Tk):
         self.random = RandomVariableGenerator()
         self.table_handler = TableHandler()
         self.reporter = ReportGenerator()
+        self.reporter.set_reporter(self.reporter)
 
 
         self.variable.set_calculator(self.calculator)
