@@ -25,8 +25,6 @@ class WhereProcess:
 
             argument = self.argument_processor.process(argument)
 
-
-
         return self.go_next.process(name,argument)
 
     def set_next(self,go_next):

@@ -39,9 +39,11 @@ class TableHandler:
 ##        $table4 = $<table1:x>sort(x.name=1,x.name=-1);
 ##        $table4 = $<table1:x>sort(x.y.id=-1,x.name=-1);
 variables = '''
-        $table1 = [{'name' : 'kibria' , 'age' : 23, 'y' : {'id' : 1}},{'name' : 'sumu' , 'age' : 23 , 'y' : {'id' : 1}},{'name' : 'mehedi' , 'age' : 21, 'y' : {'id' : 2}},{'name' : 'sithi' , 'age' : 21, 'y' : {'id' : 2}},];
+        $table1 = [{'id' : 2 ,'name' : 'kibria' , 'age' : 23, 'y' : {'id' : 1}},{'id' : 3,'name' : 'sumu' , 'age' : 23 , 'y' : {'id' : 1}},{'id' : 2,'name' : 'mehedi' , 'age' : 21, 'y' : {'id' : 2}},{'id' : 3,'name' : 'sithi' , 'age' : 21, 'y' : {'id' : 2}},];
 
-        $table4 = $<table1:x>group(x.age,x.name)->select({ 'totalId' : {'$sum' : "$y.id"}, 'name' : '$name' , 'age' : '$age' });
+        $table5 = $<table1:x>where(x.id=2);
+
+
         '''
 
 

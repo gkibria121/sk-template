@@ -27,17 +27,28 @@ class OrderByProcess:
         self.sort_object.set_argument_process(self.argument_processor)
 
 class SortObject:
+    def __init__(self):
+        self.get_order =GetOrder()
 
     def process(self,condition_list):
 
         temp = {}
 
         for item in condition_list:
-            result = item.split('=')
+            result = item.split(':')
             key = self.argument_processor.process(result[0]).replace(' ','').replace('"','')
-            value = eval(result[1])
+            value = 1 if len(result)==1 else self.get_order.run(result[1])
             temp[key] = value
         return temp
 
     def set_argument_process(self,argument_processor):
         self.argument_processor = argument_processor
+
+
+class GetOrder:
+    def run(self,key):
+
+        if key in ['asc','a','1',1]:
+            return 1
+        elif key in ['des','d','-1',-1]:
+            return -1

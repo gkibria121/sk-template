@@ -40,12 +40,65 @@ class Controller:
 
 controller = Controller()
 data = '''
-$table1 = [{'item' : 'mobile'},{'item' : 'apple'}];
-$table2 = [{'item' : 'mobile','quantity' : 10},{'item' : 'apple','quantity' : 20}];
-$table3 = [{'item' : 'mobile','price' : 100},{'item' : 'apple','price' : 50}];
-$table4 = $<table1,table2,table3>(x,y:y.item==x.item,z:z.item==x.item)=>{ {'item' : x.item,'cost'  : y[0].quantity*z[0].price } };
+$students = [
+    {
+        "student_id": 1,
+        "name": "John Smith",
+        "age": 18,
+        "grade": "A"
+    },
+    {
+        "student_id": 2,
+        "name": "Emily Johnson",
+        "age": 17,
+        "grade": "B"
+    },
+    {
+        "student_id": 3,
+        "name": "Michael Williams",
+        "age": 18,
+        "grade": "A"
+    },
+    {
+        "student_id": 4,
+        "name": "Sophia Brown",
+        "age": 16,
+        "grade": "C"
+    },
+    {
+        "student_id": 5,
+        "name": "William Davis",
+        "age": 17,
+        "grade": "B"
+    }
+];
+$attendance = [
+    {
+        "student_id": 1,
+        "attendance": 4
+    },
+    {
+        "student_id": 2,
+        "attendance": 3
+    },
+    {
+        "student_id": 3,
+        "attendance": 5
+    },
+    {
+        "student_id": 4,
+        "attendance": 3
+    },
+    {
+        "student_id": 5,
+        "attendance": 3
+    }
+];
+
+$students_with_attendance = $<students:x,attendance:y>join(attendance:x.student_id=y.student_id);
 '''
-template = '''{{$table4}}'''
+##template = '''{{$table4}}'''
 data = controller.get_data(data)
-declaration = controller.get_report(template, data)
-print(declaration)
+print(data)
+##declaration = controller.get_report(template, data)
+##print(declaration)

@@ -12,6 +12,10 @@ $table5 = $<table1:x?,table2:y?>=>join(y.item=x.item,z.item=x.item)->select({'it
 $table5 = $<table1:x?,table2:y?>(y.item=x.item,z.item=x.item)=> select({'item' : x.item,'stock' : {'$subtract' : [ {'$sum' : '$y.stock_in'} , {'$add' : ['field' ,'field']} ] }
  });
 {}
+
+formate inside foreach fix 
+
+
 {'name'  : 'kibria' , age : 23}
 {'name'  : 'kibria' , age : 22}
 {'name'  : 'kibria' , age : 22}

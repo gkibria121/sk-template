@@ -4,6 +4,7 @@ class SingleTableSolver:
     def __init__(self):
         self.wrapper = None
         self.mongo_controller = None
+        self.remove_object_id = RemoveObjectId()
 
     def run(self,data,variable):
         variable_name = variable[0]
@@ -20,6 +21,9 @@ class SingleTableSolver:
             script = self.wrapper.query(queries)
 
             result = self.wrapper.evaluate(script)
+
+            result = self.remove_object_id.run(result)
+
 
             return result
 
@@ -38,4 +42,9 @@ class SingleTableSolver:
         self.mongo_controller = controller
         self.wrapper.set_mongo_controller(self.mongo_controller)
 
+class RemoveObjectId:
+
+    def run(self,result):
+        result = re.sub(r'((\'|\")_id(\'|\")\s*\:\s*ObjectId\s*(\(([^()]|(?3))*\))(\s*,\s*)?)','',result)
+        return result
 

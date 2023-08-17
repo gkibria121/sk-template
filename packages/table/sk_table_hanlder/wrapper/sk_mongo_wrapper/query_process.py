@@ -44,12 +44,8 @@ class QueryProcess:
         return temp
 
     def set_primary_table(self,table):
-        self.join_process.set_primary_table(table)
-        self.select_process.set_primary_table(table)
-        self.where_process.set_primary_table(table)
-        self.group_process.set_primary_table(table)
-        self.order_process.set_primary_table(table)
         self.argument_process.set_primary_table(table)
+        self.join_process.set_primary_table(table)
 
 
     def set_argument_process(self,argument_processor):
@@ -72,8 +68,14 @@ class ArgumentProcess:
         self.primary_table_process.set_next(type('Defualt' , (),{'process' : lambda argument : argument}))
 
     def process(self,argument):
-        return self.key_process.process(argument)
+        result = self.key_process.process(argument)
+        try:
 
+            return eval(result)
+        except NameError:
+            return result
+        except SyntaxError:
+            return result
     def set_primary_table(self,table):
         self.primary_table = table
         self.key_process.set_primary_table(self.primary_table)

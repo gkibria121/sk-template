@@ -4,12 +4,14 @@ import json
 class MongoController:
 
     def __init__(self):
-        self.project = {}
-        self.match = {}
+        self.project_stage = {}
+        self.match_stage = {}
         self.pipeline = []
         self.primary_table = ''
         self.tables =''''''
         self.lookup ={}
+        self.group_stage = {}
+        self.sort_stage ={}
 
     def set_table_data(self,name,data):
 
@@ -34,38 +36,39 @@ class MongoController:
 {table}.insert_many({documents})
 '''
     def set_primary_table(self,name):
+        self.clear()
         self.primary_table = name
 
 
     def select(self,project):
 
 
-        if '$group' in self.group:
+        if '$group' in self.group_stage:
             self.select_with_group(project)
         else:
-            self.project = {'$project' : project}
-            self.pipeline.append(self.project)
+            self.project_stage = {'$project' : project}
+            self.pipeline.append(self.project_stage)
 
     def where(self,match):
 
 
-        self.match = {'$match': match}
-        self.pipeline.append(self.match)
+        self.match_stage = {'$match': match}
+        self.pipeline.append(self.match_stage)
 
     def group(self, group):
 
-        self.group = {'$group':  group }
+        self.group_stage = {'$group':  group }
 
     def sort(self, sort):
 
-        self.sort = {'$sort': sort}
-        self.pipeline.append(self.sort)
+        self.sort_stage = {'$sort': sort}
+        self.pipeline.append(self.sort_stage)
 
     def join(self,joints):
         for join in joints:
             from_table,right,local,foreign = join
 
-            self.lookup ={
+            self.lookup_stage ={
             '$lookup' : {
             'from' : from_table,
             'localField' : local,
@@ -73,7 +76,7 @@ class MongoController:
             'as' :  right
             }
             }
-            self.pipeline.append(self.lookup)
+            self.pipeline.append(self.lookup_stage)
             if not right.endswith('_'):
                 self.pipeline.append({'$unwind' : f"${right}"})
 
@@ -82,7 +85,7 @@ class MongoController:
             # merge group with select
             temp_project ={}
             temp_project.update(project)
-            temp_project['_id']  = self.group['$group']['_id']
+            temp_project['_id']  = self.group_stage['$group']['_id']
 
             temp = {}
             uniqe_temp = {}
@@ -100,8 +103,8 @@ class MongoController:
                 else:
                     temp[key] = value
 
-            self.group['$group'] = temp
-            self.pipeline.append(self.group)
+            self.group_stage['$group'] = temp
+            self.pipeline.append(self.group_stage)
 
 
 
@@ -115,16 +118,12 @@ class MongoController:
 
             temp.update(uniqe_temp)
 
-            self.project = {'$project' : temp}
-            self.pipeline.append(self.project)
+            self.project_stage = {'$project' : temp}
+            self.pipeline.append(self.project_stage)
 
 
     def run(self):
-
-        if '$project' not in self.project:
-            self.pipeline.append({'$project' : {'_id' : 0}})
-
-        self.pipeline = json.dumps( self.pipeline, indent=4)
+        pipeline = json.dumps( self.pipeline, indent=4)
 
         script =  f'''
 from mongomock import MongoClient as MockMongoClient
@@ -134,13 +133,14 @@ client = MockMongoClient()
 db = client['test_database']
 {self.tables}
 result = []
-pipeline = {self.pipeline}
+pipeline = {pipeline}
 for item in {self.primary_table}.aggregate(pipeline):
     result.append(item)
 print(result)
 
 '''
-        print(script)
+##        print(script)
+        self.clear()
         return script
 
     def clear(self):
@@ -149,7 +149,7 @@ print(result)
         self.pipeline = []
         self.primary_table = ''
         self.tables =''''''
-        self.lookup = {}
+        self.lookup ={}
 
 ##sk_mongo = MongoController()
 

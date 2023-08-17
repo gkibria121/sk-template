@@ -66,13 +66,30 @@ class In:
     def process(self,argument):
 
 
-        pattern =r'((\W?(([\w\.]+)|(\d+(\.\d+)*))\W?([\W]+)\W?(([\w\.]+)|(\d+(\.\d+)*)))\W?|((\{([^{}]|(?13))*\})))\s*\$in\s*((?1))'
+        pattern =r'((\W?(([\w\.]+)|(\d+(\.\d+)*))\W?([\W]+)\W?(([\w\.]+)|(\d+(\.\d+)*)))\W?|((\{([^{}]|(?13))*\})))\s*\$in\s*(\[([^\[\]]|(?15))*\])'
 
         if re.search(pattern,argument):
-            argument = re.sub(pattern,lambda match: f'{{ "{self.process_operators.run(match[1])}" : {{ "$in" : {{self.process_operators.run(match[15])}} }}  }}',argument)
+            argument = re.sub(pattern,lambda match: f'{{ "{self.process_operators.run(match[1])}" : {{ "$in" : {self.process_operators.run(match[15])} }}  }}',argument)
 
 
         return self.go_next.process(argument)
+
+    def set_process_operators(self,process):
+        self.process_operators = process
+
+
+    def set_next(self,go_next):
+        self.go_next = go_next
+class Not:
+    def process(self,argument):
+
+        pattern =r'\s*\$not\s*((\W?(([\w\.]+)|(\d+(\.\d+)*))\W?([\W]+)\W?(([\w\.]+)|(\d+(\.\d+)*)))\W?|((\{([^{}]|(?13))*\})))'
+
+        if re.search(pattern,argument):
+            argument = re.sub(pattern,lambda match: f'{{ "$not" : {self.process_operators.run(match[1])} }}',argument)
+
+        return self.go_next.process(argument)
+
 
     def set_process_operators(self,process):
         self.process_operators = process
@@ -84,14 +101,13 @@ class In:
 class NotIn:
     def process(self,argument):
 
-        pattern =r'((\W?(([\w\.]+)|(\d+(\.\d+)*))\W?([\W]+)\W?(([\w\.]+)|(\d+(\.\d+)*)))\W?|((\{([^{}]|(?13))*\})))\s*\$nin\s*((?1))'
+        pattern =r'((\W?(([\w\.]+)|(\d+(\.\d+)*))\W?([\W]+)\W?(([\w\.]+)|(\d+(\.\d+)*)))\W?|((\{([^{}]|(?13))*\})))\s*\$nin\s*(\[([^\[\]]|(?15))*\])'
 
         if re.search(pattern,argument):
-            argument = re.sub(pattern,lambda match: f'{{ "{self.process_operators.run(match[1])}" : {{ "$nin" : {{self.process_operators.run(match[15])}} }}  }}',argument)
+            argument = re.sub(pattern,lambda match: f'{{ "{self.process_operators.run(match[1])}" : {{ "$nin" : {self.process_operators.run(match[15])} }}  }}',argument)
 
 
         return self.go_next.process(argument)
-
     def set_process_operators(self,process):
         self.process_operators = process
 

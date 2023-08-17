@@ -9,10 +9,10 @@ class GroupByProcess:
             argument = {'_id' : {}}
 
             for item in argument_list:
-                key = item.split('.')[-1]
+                key = item
                 value = item
                 processed =self.argument_processor.process(f'{{"{key}" : {value}}}')
-                argument['_id'].update(eval(processed))
+                argument['_id'].update(processed)
 
 
 

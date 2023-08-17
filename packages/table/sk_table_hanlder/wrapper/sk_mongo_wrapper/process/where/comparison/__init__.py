@@ -135,7 +135,7 @@ class Equal:
             result = [item for index,item in enumerate(  re.split(r'(?=\b)\s*=\s*(?=[^=])',argument)) if item!='']
             key = result[0].replace(' ','')
             value = result[1]
-            argument = f'{{ "{key}" : {value}   }} '
+            argument = f'{{ "{key}" : {{ "$eq" : {value}   }} }}'
 
         return self.go_next.process(argument)
 
