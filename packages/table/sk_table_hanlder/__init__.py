@@ -1,10 +1,10 @@
 import regex as re
-from .wrapper.sk_mongo_wrapper.sk_mongo_wrapper import MongoWrapper
-from .controller.sk_mongo_controller.sk_mongo_controller import MongoController
-from .process.create_declaration_list import CreateDeclarationText
-from .process.get_variable_tokens import GetVariableTokens
-from .process.solve_table import SolveTable
-from .process.single_table_solver import SingleTableSolver
+from wrapper.sk_mongo_wrapper.sk_mongo_wrapper import MongoWrapper
+from controller.sk_mongo_controller.sk_mongo_controller import MongoController
+from process.create_declaration_list import CreateDeclarationText
+from process.get_variable_tokens import GetVariableTokens
+from process.solve_table import SolveTable
+from process.single_table_solver import SingleTableSolver
 
 class TableHandler:
 
@@ -39,17 +39,17 @@ class TableHandler:
 ##        $table4 = $<table1:x>sort(x.name=1,x.name=-1);
 ##        $table4 = $<table1:x>sort(x.y.id=-1,x.name=-1);
 variables = '''
-        $table1 = [{'id' : 2 ,'name' : 'kibria' , 'age' : 23, 'y' : {'id' : 1}},{'id' : 3,'name' : 'sumu' , 'age' : 23 , 'y' : {'id' : 1}},{'id' : 2,'name' : 'mehedi' , 'age' : 21, 'y' : {'id' : 2}},{'id' : 3,'name' : 'sithi' , 'age' : 21, 'y' : {'id' : 2}},];
+        $table1 = [{'item' : 'apple' , 'price' : 100, 'quantity' : 20},{'item' : 'banana' , 'price' : 200, 'quantity' : 30}];
 
-        $table5 = $<table1:x>where(x.id=2);
+        $table5 = $<table1:x>select({'item' : x.item , 'price': x.price , 'quantity' : x.quantity ,'p+q' : x.price*x.quantity+x.price-x.price/x.price});
 
 
         '''
 
 
-##table = TableHandler()
-##
-##print(table.process(variables))
+table = TableHandler()
+
+print(table.process(variables))
 
 
 

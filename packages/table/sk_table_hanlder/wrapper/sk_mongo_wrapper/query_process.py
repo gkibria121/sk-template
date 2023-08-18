@@ -48,6 +48,7 @@ class QueryProcess:
         self.join_process.set_primary_table(table)
 
 
+
     def set_argument_process(self,argument_processor):
         self.join_process.set_argument_process(argument_processor)
         self.select_process.set_argument_process(argument_processor)
