@@ -9,14 +9,10 @@ class SelectProcess:
 
         if name =='select':
 
-
-            pattern =r'\:\s*((?![\'\"])\b((\d+(?:\.\d+)?)|([\$\w\.+\-\*\/()%^\s]+))(?![\'\"]))'
-
-            argument = re.sub(pattern , lambda match : f": {self.operators_process.run(match[4])}" if match[3] == None else  f": {match[3]}",argument)
+            pattern =r'\:\s*(?![\"\'])((\d+(\.\d+))|([\w\.\s\+\-\/\*\^\%\(\)]+))(?![\"\'])'
 
 
-
-
+            argument = re.sub(pattern , lambda match : f": {self.operators_process.run(match[4])}" if match[3] == None else  f": {match[2]}",argument)
 
         return self.go_next.process(name,argument)
 
@@ -67,6 +63,12 @@ class OperatorsProcess:
 class Bracket:
     def process(self,expression):
 
+        if '(' in expression:
+
+            while True:
+                expression = re.sub(r'(\(([^()]+)\))', lambda match: self.go_next.process(match[2]),expression)
+                if re.search(r'(\(([^()]+)\))',expression)==None:
+                    break
 
 
         return self.go_next.process( expression)
@@ -124,15 +126,8 @@ class Subtraction:
 class ReferenceProcess:
 
     def process(self,expression):
-
-
         expression = self.argument_process.process(f':{expression}')
-
         expression = re.sub(r'^\s*\:','',expression)
-
-
-
-
 
         return self.go_next.process( expression)
 
