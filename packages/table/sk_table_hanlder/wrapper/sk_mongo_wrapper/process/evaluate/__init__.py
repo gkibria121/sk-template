@@ -4,6 +4,8 @@ import sys
 class EvaluateScript:
 
     def run(self,script):
+
+        print(script)
         code_string = script
         output_stream = io.StringIO()
         sys.stdout = output_stream
