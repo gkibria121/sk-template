@@ -76,7 +76,14 @@ $students = [
 $demo = "name";
 '''
 template = '''
-{{$demo::{'width' : 50,'align' : 'left','fill' : '#'}}} {{$demo::{'width' : 50,'align' : 'left','fill' : '#'}}}
+
+{{$students[0].name}} {{$students[0].student_id}}
+{{$students.foreach(($x)=>{
+{{$x.name::{'width' : 10}}} {{$x.student_id::{'width' : 10, 'align' : 'left','fill' : '#'}}}
+
+})}}
+
+
 '''
 data = controller.get_data(data)
 ##print(data)

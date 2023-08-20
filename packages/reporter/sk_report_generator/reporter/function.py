@@ -18,14 +18,14 @@ class FunctionEvaluator(IReporter):
         self.function_solver.set_single_obj_solver(self.single_function_solver)
 
     def report(self, template):
-        pattern = r'({({(?:((?:[^{}]|(?2))*?))(?:(?:\:[^{}\[\]]+)|((?:\:\:)(.*)))?})})'
+        pattern = r'(\{\{(\$\w+(((\.\w+(\(([^()]|(?6))*\))?)|(\[\d+\])|(?:\[\"\w+\"\]))*))((\:[\w\,]+)|(\:\:(\{([^{}]|(?12))*\})))?\}\})'
 
         matches = re.findall(pattern, template)
 
         for match in matches:
             changed_value = match[0]
-            result = self.function_solver.solve(match[2])
-            changed_value = re.sub(re.escape(match[2]), result, changed_value)
+            result = self.function_solver.solve(match[1])
+            changed_value = re.sub(re.escape(match[1]), result, changed_value)
             template = re.sub(re.escape(match[0]), changed_value, template)
 
         return self.successor.report(template)

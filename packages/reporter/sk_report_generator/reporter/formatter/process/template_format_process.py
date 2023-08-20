@@ -7,15 +7,15 @@ class TemplateFormatProcess:
 
     def run(self,template):
 
-        pattern = r'(\{(\{(([^{}]|(?1))*)(::(\{(([^{}]|(?1))*)\}))\})\})'
+        pattern = r'(\{\{((\{([^{}]|(?3))*\})|([^{}:]+))((\:\:((?3))))\}\})'
 
         matches = re.findall(pattern,template)
         i = 0
         form = ''
         for match in matches:
             value1 =match[0]
-            value2 = match[5]
-            value3 = match[4]
+            value2 = match[7]
+            value3 = match[6]
             form = form+f"\ncustomAutoClass{i} = {value2}"
             replacement = re.sub(re.escape(value3),f':customAutoClass{i}',value1)
             template = re.sub(re.escape(match[0]),replacement,template)

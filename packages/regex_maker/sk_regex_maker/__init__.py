@@ -47,6 +47,19 @@ class RegexMaker:
     def set_regex_maker(self,regex_maker):
         self.regex_maker = regex_maker
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 ##regex_finder = RegexMaker()
 ##pattern = regex_finder.make('expression')
 
