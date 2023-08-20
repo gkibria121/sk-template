@@ -72,20 +72,18 @@ $students = [
         "grade": "B"
     }
 ];
-
 $demo = "name";
 '''
 template = '''
+{{$students.foreach(($a)=>{
 
-{{$students[0].name}} {{$students[0].student_id}}
-{{$students.foreach(($x)=>{
-{{$x.name::{'width' : 10}}} {{$x.student_id::{'width' : 10, 'align' : 'left','fill' : '#'}}}
+{$a}
 
-})}}
-
-
+}
+)}}
 '''
 data = controller.get_data(data)
+##data = {'$person': {'name' : 'kibria','age' : 23 , 'city' : 'Dhaka', 'country'  : 'Bangladesh'}}
 ##print(data)
 declaration = controller.get_report(template, data)
 print(declaration)

@@ -16,16 +16,16 @@ class Formatter(IReporter):
 
     def report(self, template):
 
-        format_pattern = r'(\{(\{((?:[^{}:]|(?2))*)\:([^{}:]*)\})\})(?![}])'
+        format_pattern = r'(\{\{(?:[\"\']*)(((\{([^{}]|(?4))*\})|([^{}:]+))*)((\:([^{}:]+))|(\:\:(?4)))?(?:[\"\']*)(?<!\{)\}\})'
         template = self.template_process.run(template)
         matches = re.findall(format_pattern, template)
 
         for match in matches:
-            value = match[2]
-            format_spec = match[3]
+            value = match[1]
+            format_spec = re.sub(r'[\"\']','',match[8])
             replacement = self.format.run(value,format_spec,template)
-            pattern = r'({)\s*' + re.escape(match[1]) + r'\s*(})'
-            template = re.sub(pattern, replacement, template)
+            pattern = re.escape(match[0])
+            template = re.sub(pattern, '{{'+replacement+'}}', template)
 
         template = self.remove_format_tag.run(template)
 

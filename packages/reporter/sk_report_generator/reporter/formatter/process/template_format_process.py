@@ -7,7 +7,7 @@ class TemplateFormatProcess:
 
     def run(self,template):
 
-        pattern = r'(\{\{((\{([^{}]|(?3))*\})|([^{}:]+))((\:\:((?3))))\}\})'
+        pattern = r'(\{\{(?:[\"\']*)((\{([^{}]|(?3))*\})|([^{}:]))*((\:\:((?3))))(?:[\"\']*)\}\})'
 
         matches = re.findall(pattern,template)
         i = 0
