@@ -72,33 +72,13 @@ $students = [
         "grade": "B"
     }
 ];
-$attendance = [
-    {
-        "student_id": 1,
-        "attendance": 4
-    },
-    {
-        "student_id": 2,
-        "attendance": 3
-    },
-    {
-        "student_id": 3,
-        "attendance": 5
-    },
-    {
-        "student_id": 4,
-        "attendance": 3
-    },
-    {
-        "student_id": 5,
-        "attendance": 3
-    }
-];
 
-$students_with_attendance = $<students:x,attendance:y>join(attendance:x.student_id=y.student_id);
+$demo = "name";
 '''
-##template = '''{{$table4}}'''
+template = '''
+{{$demo::{'width' : 50,'align' : 'left','fill' : '#'}}} {{$demo::{'width' : 50,'align' : 'left','fill' : '#'}}}
+'''
 data = controller.get_data(data)
-print(data)
-##declaration = controller.get_report(template, data)
-##print(declaration)
+##print(data)
+declaration = controller.get_report(template, data)
+print(declaration)
