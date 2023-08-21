@@ -74,16 +74,9 @@ $students = [
 ];
 $demo = "name";
 '''
-template = '''
-{{$students.foreach(($a)=>{
-
-{$a}
-
-}
-)}}
-'''
-data = controller.get_data(data)
-##data = {'$person': {'name' : 'kibria','age' : 23 , 'city' : 'Dhaka', 'country'  : 'Bangladesh'}}
+template = '''{{$x.upper()}}'''
+##data = controller.get_data(data)
+data = {'$x': 'gkibria'}
 ##print(data)
 declaration = controller.get_report(template, data)
 print(declaration)

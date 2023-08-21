@@ -18,7 +18,7 @@ class FunctionEvaluator(IReporter):
         self.function_solver.set_single_obj_solver(self.single_function_solver)
 
     def report(self, template):
-        pattern = r'(\{\{(?:[\"\']*)(((\{([^{}]|(?4))*\})|([^{}:]+))*)((\:[^{}:]+)|(\:\:(?4)))?(?:[\"\']*)\}\})'
+        pattern = r'(\{\{(?:[\"\']*)(((\{([^{}]|(?4))*\})|([^{}:]+))*)((\:([^{}:]+))|(\:\:(?4)))?(?:[\"\']*)\}\})'
 
         matches = re.findall(pattern, template)
 

@@ -7,7 +7,7 @@ class TestGetValues(unittest.TestCase):
         self.reporter =ReportGenerator()
         self.reporter.function_evaluate.function_solver.single_obj_solver.foreach.set_reporter(self.reporter)
 
-
+        self.maxDiff = None
 
 
 

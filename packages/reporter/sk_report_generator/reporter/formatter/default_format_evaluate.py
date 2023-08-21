@@ -9,10 +9,11 @@ class DefaultFormat:
             if digit:
                 f_value = eval(value)
             else:
-                f_value = f'"{value}"'
-
-            value =eval(f"format({f_value},format_spec)")
-
+                f_value = f'\"{value}\"'
+            try:
+                value =eval(f"format({f_value},format_spec)")
+            except:
+                pass
         return self.go_next.run(value,format_spec,format_class_list)
 
     def set_next(self,go_next):

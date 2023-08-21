@@ -12,6 +12,7 @@ class TinkerApp(tk.Tk):
     def __init__(self):
         super().__init__()
         #config
+
         self.calculator = Calculator()
         self.data_structure = DataStructure()
         self.variable = VariableHandler()
@@ -19,7 +20,6 @@ class TinkerApp(tk.Tk):
         self.table_handler = TableHandler()
         self.reporter = ReportGenerator()
         self.reporter.set_reporter(self.reporter)
-
 
         self.variable.set_calculator(self.calculator)
 
@@ -35,7 +35,7 @@ class TinkerApp(tk.Tk):
         self.geometry("800x600")
 
         self.tab_control = ttk.Notebook(self)
-
+        self.tab_control.bind("<<NotebookTabChanged>>", self.check_for_errors)
         # Create and add tabs to the tab_control
         self.tab_report = ttk.Frame(self.tab_control)
         self.tab_control.add(self.tab_report, text="Report",padding = 5)
@@ -59,7 +59,6 @@ class TinkerApp(tk.Tk):
         self.create_variable_declaration_tab()
         self.create_error_logs_tab()
         self.create_ds_tab()
-
     def create_ds_tab(self):
         label = tk.Label(self.tab_data_structure, text = "Data Structure")
         label.pack(padx=10,pady=10)
@@ -68,7 +67,7 @@ class TinkerApp(tk.Tk):
 
     def create_error_logs_tab(self):
         # Add content for the "Reporter" tab here
-        label = tk.Label(self.error_logs, text="Reporter Tab Content",state='disabled')
+        label = tk.Label(self.error_logs, text="Errors",state='disabled')
         label.pack(padx=10, pady=10)
         self.errors = tk.Text(self.error_logs)
         self.errors.pack(fill='both', expand=True)
@@ -103,7 +102,8 @@ class TinkerApp(tk.Tk):
         variable = self.variable_text.get("1.0", "end-1c")
         data = eval(self.ds.get("1.0", "end-1c"))
 
-        report = self.reporter.generate_report(template, data)
+        report = self.check_error(self.reporter.generate_report,(template, data))
+
         self.report.configure(state='normal')  # Enable editing of the report tab
         self.report.delete(1.0, tk.END)  # Clear previous content
         self.report.insert(tk.END, report)  # Insert processed content
@@ -112,10 +112,44 @@ class TinkerApp(tk.Tk):
     def get_data(self):
         variable = self.variable_text.get("1.0", "end-1c")
 
-        data_stucture =self.data_structure.run(variable)
+        data_stucture = self.check_error( self.data_structure.run,variable)
         self.ds.delete(1.0, tk.END)  # Clear previous content
         formated_data_structure = json.dumps(data_stucture,indent=4)
         self.ds.insert(tk.END, formated_data_structure)  # Insert processed content
+
+    def write_error(self,error):
+
+        pre_errors =self.errors.get("1.0", "end-1c")
+
+        self.errors.configure(state='normal')  # Enable editing of the report tab
+        self.errors.delete(1.0, tk.END)  # Clear previous content
+        self.errors.insert(tk.END, f"\n{error}",'red_tag')  # Insert processed content
+        self.errors.tag_configure('red_tag', foreground='red')
+        self.errors.configure(state='disabled')
+
+    def check_error(self, function, arguments):
+        try:
+            if type( arguments) != tuple:
+                result =function(arguments)
+            else:
+                result = function(*arguments)
+            return result
+        except Exception as error:
+            self.write_error(str(error))
+            return 'Check Error Logs'
+
+    def check_for_errors(self, event):
+        error_occurred = False
+
+        if self.errors.get("1.0", tk.END).strip():  # Check if there's any content in the errors tab
+            error_occurred = True
+
+        if error_occurred:
+            self.tab_control.tab(4, text="Error Logs ⚠️")  # Change the tab name with a warning indicator
+        else:
+            self.tab_control.tab(4, text="Error Logs")  # Reset the tab name
+
+
 
 
 if __name__ == "__main__":

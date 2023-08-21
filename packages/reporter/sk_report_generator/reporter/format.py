@@ -16,7 +16,7 @@ class Formatter(IReporter):
 
     def report(self, template):
 
-        format_pattern = r'(\{\{(?:[\"\']*)(((\{([^{}]|(?4))*\})|([^{}:]+))*)((\:([^{}:]+))|(\:\:(?4)))?(?:[\"\']*)(?<!\{)\}\})'
+        format_pattern = r'(?<!\{)(\{\{(?:[\"\']*)(((\{([^{}]|(?4))*\})|([^{}:]+))*)((\:([^{}:]+))|(\:\:(?4)))(?:[\"\']*)\}\})(?!\})'
         template = self.template_process.run(template)
         matches = re.findall(format_pattern, template)
 
