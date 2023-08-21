@@ -156,7 +156,7 @@ class TestAnd(unittest.TestCase):
         self.and_process.set_next(type('Default',(),{'process' : lambda arguemnt: arguemnt}))
 
     def test_equal(self):
-        result =self.and_process.process('x.item!=x.y.item $and x.item!=x.y.item')
+        result =self.and_process.process('x.item!=x.y.item AND x.item!=x.y.item')
         self.assertEqual(result,'{ "$and" : [{ "x.item" : { "$ne" : x.y.item    } },{ "x.item" : { "$ne" : x.y.item   } }]   }')
 
 
@@ -168,7 +168,7 @@ class TestOr(unittest.TestCase):
         self.or_process.set_next(type('Default',(),{'process' : lambda arguemnt: arguemnt}))
 
     def test_equal(self):
-        result =self.or_process.process('x.item!=x.y.item $or x.item!=x.y.item')
+        result =self.or_process.process('x.item!=x.y.item OR x.item!=x.y.item')
         self.assertEqual(result,'{ "$or" : [{ "x.item" : { "$ne" : x.y.item    } },{ "x.item" : { "$ne" : x.y.item   } }]   }')
 
 class TestNot(unittest.TestCase):
@@ -179,7 +179,7 @@ class TestNot(unittest.TestCase):
         self.not_process.set_next(type('Default',(),{'process' : lambda arguemnt: arguemnt}))
 
     def test_equal(self):
-        result =self.not_process.process('$not x.item!=x.y.item')
+        result =self.not_process.process('NOT x.item!=x.y.item')
         self.assertEqual(result,'{ "$not" : { "x.item" : { "$ne" : x.y.item   } } }')
 
 
@@ -191,9 +191,9 @@ class TestIn(unittest.TestCase):
         self.in_process.set_next(type('Default',(),{'process' : lambda arguemnt: arguemnt}))
 
     def test_equal(self):
-        result =self.in_process.process('x.item $in ["item"]')
+        result =self.in_process.process('x.item IN ["item"]')
         self.assertEqual(result,'{ "x.item " : { "$in" : ["item"] }  }')
-        result =self.in_process.process('x.item $in ["item","not item"]')
+        result =self.in_process.process('x.item IN ["item","not item"]')
 
         self.assertEqual(result,'{ "x.item " : { "$in" : ["item","not item"] }  }')
 
@@ -205,9 +205,9 @@ class TestNotIn(unittest.TestCase):
         self.not_in_process.set_next(type('Default',(),{'process' : lambda arguemnt: arguemnt}))
 
     def test_equal(self):
-        result =self.not_in_process.process('x.item $nin ["item"]')
+        result =self.not_in_process.process('x.item NOT IN ["item"]')
         self.assertEqual(result,'{ "x.item " : { "$nin" : ["item"] }  }')
-        result =self.not_in_process.process('x.item $nin ["item","not item"]')
+        result =self.not_in_process.process('x.item NOT IN ["item","not item"]')
 
         self.assertEqual(result,'{ "x.item " : { "$nin" : ["item","not item"] }  }')
 if __name__ == '__main__':
