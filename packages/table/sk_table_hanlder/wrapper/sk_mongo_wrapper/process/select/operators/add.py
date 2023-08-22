@@ -6,7 +6,7 @@ class Addition:
         if '+' in expression:
             nodes = [eval(self.go_next.process( item)) for index, item in enumerate( expression.split('+')) if item!='']
 
-            expression = f'{{ "$add" : {nodes}  }}'
+            expression = f'{{ "$add" : {nodes} }}'
 
         return self.go_next.process( expression)
 
