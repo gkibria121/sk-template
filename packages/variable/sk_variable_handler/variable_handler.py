@@ -1,6 +1,6 @@
 import regex as re
 import json
-from sk_calculator import Calculator
+##from sk_calculator import Calculator
 class VariableHandler:
 
     def __init__(self):

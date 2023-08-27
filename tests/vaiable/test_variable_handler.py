@@ -1,6 +1,6 @@
 from sk_variable_handler.variable_handler import VariableHandler
 from sk_calculator import Calculator
-from sk_regex import RegexMaker
+from sk_regex_maker import RegexMaker
 import unittest
 
 

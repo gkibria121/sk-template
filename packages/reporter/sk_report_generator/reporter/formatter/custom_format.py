@@ -6,6 +6,7 @@ from .custom_format_functions.currency import Currency
 from .custom_format_functions.datetime import Time
 from .custom_format_functions.round import Round
 from .custom_format_functions.ceil import Ceil
+from .custom_format_functions.json_dumps import Dumps
 from .custom_format_functions.str_continue import StrContinue
 from .json_to_format_spec.width import WidthHandler
 from .json_to_format_spec.align import AlignHandler
@@ -29,6 +30,7 @@ class CustomFormat:
 
 
         self.floor = Floor()
+
         self.time = Time()
         self.currency = Currency()
         self.ceil = Ceil()
@@ -47,6 +49,7 @@ class CustomFormat:
         self.mask = Mask()
         self.bool = Bool()
         self.trunc = Trunc()
+        self.json_dumps = Dumps()
 
 
 
@@ -57,7 +60,8 @@ class CustomFormat:
         self.str_continue.set_successor(self.mask)
         self.mask.set_successor(self.bool)
         self.mask.set_successor(self.trunc)
-        self.trunc.set_successor(self.ceil)
+        self.trunc.set_successor(self.json_dumps)
+        self.json_dumps.set_successor(self.ceil)
         self.ceil.set_successor(self.default1)
 
 
