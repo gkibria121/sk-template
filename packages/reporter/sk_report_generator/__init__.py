@@ -2,6 +2,7 @@ from .reporter.default import Default
 from .reporter.format import Formatter
 from .reporter.script import ScriptEvaluator
 from .reporter.function import FunctionEvaluator
+from .reporter.template.template_module import Moduler
 from .reporter.operation import OperationHandler
 import regex as re
 
