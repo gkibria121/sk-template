@@ -6,6 +6,7 @@ from packages.reporter.sk_report_generator import ReportGenerator
 from packages.variable.sk_variable_handler.variable_handler import VariableHandler
 from packages.random_variable.sk_random_variable import RandomVariableGenerator
 from packages.table.sk_table_hanlder import TableHandler
+import tkinter.font as tk_font
 import traceback
 import json
 
@@ -35,10 +36,23 @@ class TinkerApp(tk.Tk):
         self.title("Reporting Template")
         self.geometry("800x600")
 
+        # Create a vertical sidebar
+        self.sidebar = tk.Frame(self, width=150)
+        self.sidebar.pack(fill=tk.Y, side=tk.LEFT,pady=100)
+
         self.tab_control = ttk.Notebook(self)
         # Create and add tabs to the tab_control
         self.tab_report = ttk.Frame(self.tab_control)
         self.tab_control.add(self.tab_report, text="Report",padding = 5)
+
+        self.tab_names = ["Report", "Template", "Script", "Data Structure", "Error Logs"]
+        self.tab_buttons = []
+        for idx, tab_name in enumerate(self.tab_names):
+            button = tk.Button(self.sidebar, text=tab_name, command=lambda idx=idx: self.switch_tab(idx),height=3)
+            button.pack(fill=tk.X, pady=5)
+
+
+
 
         self.tab_template = ttk.Frame(self.tab_control)
         self.tab_control.add(self.tab_template, text="Template",padding = 5)
@@ -59,10 +73,17 @@ class TinkerApp(tk.Tk):
         self.create_variable_declaration_tab()
         self.create_error_logs_tab()
         self.create_ds_tab()
+
+        # Hide the tabs in the top bar
+        style = ttk.Style(self)
+        style.layout("TNotebook.Tab", [])  # Hide the tabs
+
+    def switch_tab(self, idx):
+        self.tab_control.select(idx)
     def create_ds_tab(self):
         label = tk.Label(self.tab_data_structure, text = "Data Structure")
         label.pack(padx=10,pady=10)
-        self.ds = scrolledtext.ScrolledText(self.tab_data_structure)
+        self.ds = scrolledtext.ScrolledText(self.tab_data_structure,background='lightgrey')
         self.ds.pack(fill='both', expand=True)
 
     def create_error_logs_tab(self):
@@ -76,11 +97,10 @@ class TinkerApp(tk.Tk):
         # Add content for the "Variable Declaration" tab here
         label = tk.Label(self.tab_variable_declaration, text="Write Script")
         label.pack(padx=10, pady=10)
-        self.variable_text = scrolledtext.ScrolledText(self.tab_variable_declaration)
+        self.variable_text = scrolledtext.ScrolledText(self.tab_variable_declaration,background='lightgrey')
         self.variable_text.pack(fill='both', expand=True)
         button = tk.Button(self.tab_variable_declaration,text='Generate Data',command=self.get_data,padx=10,pady=10)
         button.pack(pady=10)
-
     def create_template_tab(self):
         # Add content for the "Template" tab here
         label = tk.Label(self.tab_template, text="Insert Template")
@@ -144,8 +164,6 @@ class TinkerApp(tk.Tk):
             self.tab_control.tab(4, text="Error Logs ⚠️")
             self.tab_control.select(self.error_logs)
             return 'Check Error Logs'
-
-
 
 
 
