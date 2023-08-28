@@ -1,0 +1,3 @@
+this is a template
+$user
+{{:c1}}

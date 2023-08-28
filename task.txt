@@ -2,9 +2,9 @@
 ##json display =tree,table with border
 
 
-import template and format class
+import template and format class #done
 
-set variable to external templates
+set variable to external templates #done
 
 create theme for template, script
 

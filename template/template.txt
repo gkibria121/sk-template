@@ -1,1 +1,8 @@
-this is a template
+{{:c1}}
+
+$user
+$user1
+
+<format>
+c1 = {'width' : 30,'fill':'-','align' : 'center'}
+</format>

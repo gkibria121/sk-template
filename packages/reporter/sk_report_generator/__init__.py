@@ -5,7 +5,7 @@ from .reporter.function import FunctionEvaluator
 from .reporter.template.template_module import Moduler
 from .reporter.operation import OperationHandler
 import regex as re
-
+from pathlib import Path
 class ReportGenerator:
 
     def __init__(self):
@@ -14,17 +14,17 @@ class ReportGenerator:
         self.format = Formatter()
         self.operation = OperationHandler()
         self.default = Default()
-
+        self.moduler = Moduler()
+        self.moduler.set_successor(self.function_evaluate)
         self.function_evaluate.set_successor(self.script_evaluate)
         self.script_evaluate.set_successor(self.operation)
         self.operation.set_successor(self.format)
         self.format.set_successor(self.default)
-
         self.data = None
 
     def generate_report(self, template, data):
         self.set_data(data)
-        result = self.function_evaluate.report(template)
+        result = self.moduler.report(template)
         return result
 
     def set_data(self, data):
