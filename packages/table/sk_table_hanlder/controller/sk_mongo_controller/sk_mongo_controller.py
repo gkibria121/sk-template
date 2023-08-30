@@ -78,7 +78,11 @@ class MongoController:
             }
             self.pipeline.append(self.lookup_stage)
             if not right.endswith('_'):
-                self.pipeline.append({'$unwind' : f"${right}"})
+                self.pipeline.append(        {
+        "$addFields": {
+            "posts": { "$arrayElemAt": ["$posts", 0] }
+        }
+    })
 
 
     def select_with_group(self,project):
@@ -141,6 +145,7 @@ print(result)
 '''
 ##        print(script)
         self.clear()
+        print(script)
         return script
 
     def clear(self):

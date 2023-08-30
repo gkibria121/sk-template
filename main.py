@@ -39,11 +39,14 @@ class Controller:
 
 
 controller = Controller()
-data = {}
-template = '''{{::template,{'$user' : '$person'}}}
-{{::sub/template2,{'$user' : '$person2'}}}
-{{::sub/sub2/template3,{'$user' : '$person3'}}}
- '''
-##data = controller.get_data(data)
-declaration = controller.get_report(template, data)
-print(declaration)
+data = '''
+$x = [1,2,3,4];
+'''
+##template = '''{{::template,{'$user' : '$person'}}}
+##{{::sub/template2,{'$user' : '$person2'}}}
+##{{::sub/sub2/template3,{'$user' : '$person3'}}}
+## '''
+data = controller.get_data(data)
+print(data)
+##declaration = controller.get_report(template, data)
+##print(declaration)

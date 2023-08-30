@@ -9,7 +9,7 @@ class SingleTableSolver:
     def run(self,data,variable):
         variable_name = variable[0]
         table_expression = variable[1]
-        pattern = r'\$<((\w+(\:\w+))(,(\w+(\:\w+)))*)>((\w+(\((([^()]|(?9)))*\)))(->(\w+(\((([^()]|(?9)))*\))))*)'
+        pattern = r'\$<((\w+(\:\w+))(\s*,(\w+(\:\w+)))*)>((\w+(\((([^()]|(?9)))*\)))\s*(->\s*(\w+(\((([^()]|(?9)))*\))))*)'
         match = re.search(pattern , table_expression)
         if match:
             table_names = [item for index,item in enumerate(match[1].split(',')) if item !='']

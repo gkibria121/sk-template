@@ -9,3 +9,6 @@ set variable to external templates #done
 create theme for template, script
 
 make tabs side bar
+
+
+fix expression problem
