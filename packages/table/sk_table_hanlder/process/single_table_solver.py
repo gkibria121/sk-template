@@ -40,7 +40,7 @@ class SingleTableSolver:
 
     def set_mongo_controller(self,controller):
         self.mongo_controller = controller
-        self.wrapper.set_mongo_controller(self.mongo_controller)
+        self.wrapper.set_mongo_controller(controller)
 
 class RemoveObjectId:
 

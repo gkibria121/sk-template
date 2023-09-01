@@ -4,6 +4,9 @@ from packages.reporter.sk_report_generator import ReportGenerator
 from packages.variable.sk_variable_handler.variable_handler import VariableHandler
 from packages.random_variable.sk_random_variable import RandomVariableGenerator
 from packages.table.sk_table_hanlder import TableHandler
+from packages.controller.sk_mongo_controller.sk_mongo_controller import MongoController
+from packages.wrapper.sk_mongo_wrapper.sk_mongo_wrapper import MongoWrapper
+
 import json
 
 class Controller:
@@ -13,7 +16,11 @@ class Controller:
         self.data_structure = DataStructure()
         self.variable = VariableHandler()
         self.random = RandomVariableGenerator()
+        self.mongo_controller = MongoController()
+        self.mongo_wrapper = MongoWrapper()
         self.table_handler = TableHandler()
+        self.table_handler.set_wrapper(self.mongo_wrapper)
+        self.table_handler.set_mongo_controller(self.mongo_controller)
         self.reporter = ReportGenerator()
 
 

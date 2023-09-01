@@ -1,6 +1,4 @@
 import regex as re
-from .wrapper.sk_mongo_wrapper.sk_mongo_wrapper import MongoWrapper
-from .controller.sk_mongo_controller.sk_mongo_controller import MongoController
 from .process.create_declaration_list import CreateDeclarationText
 from .process.get_variable_tokens import GetVariableTokens
 from .process.solve_table import SolveTable
@@ -10,12 +8,13 @@ class TableHandler:
 
     def __init__(self):
         self.data = {}
+        self.wrapper = None
+        self.monog_controller = None
         self.create_declaration_text = CreateDeclarationText()
         self.get_variable_tokens= GetVariableTokens()
         self.solve_table = SolveTable()
         self.single_table_solver = SingleTableSolver()
-        self.single_table_solver.set_wrapper(MongoWrapper())
-        self.single_table_solver.set_mongo_controller(MongoController())
+
         self.solve_table.set_single_table_solver(self.single_table_solver)
 
 
@@ -27,7 +26,14 @@ class TableHandler:
 
         return declaration_text
 
+    def set_wrapper(self,wrapper):
+        self.wrapper = wrapper
 
+        self.single_table_solver.set_wrapper(self.wrapper)
+
+    def set_mongo_controller(self,controller):
+        self.single_table_solver.set_mongo_controller(controller)
+        self.monog_controller = controller
 
 
 
@@ -38,13 +44,13 @@ class TableHandler:
 ##        $table4 = $<table1:x>group(x.age,x.name)->select({ 'totalId' : {'$sum' : "$y.id"}, 'name' : '$name' , 'age' : '$age' });
 ##        $table4 = $<table1:x>sort(x.name=1,x.name=-1);
 ##        $table4 = $<table1:x>sort(x.y.id=-1,x.name=-1);
-variables = '''
-        $table1 = [{'item' : 'apple' , 'price' : 100, 'quantity' : 20},{'item' : 'apple' , 'price' : 200, 'quantity' : 40},{'item' : 'apple' , 'price' : 300, 'quantity' : 50},{'item' : 'apple' , 'price' : 400, 'quantity' : 60},{'item' : 'banana' , 'price' : 200, 'quantity' : 30}];
-
-        $table5 = $<table1:x>group(x.item)->select({'item' : x.item ,'price' : addToSet(x.price)});
-
-
-        '''
+##variables = '''
+##        $table1 = [{'item' : 'apple' , 'price' : 100, 'quantity' : 20},{'item' : 'apple' , 'price' : 200, 'quantity' : 40},{'item' : 'apple' , 'price' : 300, 'quantity' : 50},{'item' : 'apple' , 'price' : 400, 'quantity' : 60},{'item' : 'banana' , 'price' : 200, 'quantity' : 30}];
+##
+##        $table5 = $<table1:x>group(x.item)->select({'item' : x.item ,'price' : addToSet(x.price)});
+##
+##
+##        '''
 
 ##
 ##table = TableHandler()
