@@ -45,7 +45,14 @@ class VariableHandler:
 
         text = ''
         for key,value in solved_expression.items():
-            text += f"{key} = {value};"
+
+
+            value = eval(value) if type(value)==str else value
+            if type(value)==str:
+                text += f'{key} = "{value}";'
+            else:
+                text += f"{key} = {value};"
+
 
         return text
 

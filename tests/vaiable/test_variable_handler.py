@@ -16,10 +16,14 @@ class TestGetValues(unittest.TestCase):
 
     def test_get_result(self):
         declarations = "$x=@'1+2';$y=@'2+1';$var=@'12+223+(222+2)+sin(90)';$var2= $x+$y;$xy=($var2+$x+$y);$yx=$xy+$var2;"
-        expected_result = "$x = 3;$y = 3;$var = 460;$var2 = (3)+(3);$xy = (((3)+(3))+(3)+(3));$yx = ((((3)+(3))+(3)+(3)))+((3)+(3));"
+        expected_result = "$x = 3;$y = 3;$var = 460;$var2 = 6;$xy = 12;$yx = 18;"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
-
+    def test_get_result_2(self):
+        declarations = "$x=@'1+2';$y=@'2+1';$var=@'12+223+(222+2)+sin(90)';$var2= \"$x+$y\";"
+        expected_result = "$x = 3;$y = 3;$var = 460;$var2 = \"(3)+(3)\";"
+        result = self.variable.process(declarations)
+        self.assertEqual(result, expected_result)
     def test_get_single_variable(self):
         # Test getting the value of a single variable
         declarations = "$x = 10;"
@@ -45,19 +49,19 @@ class TestGetValues(unittest.TestCase):
     def test_get_list_variables(self):
         # Test getting the value of a nested variable
         declarations = "$x = [5];$y = $x+[3];$z =$y+[2];"
-        expected_result = "$x = [5];$y = ([5])+[3];$z = (([5])+[3])+[2];"
+        expected_result = "$x = [5];$y = [5, 3];$z = [5, 3, 2];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
 
     def test_expression_in_list(self):
         # Test getting the value of a nested variable
         declarations = "$x = [5 ,@\"5+10\"];$y = $x+[3];$z =$y+[2];"
-        expected_result = "$x = [5 ,15];$y = ([5 ,15])+[3];$z = (([5 ,15])+[3])+[2];"
+        expected_result = "$x = [5, 15];$y = [5, 15, 3];$z = [5, 15, 3, 2];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
     def test_nested_expressions(self):
         declarations = "$x = [5 , @\"5+10\"];$y = @'$x+[3]';$z =$y+[2, @'1+2^3'];"
-        expected_result = "$x = [5 , 15];$y = ([5 , 15])+[3];$z = (([5 , 15])+[3])+[2, 9];"
+        expected_result = "$x = [5, 15];$y = [5, 15, 3];$z = [5, 15, 3, 2, 9];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
     def test_mathematical_expressions(self):
@@ -73,7 +77,7 @@ class TestGetValues(unittest.TestCase):
 
     def test_mixed_data_list(self):
         declarations = "$x = [1, 'hello', 3.14];$y = $x + [True, None];"
-        expected_result = "$x = [1, 'hello', 3.14];$y = ([1, 'hello', 3.14]) + [True, None];"
+        expected_result = "$x = [1, 'hello', 3.14];$y = [1, 'hello', 3.14, True, None];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
 
@@ -114,6 +118,13 @@ class TestGetValues(unittest.TestCase):
         self.assertEqual(result, "")
 
 
+
+
+    def test_empty_expression_not(self):
+        # Test an empty expression
+        declarations = "$x= '2';"
+        result = self.variable.process(declarations)
+        self.assertEqual(result, "$x = \"2\";")
 
 
 
