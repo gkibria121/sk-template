@@ -47,7 +47,24 @@ class Controller:
 
 controller = Controller()
 data = '''
-$x = [1,2,3,4];
+$land_area=10.0*720;
+$story=9;
+$floor_area=$land_area*0.80;
+$total_floor_area=$floor_area*$story;
+$cost_per_sft=2200;
+$build_cost_lac=$total_floor_area*$cost_per_sft/100000;
+$sale_area=$total_floor_area*0.5;
+$no_of_parking=20;
+$signing_lac=80;
+$total_cost=$build_cost_lac+$signing_lac;
+$sale_rate=5500;
+$apt_sale=$sale_rate*$sale_area/100000;
+$parking_sale=$no_of_parking*5/2.0;
+$total_sale=$apt_sale+$parking_sale;
+$gross_profit=$total_sale-$total_cost;
+$sale=1425.6;
+$cost=1220.48;
+$profit=$sale-$cost;
 '''
 ##template = '''{{::template,{'$user' : '$person'}}}
 ##{{::sub/template2,{'$user' : '$person2'}}}

@@ -35,7 +35,7 @@ class VariableHandler:
             if variable_in_expression:
                 temp_expression = match[2]
                 for key,value in solved_expression.items():
-                    temp_expression = re.sub(re.escape(key)+r'(?=\b)',value,temp_expression)
+                    temp_expression = re.sub(re.escape(key)+r'(?=\b)',f"({value})",temp_expression)
                 variable_in_solved_expression =re.search(r'\$\w+',temp_expression)
 
                 if not variable_in_solved_expression:

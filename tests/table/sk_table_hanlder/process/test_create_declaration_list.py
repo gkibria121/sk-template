@@ -13,7 +13,7 @@ class TestCreateDeclarationText(unittest.TestCase):
         lis = {f"key{i}" : f"value{i}" for i in range(11)}
         result = self.create_declaration_text.run(lis)
         self.maxDiff = None
-        self.assertEqual(result,''.join([f'key{i} = value{i};\n' for i in range(11)]))
+        self.assertEqual(result,''.join([f'key{i} = "value{i}";\n' for i in range(11)]))
 
 
 
