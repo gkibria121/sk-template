@@ -1,5 +1,4 @@
 import re
-import pyperclip
 class RegexMaker:
     def make(self,name):
         return eval(f'self.{name}()')

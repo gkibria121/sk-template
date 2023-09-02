@@ -128,6 +128,11 @@ class TestGetValues(unittest.TestCase):
 
 
 
+    def test_get_result(self):
+        declarations = "$x=@'1+2';$y=@'2+1';$var=@'12+223+(222+2)+sin(90)';$var2= $x+$y;$xy=@'($var2+$x+$y)';$yx=$xy+$var2;"
+        expected_result = "$x = 3;$y = 3;$var = 460;$var2 = 6;$xy = 12;$yx = 18;"
+        result = self.variable.process(declarations)
+        self.assertEqual(result, expected_result)
 
 if __name__ == '__main__':
     unittest.main()
