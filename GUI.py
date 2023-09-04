@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, scrolledtext
+from tkinter import ttk, scrolledtext, filedialog
 from packages.calculator.sk_calculator import Calculator
 from packages.data.sk_data_handler.data import DataStructure
 from packages.reporter.sk_report_generator import ReportGenerator
@@ -9,7 +9,7 @@ from packages.table.sk_table_hanlder import TableHandler
 import tkinter.font as tk_font
 import traceback
 import json
-
+import regex as re
 class TinkerApp(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -28,7 +28,6 @@ class TinkerApp(tk.Tk):
         self.data_structure.set_random(self.variable)
         self.data_structure.set_variable(self.random)
         self.data_structure.set_table_handler(self.table_handler)
-
 
 
         #app
@@ -73,6 +72,13 @@ class TinkerApp(tk.Tk):
         self.create_variable_declaration_tab()
         self.create_error_logs_tab()
         self.create_ds_tab()
+        # Add "Open File" button
+        open_button = tk.Button(self.sidebar, text="Open File", command=self.open_file, height=3)
+        open_button.pack(fill=tk.X, pady=5)
+
+        # Add "Save File" button
+        save_button = tk.Button(self.sidebar, text="Save File", command=self.save_file, height=3)
+        save_button.pack(fill=tk.X, pady=5)
 
         # Hide the tabs in the top bar
         style = ttk.Style(self)
@@ -85,6 +91,35 @@ class TinkerApp(tk.Tk):
         label.pack(padx=10,pady=10)
         self.ds = scrolledtext.ScrolledText(self.tab_data_structure,background='lightgrey')
         self.ds.pack(fill='both', expand=True)
+    def open_file(self):
+        file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
+        if file_path:
+            with open(file_path, "r") as file:
+                file_contents = file.read()
+            # Insert file contents into the currently active text widget
+            script = re.search(r'<script>([\s\S]*)<\/script>',file_contents)
+            self.variable_text.delete(1.0, tk.END)
+            if script:
+                self.variable_text.insert(tk.END,script[1])
+
+            template = re.search(r'<template>([\s\S]*)<\/template>',file_contents)
+
+            self.template.delete(1.0, tk.END)
+            if template:
+                self.template.insert(tk.END,template[1])
+
+    def save_file(self):
+        file_path = filedialog.asksaveasfilename(filetypes=[("Text Files", "*.txt")])
+        if file_path:
+            file_contents = ''
+            file_contents += f'<template>{self.template.get("1.0", "end-1c")}</template>'
+            file_contents += f'\n<script>{self.variable_text.get("1.0", "end-1c")}</script>'
+
+
+            if file_contents != '':
+                file_path = file_path if file_path.endswith('.txt') else  file_path+'.txt'
+                with open(file_path, "w") as file:
+                    file.write(file_contents)
 
     def create_error_logs_tab(self):
         # Add content for the "Reporter" tab here

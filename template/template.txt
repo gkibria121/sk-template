@@ -1,0 +1,37 @@
+<template>Feasibility of Badda 10 Katha Land
+
+Land Area  ={{$land_area}} sft
+No of story=GF+ {{$story}} floor
+No of Apartment per Floor= 4 nos per floor
+No of Parking =20 Nos.
+
+Cost Calculation
+---------------------------------------------------
+Construction Cost={{$build_cost_lac:.2f}} Lac Tk @Tk{{$cost_per_sft:.2f}} per sft
+Signing Money= {{$signing_lac:.2f}} Lac Tk
+---------------------------------------------------
+Total Estimated Cost={{$total_cost:.2f}} lac Tk
+
+Estimated Revenue Calculation
+-----------------------------------------------------------
+Apertment Sale={{$apt_sale:.2f}} Lac Tk @Tk{{$sale_rate:.2f}} per sft 
+Parking Sale  ={{$parking_sale:.2f}} Lac Tk @5.00 Lac per Parking
+-----------------------------------------------------------
+Toatl Sale={{$total_sale:.2f}} lac Tk 
+
+Gross Profit={{$gross_profit:.2f}} Lac Tk</template>
+<script>$land_area=10.0*720;
+$story=9;
+$floor_area=$land_area*0.80;
+$total_floor_area=$floor_area*$story;
+$cost_per_sft=2000;
+$build_cost_lac=$total_floor_area*$cost_per_sft/100000;
+$sale_area=$total_floor_area*0.5;
+$no_of_parking=20;
+$signing_lac=80;
+$total_cost=$build_cost_lac+$signing_lac;
+$sale_rate=5600;
+$apt_sale=$sale_rate*$sale_area/100000;
+$parking_sale=$no_of_parking*5/2.0;
+$total_sale=$apt_sale+$parking_sale;
+$gross_profit=$total_sale-$total_cost*1;</script>

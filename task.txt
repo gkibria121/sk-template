@@ -12,3 +12,9 @@ make tabs side bar
 
 
 fix expression problem
+
+
+
+
+fix 5 / 5.0000 //float
+for loop in template in range or something
