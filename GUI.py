@@ -34,9 +34,18 @@ class TinkerApp(tk.Tk):
 
         self.title("Reporting Template")
         self.geometry("800x600")
+        # Create a header frame
+        self.header_frame = tk.Frame(self)
+        self.header_frame.pack(fill=tk.X)
+
+        # Add header widgets
+        self.header_label = tk.Label(self.header_frame, text='Untitled', font=("Helvetica", 12))
+        self.header_label.pack(pady=2)
+
+
 
         # Create a vertical sidebar
-        self.sidebar = tk.Frame(self, width=150)
+        self.sidebar = tk.Frame(self, width=10)
         self.sidebar.pack(fill=tk.Y, side=tk.LEFT,pady=100)
 
         self.tab_control = ttk.Notebook(self)
@@ -101,6 +110,8 @@ class TinkerApp(tk.Tk):
         self.ds.pack(fill='both', expand=True)
     def open_file(self):
         self.file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
+        self.file_name  =re.search(r'\/([\w]+)\b(?!\/)(\.\w+)',self.file_path)[1]
+        self.set_header_name(self.file_name)
         if self.file_path:
             with open(self.file_path, "r") as file:
                 file_contents = file.read()
@@ -145,10 +156,13 @@ class TinkerApp(tk.Tk):
             self.save_as_file()
     def new_file(self):
         self.file_path = None
+        self.set_header_name('Untitled')
         self.errors.delete(1.0,tk.END)
         self.variable_text.delete(1.0,tk.END)
         self.template.delete(1.0,tk.END)
-        self.report.delete(1.0,tk.END)
+        self.report.configure(state='normal')  # Enable editing of the report tab
+        self.report.delete(1.0, tk.END)  # Clear previous content
+        self.report.configure(state='disabled')
         self.ds.delete(1.0,tk.END)
 
 
@@ -233,8 +247,8 @@ class TinkerApp(tk.Tk):
             self.tab_control.select(self.error_logs)
             return 'Check Error Logs'
 
-
-
+    def set_header_name(self,new_name):
+        self.header_label.config(text=new_name)
 
 if __name__ == "__main__":
     app = TinkerApp()
