@@ -72,13 +72,21 @@ class TinkerApp(tk.Tk):
         self.create_variable_declaration_tab()
         self.create_error_logs_tab()
         self.create_ds_tab()
-        # Add "Open File" button
-        open_button = tk.Button(self.sidebar, text="Open File", command=self.open_file, height=3)
-        open_button.pack(fill=tk.X, pady=5)
+        # Create a menu bar
+        menubar = tk.Menu(self)
+        self.config(menu=menubar)
 
-        # Add "Save File" button
-        save_button = tk.Button(self.sidebar, text="Save File", command=self.save_file, height=3)
-        save_button.pack(fill=tk.X, pady=5)
+        # Create a "File" menu
+        file_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Menu", menu=file_menu)
+
+        # Add "Open File" option to the "File" menu
+        file_menu.add_command(label="New File", command=self.new_file)
+        file_menu.add_command(label="Open File", command=self.open_file)
+
+        # Add "Save File" option to the "File" menu
+        file_menu.add_command(label="Save File", command=self.save_file)
+        file_menu.add_command(label="Save As File", command=self.save_as_file)
 
         # Hide the tabs in the top bar
         style = ttk.Style(self)
@@ -92,9 +100,9 @@ class TinkerApp(tk.Tk):
         self.ds = scrolledtext.ScrolledText(self.tab_data_structure,background='lightgrey')
         self.ds.pack(fill='both', expand=True)
     def open_file(self):
-        file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
-        if file_path:
-            with open(file_path, "r") as file:
+        self.file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
+        if self.file_path:
+            with open(self.file_path, "r") as file:
                 file_contents = file.read()
             # Insert file contents into the currently active text widget
             script = re.search(r'<script>([\s\S]*)<\/script>',file_contents)
@@ -107,19 +115,44 @@ class TinkerApp(tk.Tk):
             self.template.delete(1.0, tk.END)
             if template:
                 self.template.insert(tk.END,template[1])
+        self.get_data()
+        self.generate_report()
 
-    def save_file(self):
-        file_path = filedialog.asksaveasfilename(filetypes=[("Text Files", "*.txt")])
-        if file_path:
+    def save_as_file(self):
+        self.file_path = filedialog.asksaveasfilename(filetypes=[("Text Files", "*.txt")])
+        if  self.file_path:
             file_contents = ''
             file_contents += f'<template>{self.template.get("1.0", "end-1c")}</template>'
             file_contents += f'\n<script>{self.variable_text.get("1.0", "end-1c")}</script>'
 
 
             if file_contents != '':
-                file_path = file_path if file_path.endswith('.txt') else  file_path+'.txt'
-                with open(file_path, "w") as file:
+                self.file_path = self.file_path if  self.file_path.endswith('.txt') else  self.file_path+'.txt'
+                with open(self.file_path, "w") as file:
                     file.write(file_contents)
+    def save_file(self):
+        if self.file_path:
+            file_contents = ''
+            file_contents += f'<template>{self.template.get("1.0", "end-1c")}</template>'
+            file_contents += f'\n<script>{self.variable_text.get("1.0", "end-1c")}</script>'
+
+
+            if file_contents != '':
+                self.file_path = self.file_path if self.file_path.endswith('.txt') else  self.file_path+'.txt'
+                with open(self.file_path, "w") as file:
+                    file.write(file_contents)
+        if self.file_path==None:
+            self.save_as_file()
+    def new_file(self):
+        self.file_path = None
+        self.errors.delete(1.0,tk.END)
+        self.variable_text.delete(1.0,tk.END)
+        self.template.delete(1.0,tk.END)
+        self.report.delete(1.0,tk.END)
+        self.ds.delete(1.0,tk.END)
+
+
+
 
     def create_error_logs_tab(self):
         # Add content for the "Reporter" tab here
