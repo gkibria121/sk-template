@@ -100,7 +100,11 @@ class TinkerApp(tk.Tk):
         # Hide the tabs in the top bar
         style = ttk.Style(self)
         style.layout("TNotebook.Tab", [])  # Hide the tabs
-
+        self.footer_frame = tk.Frame(self)
+        self.footer_frame.pack(fill=tk.X)
+        # Add footer widgets
+        self.footer_lable = tk.Label(self.footer_frame, text='', font=("Helvetica", 12), anchor="w")
+        self.footer_lable.pack(pady=2)
     def switch_tab(self, idx):
         self.tab_control.select(idx)
     def create_ds_tab(self):
@@ -110,8 +114,9 @@ class TinkerApp(tk.Tk):
         self.ds.pack(fill='both', expand=True)
     def open_file(self):
         self.file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
-        self.file_name  =self.file_path
+        self.file_name  = re.search(r'(\w+)\.\w+',self.file_path)[1]
         self.set_header_name(self.file_name)
+        self.set_footer_name(self.file_path)
         if self.file_path:
             with open(self.file_path, "r") as file:
                 file_contents = file.read()
@@ -250,6 +255,8 @@ class TinkerApp(tk.Tk):
     def set_header_name(self,new_name):
         self.header_label.config(text=new_name)
 
+    def set_footer_name(self,new_name):
+        self.footer_lable.config(text=new_name)
 if __name__ == "__main__":
     app = TinkerApp()
     app.mainloop()
