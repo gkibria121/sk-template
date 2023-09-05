@@ -110,7 +110,7 @@ class TinkerApp(tk.Tk):
         self.ds.pack(fill='both', expand=True)
     def open_file(self):
         self.file_path = filedialog.askopenfilename(filetypes=[("Text Files", "*.txt")])
-        self.file_name  =re.search(r'\/([\w]+)\b(?!\/)(\.\w+)',self.file_path)[1]
+        self.file_name  =self.file_path
         self.set_header_name(self.file_name)
         if self.file_path:
             with open(self.file_path, "r") as file:
