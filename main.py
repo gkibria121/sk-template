@@ -7,13 +7,22 @@ from packages.table.sk_table_hanlder import TableHandler
 from packages.controller.sk_mongo_controller.sk_mongo_controller import MongoController
 from packages.wrapper.sk_mongo_wrapper.sk_mongo_wrapper import MongoWrapper
 import json
-
+from packages.function.sk_function_solver.function_solver import FunctionSolver
+from packages.function.sk_function_solver.process_function_calling import ProcessFunctionCalling
+from packages.function.sk_function_solver.single_function_solver import SingleFunctionSOlver
+from packages.function.sk_function_solver.get_index_value import GetIndexValue
+from packages.function.sk_function_solver.process_condition import ProcessCondition
 class Controller:
 
     def __init__(self):
         self.calculator = Calculator()
         self.data_structure = DataStructure()
         self.variable = VariableHandler()
+        self.variable.set_function_solver(FunctionSolver())
+        self.variable.set_get_index(GetIndexValue())
+        self.variable.set_process_condition(ProcessCondition())
+        self.variable.set_process_function_calling(ProcessFunctionCalling())
+        self.variable.set_single_function_solver(SingleFunctionSOlver())
 
 
         self.random = RandomVariableGenerator()

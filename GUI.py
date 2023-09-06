@@ -6,6 +6,11 @@ from packages.reporter.sk_report_generator import ReportGenerator
 from packages.variable.sk_variable_handler.variable_handler import VariableHandler
 from packages.random_variable.sk_random_variable import RandomVariableGenerator
 from packages.table.sk_table_hanlder import TableHandler
+from packages.function.sk_function_solver.function_solver import FunctionSolver
+from packages.function.sk_function_solver.process_function_calling import ProcessFunctionCalling
+from packages.function.sk_function_solver.single_function_solver import SingleFunctionSOlver
+from packages.function.sk_function_solver.get_index_value import GetIndexValue
+from packages.function.sk_function_solver.process_condition import ProcessCondition
 import tkinter.font as tk_font
 import traceback
 import json
@@ -18,6 +23,11 @@ class TinkerApp(tk.Tk):
         self.calculator = Calculator()
         self.data_structure = DataStructure()
         self.variable = VariableHandler()
+        self.variable.set_function_solver(FunctionSolver())
+        self.variable.set_get_index(GetIndexValue())
+        self.variable.set_process_condition(ProcessCondition())
+        self.variable.set_process_function_calling(ProcessFunctionCalling())
+        self.variable.set_single_function_solver(SingleFunctionSOlver())
         self.random = RandomVariableGenerator()
         self.table_handler = TableHandler()
         self.reporter = ReportGenerator()

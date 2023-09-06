@@ -1,10 +1,6 @@
 import regex as re
 import json
-from sk_function_solver.function_solver import FunctionSolver
-from sk_function_solver.process_function_calling import ProcessFunctionCalling
-from sk_function_solver.single_function_solver import SingleFunctionSOlver
-from sk_function_solver.get_index_value import GetIndexValue
-from sk_function_solver.process_condition import ProcessCondition
+
 
 
 class VariableHandler:
@@ -14,13 +10,34 @@ class VariableHandler:
         self.function_solver = None
         self.successor = None
         self.data = None
-        self.process_function_calling = ProcessFunctionCalling()
-        self.single_function_solver = SingleFunctionSOlver()
-        self.single_function_solver.set_get_index_value(GetIndexValue())
-        self.single_function_solver.set_process_condition(ProcessCondition())
-        self.function_solver = FunctionSolver()
-        self.function_solver.set_process_function_calling(self.process_function_calling)
-        self.function_solver.set_single_obj_solver(self.single_function_solver)
+        self.process_function_calling = None
+        self.single_function_solver = None
+        self.get_index = None
+        self.process_condition = None
+        self.function_solver = None
+
+
+
+
+
+    def set_process_function_calling(self,function):
+        self.process_function_calling = function
+
+    def set_single_function_solver(self,solver):
+        self.single_function_solver = solver
+
+    def set_get_index(self,index):
+        self.get_index = index
+    def set_function_solver(self,solver):
+        self.function_solver = solver
+    def set_process_condition(self,condition):
+        self.process_condition = condition
+
+
+
+
+
+
     def set_calculator(self, calculator):
 
         self.calculator = calculator
@@ -37,6 +54,12 @@ class VariableHandler:
 
 
     def solve_variables(self,declaraions):
+        self.single_function_solver.set_get_index_value(self.get_index)
+        self.single_function_solver.set_process_condition(self.process_condition)
+
+        self.function_solver.set_process_function_calling(self.process_function_calling)
+        self.function_solver.set_single_obj_solver(self.single_function_solver)
+
         solved_expression = {}
 
         pattern = r'((\$\w+)\s*=\s*([^;]+);)'
