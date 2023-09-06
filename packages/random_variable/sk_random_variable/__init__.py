@@ -15,7 +15,7 @@ class RandomVariableGenerator:
         declaraion_list = self.call_random_functions(declaraion_list)
 
         declaraion_text = self.process_list(declaraion_list)
-        return  declaraion_text
+        return  self.go_next.process(declaraion_text)
 
 
 
@@ -138,3 +138,6 @@ The program assigns the generated random data to variables using the assignment 
  '''
 
         return text
+
+    def set_next(self,go_next):
+        self.go_next = go_next

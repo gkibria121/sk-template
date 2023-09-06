@@ -8,10 +8,11 @@ class DataStructure:
 
 
     def run(self,data_text):
+        self.random.set_next(self.variable)
+        self.variable.set_next(self.table_handler)
+        self.table_handler.set_next(type('Default',(),{'process' : lambda value: value}))
 
         data_text = self.random.process(data_text)
-        data_text = self.variable.process(data_text)
-        data_text = self.table_handler.process(data_text)
         data_structure = self.get_data_structure(data_text)
         return data_structure
 

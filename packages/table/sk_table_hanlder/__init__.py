@@ -24,7 +24,7 @@ class TableHandler:
         declaration_list = self.solve_table.run(variable_tokens)
         declaration_text = self.create_declaration_text.run(declaration_list)
 
-        return declaration_text
+        return self.go_next.process(declaration_text)
 
     def set_wrapper(self,wrapper):
         self.wrapper = wrapper
@@ -36,6 +36,8 @@ class TableHandler:
         self.monog_controller = controller
 
 
+    def set_next(self,go_next):
+        self.go_next = go_next
 
 ##$table4 = $<table,table3,table2>(x,z:x.number==z.number,y:x.number==y.number)=>{ {'name' : x.item , 'cost' : x.quantity*y.price ,'unit' : x.unit} };
 ##$table2 = $<table>(x)=>{ {'number' : $<table><[$parent_index-1].number|1>+$<table><[$parent_index+1].number|1> } };

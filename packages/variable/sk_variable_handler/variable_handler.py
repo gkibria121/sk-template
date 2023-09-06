@@ -68,7 +68,7 @@ class VariableHandler:
         for match in matches:
             variable_in_expression =re.search(r'\$\w+',match[2])
             if  not variable_in_expression:
-                solved_expression[match[1]] =self.eval_value(match[2])
+                solved_expression[match[1]] =self.eval_value(solved_expression,match[2])
 
             if variable_in_expression:
                 temp_expression = match[2]
@@ -77,18 +77,22 @@ class VariableHandler:
                 variable_in_solved_expression =re.search(r'\$\w+',temp_expression)
 
                 if not variable_in_solved_expression:
-                    solved_expression[match[1]]=self.eval_value(temp_expression)
+                    solved_expression[match[1]]=self.eval_value(solved_expression,temp_expression)
                 else:
                     raise NameError(variable_in_solved_expression[0]+" Not defined")
 
+
+        return solved_expression
+
+    def generate_text(self,dictionary):
         text = ''
-        for key,value in solved_expression.items():
+        for key,value in dictionary.items():
 
             value = self.get_original_type(value)
             text += f"{key} = {value};"
 
-
         return text
+
 
     def get_original_type(self,value):
         flag = True
@@ -101,15 +105,32 @@ class VariableHandler:
         if type(value)==str and flag:
             value = f'"{value}"'
         return value
-    def eval_value(self,value):
+    def eval_value(self,data,value):
         is_function= self.is_function(value)
         if is_function:
             value = self.solve_function(value)
 
         is_expression = self.is_expression(value)
         if is_expression:
+
             value = self.solve_expression(value)
+        is_table = self.is_table(value)
+        if is_table:
+            text = self.generate_text(data)
+            text += f'$new_table_from_variable_to_table = {value};'
+            resulte_text = self.go_next.process(text)
+
+            value = re.search(r'\$new_table_from_variable_to_table\s*=\s*([^;]+);',resulte_text)[1]
+
+
+
         return value
+
+
+    def is_table(self,value):
+
+        return re.search(r'\$\s*<[\w\:\,\s]+>',value)
+
 
     def solve_function(self,function_calling):
         value_of_function = function_calling
@@ -137,7 +158,9 @@ class VariableHandler:
 
         declarations = self.remove_comments(declarations_text)
         solve_variables = self.solve_variables(declarations)
-        return solve_variables
+
+        text = self.generate_text(solve_variables)
+        return self.go_next.process(text)
 
     def is_expression(self,value):
         pattern = r'\@((\"([^\"]+)\")|(\'([^\']+)\'))'
@@ -160,6 +183,9 @@ class VariableHandler:
 
     def set_function_solver(self,function_solver):
         self.function_solver  = function_solver
+
+    def set_next(self,go_next):
+        self.go_next = go_next
 
 
 

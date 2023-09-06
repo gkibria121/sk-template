@@ -21,6 +21,7 @@ class TestGetValues(unittest.TestCase):
         self.variable.set_process_condition(ProcessCondition())
         self.variable.set_process_function_calling(ProcessFunctionCalling())
         self.variable.set_single_function_solver(SingleFunctionSOlver())
+        self.variable.set_next(type('Default',(),{'process' : lambda text: text}))
 
     def test_get_result(self):
         declarations = "$x=@'1+2';$y=@'2+1';$var=@'12+223+(222+2)+sin(90)';$var2= $x+$y;$xy=($var2+$x+$y);$yx=$xy+$var2;"
