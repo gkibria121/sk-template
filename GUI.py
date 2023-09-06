@@ -6,6 +6,9 @@ from packages.reporter.sk_report_generator import ReportGenerator
 from packages.variable.sk_variable_handler.variable_handler import VariableHandler
 from packages.random_variable.sk_random_variable import RandomVariableGenerator
 from packages.table.sk_table_hanlder import TableHandler
+from packages.wrapper.sk_mongo_wrapper.sk_mongo_wrapper import MongoWrapper
+from packages.controller.sk_mongo_controller.sk_mongo_controller import MongoController
+
 from packages.function.sk_function_solver.function_solver import FunctionSolver
 from packages.function.sk_function_solver.process_function_calling import ProcessFunctionCalling
 from packages.function.sk_function_solver.single_function_solver import SingleFunctionSOlver
@@ -28,8 +31,15 @@ class TinkerApp(tk.Tk):
         self.variable.set_process_condition(ProcessCondition())
         self.variable.set_process_function_calling(ProcessFunctionCalling())
         self.variable.set_single_function_solver(SingleFunctionSOlver())
+
         self.random = RandomVariableGenerator()
         self.table_handler = TableHandler()
+        self.mongo_controller = MongoController()
+        self.mongo_wrapper = MongoWrapper()
+        self.table_handler.set_wrapper(self.mongo_wrapper)
+        self.table_handler.set_mongo_controller(self.mongo_controller)
+
+
         self.reporter = ReportGenerator()
         self.reporter.set_reporter(self.reporter)
 
