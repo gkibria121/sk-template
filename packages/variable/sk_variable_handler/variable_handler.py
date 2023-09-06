@@ -46,9 +46,15 @@ class VariableHandler:
         text = ''
         for key,value in solved_expression.items():
 
+            flag = True
 
-            value = eval(value) if type(value)==str else value
-            if type(value)==str:
+            try:
+                value = eval(value) if type(value)==str else value
+                flag = True
+            except:
+                flag = False
+
+            if type(value)==str and flag:
                 text += f'{key} = "{value}";'
             else:
                 text += f"{key} = {value};"
@@ -58,14 +64,11 @@ class VariableHandler:
 
 
     def eval_value(self,value):
+        value = self.index_process(value)
+
         is_expression = self.is_expression(value)
         if is_expression:
             value = self.solve_expression(value)
-
-##        if self.is_object(value):
-##            value = str(eval(value))
-
-
         return value
 
     def process(self, declarations_text):
@@ -91,7 +94,14 @@ class VariableHandler:
         return False
 
 
+    def index_process(self,value):
+        pattern = r'(?<=\))((\.\w+)|(\[\d+\]))*'
+        value = re.sub(pattern, lambda match: self.get_proccessed_value(match), value)
+        return value
 
+    def get_proccessed_value(self,value):
+        pattern  =r'(?:\s*(?:\.([^\d][\w]*))\b(?!\())'
+        return re.sub(pattern, lambda match: f'["{match.group(1)}"]', value[0])
 
     def solve_expression(self,expression):
 

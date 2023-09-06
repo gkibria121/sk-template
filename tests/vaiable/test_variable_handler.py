@@ -134,5 +134,49 @@ class TestGetValues(unittest.TestCase):
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
 
+
+    def test_dot_convention(self):
+        declarations = '''$x={
+    'name': 'John',
+    'age': 30,
+    'hobbies': ['Reading', 'Hiking', 'Gaming'],
+    'address': {
+        'street': '123 Main St',
+        'city': 'Cityville',
+        'zipCode': '12345'
+    },
+    'friends': [
+        {'name': 'Alice', 'age': 28},
+        {'name': 'Bob', 'age': 32},
+        {'name': 'Eve', 'age': 29}
+    ]
+};
+$y = $x.name;
+'''
+        expected_result = "$x = {'name': 'John', 'age': 30, 'hobbies': ['Reading', 'Hiking', 'Gaming'], 'address': {'street': '123 Main St', 'city': 'Cityville', 'zipCode': '12345'}, 'friends': [{'name': 'Alice', 'age': 28}, {'name': 'Bob', 'age': 32}, {'name': 'Eve', 'age': 29}]};$y = \"John\";"
+        result = self.variable.process(declarations)
+        self.assertEqual(result, expected_result)
+
+        declarations = '''$x={
+    'name': 'John',
+    'age': 30,
+    'hobbies': ['Reading', 'Hiking', 'Gaming'],
+    'address': {
+        'street': '123 Main St',
+        'city': 'Cityville',
+        'zipCode': '12345'
+    },
+    'friends': [
+        {'name': 'Alice', 'age': 28},
+        {'name': 'Bob', 'age': 32},
+        {'name': 'Eve', 'age': 29}
+    ]
+};
+$y = $x.friends[0].name;
+'''
+        expected_result = "$x = {'name': 'John', 'age': 30, 'hobbies': ['Reading', 'Hiking', 'Gaming'], 'address': {'street': '123 Main St', 'city': 'Cityville', 'zipCode': '12345'}, 'friends': [{'name': 'Alice', 'age': 28}, {'name': 'Bob', 'age': 32}, {'name': 'Eve', 'age': 29}]};$y = \"Alice\";"
+        result = self.variable.process(declarations)
+        self.assertEqual(result, expected_result)
+
 if __name__ == '__main__':
     unittest.main()
