@@ -2,7 +2,11 @@ from sk_variable_handler.variable_handler import VariableHandler
 from sk_calculator import Calculator
 from sk_regex_maker import RegexMaker
 import unittest
-
+from sk_function_solver.function_solver import FunctionSolver
+from sk_function_solver.process_function_calling import ProcessFunctionCalling
+from sk_function_solver.single_function_solver import SingleFunctionSOlver
+from sk_function_solver.get_index_value import GetIndexValue
+from sk_function_solver.process_condition import ProcessCondition
 
 class TestGetValues(unittest.TestCase):
 
@@ -12,7 +16,11 @@ class TestGetValues(unittest.TestCase):
         self.variable.set_calculator(self.calculator)
         self.variable.set_calculator(self.calculator)
         self.variable.set_regex_maker(RegexMaker())
-
+        self.variable.set_function_solver(FunctionSolver())
+        self.variable.set_get_index(GetIndexValue())
+        self.variable.set_process_condition(ProcessCondition())
+        self.variable.set_process_function_calling(ProcessFunctionCalling())
+        self.variable.set_single_function_solver(SingleFunctionSOlver())
 
     def test_get_result(self):
         declarations = "$x=@'1+2';$y=@'2+1';$var=@'12+223+(222+2)+sin(90)';$var2= $x+$y;$xy=($var2+$x+$y);$yx=$xy+$var2;"
