@@ -1,10 +1,10 @@
 import regex as re
-from .function_solver.function_solver import FunctionSolver
+from sk_function_solver.function_solver import FunctionSolver
 from .base import IReporter
-from .function_solver.process_function_calling import ProcessFunctionCalling
-from .function_solver.single_function_solver import SingleFunctionSOlver
-from .function_solver.get_index_value import GetIndexValue
-from .function_solver.process_condition import ProcessCondition
+from sk_function_solver.process_function_calling import ProcessFunctionCalling
+from sk_function_solver.single_function_solver import SingleFunctionSOlver
+from sk_function_solver.get_index_value import GetIndexValue
+from sk_function_solver.process_condition import ProcessCondition
 class FunctionEvaluator(IReporter):
     def __init__(self):
         self.successor = None

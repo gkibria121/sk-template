@@ -6,7 +6,6 @@ from packages.random_variable.sk_random_variable import RandomVariableGenerator
 from packages.table.sk_table_hanlder import TableHandler
 from packages.controller.sk_mongo_controller.sk_mongo_controller import MongoController
 from packages.wrapper.sk_mongo_wrapper.sk_mongo_wrapper import MongoWrapper
-
 import json
 
 class Controller:
@@ -15,6 +14,8 @@ class Controller:
         self.calculator = Calculator()
         self.data_structure = DataStructure()
         self.variable = VariableHandler()
+
+
         self.random = RandomVariableGenerator()
         self.mongo_controller = MongoController()
         self.mongo_wrapper = MongoWrapper()
@@ -22,6 +23,7 @@ class Controller:
         self.table_handler.set_wrapper(self.mongo_wrapper)
         self.table_handler.set_mongo_controller(self.mongo_controller)
         self.reporter = ReportGenerator()
+        self.reporter.set_reporter(self.reporter)
 
 
         self.variable.set_calculator(self.calculator)
@@ -47,27 +49,11 @@ class Controller:
 
 controller = Controller()
 data = '''
-$x={
-    'name': 'John',
-    'age': 30,
-    'hobbies': ['Reading', 'Hiking', 'Gaming'],
-    'address': {
-        'street': '123 Main St',
-        'city': 'Cityville',
-        'zipCode': '12345'
-    },
-    'friends': [
-        {'name': 'Alice', 'age': 28},
-        {'name': 'Bob', 'age': 32},
-        {'name': 'Eve', 'age': 29}
-    ]
-};
-$y = $x.friends[0].name;
+$x = [{'key': 'value'}];
+$y = $x[0].key;
 '''
-##template = '''{{::template,{'$user' : '$person'}}}
-##{{::sub/template2,{'$user' : '$person2'}}}
-##{{::sub/sub2/template3,{'$user' : '$person3'}}}
-## '''
+##data = {'$table': [{'id': 1, 'first_name': 'John', 'last_name': 'Doe', 'age': 30, 'department': 'Sales', 'salary': 50000.0, 'hire_date': '2020-01-15'}, {'id': 2, 'first_name': 'Jane', 'last_name': 'Smith', 'age': 35, 'department': 'HR', 'salary': 60000.0, 'hire_date': '2019-05-20'}, {'id': 3, 'first_name': 'Michael', 'last_name': 'Johnson', 'age': 28, 'department': 'IT', 'salary': 55000.0, 'hire_date': '2021-03-10'}, {'id': 4, 'first_name': 'Sarah', 'last_name': 'Williams', 'age': 32, 'department': 'Marketing', 'salary': 58000.0, 'hire_date': '2018-09-01'}, {'id': 5, 'first_name': 'David', 'last_name': 'Brown', 'age': 29, 'department': 'Finance', 'salary': 52000.0, 'hire_date': '2022-02-28'}]}
+##template = '''<><<{{$table[0].id}}>> </>'''
 data = controller.get_data(data)
 print(data)
 ##declaration = controller.get_report(template, data)

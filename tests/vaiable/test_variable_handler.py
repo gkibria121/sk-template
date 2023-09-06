@@ -178,5 +178,30 @@ $y = $x.friends[0].name;
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
 
+    def test_skipt_table(self):
+
+            declarations = '''$x={
+        'name': 'John',
+        'age': 30,
+        'hobbies': ['Reading', 'Hiking', 'Gaming'],
+        'address': {
+            'street': '123 Main St',
+            'city': 'Cityville',
+            'zipCode': '12345'
+        },
+        'friends': [
+            {'name': 'Alice', 'age': 28},
+            {'name': 'Bob', 'age': 32},
+            {'name': 'Eve', 'age': 29}
+        ]
+    };
+    $y = $x.name;
+    $z = $<z>select({'key' : z.key});
+    '''
+            expected_result = "$x = {'name': 'John', 'age': 30, 'hobbies': ['Reading', 'Hiking', 'Gaming'], 'address': {'street': '123 Main St', 'city': 'Cityville', 'zipCode': '12345'}, 'friends': [{'name': 'Alice', 'age': 28}, {'name': 'Bob', 'age': 32}, {'name': 'Eve', 'age': 29}]};$y = \"John\";$z = $<z>select({'key' : z.key});"
+            result = self.variable.process(declarations)
+            self.assertEqual(result, expected_result)
+
+
 if __name__ == '__main__':
     unittest.main()

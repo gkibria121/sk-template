@@ -1,11 +1,26 @@
 import regex as re
 import json
-##from sk_calculator import Calculator
+from sk_function_solver.function_solver import FunctionSolver
+from sk_function_solver.process_function_calling import ProcessFunctionCalling
+from sk_function_solver.single_function_solver import SingleFunctionSOlver
+from sk_function_solver.get_index_value import GetIndexValue
+from sk_function_solver.process_condition import ProcessCondition
+
+
 class VariableHandler:
 
     def __init__(self):
         self.calculator = None
-
+        self.function_solver = None
+        self.successor = None
+        self.data = None
+        self.process_function_calling = ProcessFunctionCalling()
+        self.single_function_solver = SingleFunctionSOlver()
+        self.single_function_solver.set_get_index_value(GetIndexValue())
+        self.single_function_solver.set_process_condition(ProcessCondition())
+        self.function_solver = FunctionSolver()
+        self.function_solver.set_process_function_calling(self.process_function_calling)
+        self.function_solver.set_single_obj_solver(self.single_function_solver)
     def set_calculator(self, calculator):
 
         self.calculator = calculator
@@ -46,30 +61,54 @@ class VariableHandler:
         text = ''
         for key,value in solved_expression.items():
 
-            flag = True
-
-            try:
-                value = eval(value) if type(value)==str else value
-                flag = True
-            except:
-                flag = False
-
-            if type(value)==str and flag:
-                text += f'{key} = "{value}";'
-            else:
-                text += f"{key} = {value};"
+            value = self.get_original_type(value)
+            text += f"{key} = {value};"
 
 
         return text
 
+    def get_original_type(self,value):
+        flag = True
+        try:
+            value = eval(value) if type(value)==str else value
+            flag = True
+        except:
+            flag = False
 
+        if type(value)==str and flag:
+            value = f'"{value}"'
+        return value
     def eval_value(self,value):
-        value = self.index_process(value)
+        is_function= self.is_function(value)
+        if is_function:
+            value = self.solve_function(value)
 
         is_expression = self.is_expression(value)
         if is_expression:
             value = self.solve_expression(value)
         return value
+
+    def solve_function(self,function_calling):
+        value_of_function = function_calling
+        pattern = r'((\(([^()]|(?2))*\))((\[\d+\])?((\.\w+(?2)?)|(\[\d+\]))+))'
+        matches = re.findall(pattern,value_of_function)
+        for match in matches:
+            self.function_solver.set_data({'$function_name' : eval(match[1])})
+            evaluated_value =self.function_solver.solve('$function_name'+match[3])
+            try:
+                evaluated_value = eval(evaluated_value)
+                evaluated_value = f"{evaluated_value}"
+            except:
+                evaluated_value = f'"{evaluated_value}"'
+            value_of_function = re.sub(re.escape(match[0]),evaluated_value,value_of_function)
+        return value_of_function
+
+
+
+
+    def is_function(self,value):
+        pattern  = r'((\(([^()]|(?2))*\))((\[\d+\])?((\.\w+(?2)?)|(\[\d+\]))+))'
+        return re.search(pattern,value)
 
     def process(self, declarations_text):
 
@@ -85,24 +124,6 @@ class VariableHandler:
 
         return False
 
-    def is_object(self,value):
-
-        pattern = r'[\{\}\[\]\]]'
-        if re.search(pattern,value):
-            return True
-
-        return False
-
-
-    def index_process(self,value):
-        pattern = r'(?<=\))((\.\w+)|(\[\d+\]))*'
-        value = re.sub(pattern, lambda match: self.get_proccessed_value(match), value)
-        return value
-
-    def get_proccessed_value(self,value):
-        pattern  =r'(?:\s*(?:\.([^\d][\w]*))\b(?!\())'
-        return re.sub(pattern, lambda match: f'["{match.group(1)}"]', value[0])
-
     def solve_expression(self,expression):
 
         pattern = r'\@((\"([^\"]+)\")|(\'([^\']+)\'))'
@@ -113,6 +134,11 @@ class VariableHandler:
 
     def set_regex_maker(self,regex_maker):
         self.regex_maker = regex_maker
+
+    def set_function_solver(self,function_solver):
+        self.function_solver  = function_solver
+
+
 
 ##variable = "$x=@'1+2';$y=@'2+1';$var=@'12+223+(222+2)+sin(90)';$var2= $x+$y;$xy=($var2+$x+$y);$yx=$xy+$var2;"
 ##
