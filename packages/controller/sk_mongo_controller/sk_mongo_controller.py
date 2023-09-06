@@ -145,7 +145,6 @@ print(result)
 '''
 ##        print(script)
         self.clear()
-        print(script)
         return script
 
     def clear(self):

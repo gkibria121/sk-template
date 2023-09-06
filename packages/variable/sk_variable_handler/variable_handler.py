@@ -42,15 +42,6 @@ class VariableHandler:
 
         self.calculator = calculator
 
-    def remove_comments(self, declarations):
-        single_line_comment = r'\#.*+($)?'
-        declarations = re.sub(single_line_comment, '', declarations)
-        multiline_comment = r'\/\*[\s\S]*?\*\/'
-        declarations = re.sub(multiline_comment, '', declarations)
-        extra_space = r'\n\s*'
-        declarations = re.sub(extra_space, '', declarations)
-        declarations = declarations.strip()
-        return declarations
 
 
     def solve_variables(self,declaraions):
@@ -156,8 +147,7 @@ class VariableHandler:
 
     def process(self, declarations_text):
 
-        declarations = self.remove_comments(declarations_text)
-        solve_variables = self.solve_variables(declarations)
+        solve_variables = self.solve_variables(declarations_text)
 
         text = self.generate_text(solve_variables)
         return self.go_next.process(text)
