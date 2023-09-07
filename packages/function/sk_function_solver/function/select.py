@@ -15,7 +15,7 @@ class Select:
                 value = value
             else:
 
-                pattern = r'(\(((\(\w+\))|(\w+))\s*=>\s*(([^()]|(\((?5)\)))*)\)\s*\,)?(.*)'
+                pattern = r'(\(((\(\w+\))|(\w+))\s*=>\s*(([^()]|(\((?5)\)))*)\)\s*\,)?(([^|]+)(\|(.*))?)'
                 match = re.search(pattern,condition)
                 if match:
 
@@ -23,9 +23,10 @@ class Select:
                         print(value)
 
                         placeholder = match[3] if match[3] is not None else match[4]
+                        eb = placeholder if match[11] is None else match[11]
 
 
-                        value= eval(f"[{match[8]}  if {match[5]}  else {placeholder} for {placeholder} in value]")
+                        value= eval(f"[{match[9]}  if {match[5]}  else {eb} for {placeholder} in value]")
 
 
         return self.go_next.run(value,method,condition)
