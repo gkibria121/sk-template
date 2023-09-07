@@ -8,7 +8,7 @@ class Filter:
 
     def run(self,value,method,condition):
 
-        if method == 'filter':
+        if method == 'where':
             if condition=='':
                 pass
             if condition!='':
