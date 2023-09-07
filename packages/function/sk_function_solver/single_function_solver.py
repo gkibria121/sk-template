@@ -22,7 +22,7 @@ from .function.snake import SnakeCase
 from .function.range import Range
 from .function.foreach import Foreach
 from .get_obj_value import GetObjectValue
-
+from .function.select import Select
 class SingleFunctionSOlver:
     def __init__(self):
         self.get_object_value = GetObjectValue()
@@ -51,6 +51,8 @@ class SingleFunctionSOlver:
         self.snake = SnakeCase()
         self.range = Range()
         self.foreach = Foreach()
+        self.select = Select()
+
 
 
 
@@ -72,7 +74,8 @@ class SingleFunctionSOlver:
         self.len.set_next(self.camel)
         self.camel.set_next(self.snake)
         self.snake.set_next(self.range)
-        self.range.set_next(self.set)
+        self.range.set_next(self.select)
+        self.select.set_next(self.set)
 
         self.set.set_next(self.foreach)
         self.foreach.set_next(self.sum)
