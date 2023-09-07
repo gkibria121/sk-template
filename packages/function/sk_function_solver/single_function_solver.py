@@ -60,7 +60,7 @@ class SingleFunctionSOlver:
         self.upper.set_next(self.round)
         self.round.set_next(self.slice)
         self.slice.set_next(self.filter)
-        self.slice.set_next(self.lower)
+        self.filter.set_next(self.lower)
         self.lower.set_next(self.avg)
         self.avg.set_next(self.distinct)
         self.distinct.set_next(self.reverse)

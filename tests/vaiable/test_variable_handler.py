@@ -212,5 +212,74 @@ $y = $x.friends[0].name;
             self.assertEqual(result, expected_result)
 
 
+
+from sk_variable_handler.variable_handler import GetOriginalType
+
+class TestGetOriginalType(unittest.TestCase):
+
+    def setUp(self):
+        self.get_original_type =GetOriginalType()
+
+    def test_original_type(self):
+
+        result = self.get_original_type.run('12')
+
+        self.assertEqual(result,12)
+
+        result = self.get_original_type.run('"12"')
+
+        self.assertEqual(result,'"12"')
+        result = self.get_original_type.run('[1,2,3,4,5,6]')
+
+        self.assertEqual(result,[1,2,3,4,5,6])
+
+
+        result = self.get_original_type.run('"[1,2,3,4,5,6]"')
+        self.assertEqual(result,'"[1,2,3,4,5,6]"')
+
+
+
+        result = self.get_original_type.run('$<table:x>select({"x" : "y"})')
+        self.assertEqual(result,'$<table:x>select({"x" : "y"})')
+
+from sk_variable_handler.variable_handler import GenerateText
+
+class TestGenerateText(unittest.TestCase):
+    def setUp(self):
+        self.get_original_type = GetOriginalType()
+        self.generate_text = GenerateText()
+        self.generate_text.set_get_original_type(self.get_original_type)
+
+    def test_generate_text(self):
+        result = self.generate_text.run({'$x' : '"y"'})
+        self.assertEqual(result,'$x = "y";')
+
+        result = self.generate_text.run({'$x' : '1'})
+        self.assertEqual(result,'$x = 1;')
+
+        result = self.generate_text.run({'$x' : '1'})
+        self.assertEqual(result,'$x = 1;')
+
+        result = self.generate_text.run({'$x' : '1','$y' : '[1,2,3,4,5]'})
+        self.assertEqual(result,'$x = 1;$y = [1, 2, 3, 4, 5];')
+
+from sk_variable_handler.variable_handler import TableSolver
+
+class TestTableHandler(unittest.TestCase):
+    def setUp(self):
+        self.get_original_type = GetOriginalType()
+        self.generate_text = GenerateText()
+        self.generate_text.set_get_original_type(self.get_original_type)
+        self.table_solver = TableSolver()
+        self.table_solver.set_generate_text(self.generate_text)
+        self.table_solver.set_next(type('Default' ,(),{'process' : lambda text:text}))
+    def test_table(self):
+        data = {'$x' : 1}
+        value = '$<x>select({x : 1})'
+
+        result  = self.table_solver.run(data,value)
+        self.assertEqual(result,'$<x>select({x : 1})')
+
+
 if __name__ == '__main__':
     unittest.main()

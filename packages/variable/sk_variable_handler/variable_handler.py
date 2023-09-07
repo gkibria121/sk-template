@@ -88,6 +88,7 @@ class VariableHandler:
     def set_calculator(self, calculator):
 
         self.calculator = calculator
+        self.solve_expression.set_calculator(self.calculator)
 
 
 
