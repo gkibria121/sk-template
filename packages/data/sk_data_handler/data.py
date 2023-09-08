@@ -54,7 +54,7 @@ class JsonProcess:
     def process(self,text):
 
         text =re.sub(r'(\{([^{}]|(?1))*\})',lambda match:self.process_key(match[0]),text )
-        print(text)
+
 
         return self.go_next.process(text)
     def process_key(self,json_data):

@@ -20,7 +20,7 @@ class Select:
                 if match:
 
                     if type(value)==list:
-                        print(value)
+
 
                         placeholder = match[3] if match[3] is not None else match[4]
                         eb = placeholder if match[11] is None else match[11]

@@ -28,5 +28,5 @@ class TemplateFormatProcess:
 
     def convert_into_class(self,match):
 
-        print(match)
+
         return match

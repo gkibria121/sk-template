@@ -1,4 +1,3 @@
 create select in script where select can change list into object
 
 $x =[1,2,3,4];
-$y = $x.select((x)=> x>1, x*2);

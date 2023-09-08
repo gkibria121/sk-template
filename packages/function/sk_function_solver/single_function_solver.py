@@ -23,6 +23,9 @@ from .function.range import Range
 from .function.foreach import Foreach
 from .get_obj_value import GetObjectValue
 from .function.select import Select
+from .function.index import Index
+from .function.find import Find
+from.function.in_array import In
 class SingleFunctionSOlver:
     def __init__(self):
         self.get_object_value = GetObjectValue()
@@ -52,6 +55,9 @@ class SingleFunctionSOlver:
         self.range = Range()
         self.foreach = Foreach()
         self.select = Select()
+        self.index = Index()
+        self.find = Find()
+        self.in_array = In()
 
 
 
@@ -75,7 +81,10 @@ class SingleFunctionSOlver:
         self.camel.set_next(self.snake)
         self.snake.set_next(self.range)
         self.range.set_next(self.select)
-        self.select.set_next(self.set)
+        self.select.set_next(self.index)
+        self.index.set_next(self.find)
+        self.find.set_next(self.in_array)
+        self.in_array.set_next(self.set)
 
         self.set.set_next(self.foreach)
         self.foreach.set_next(self.sum)
