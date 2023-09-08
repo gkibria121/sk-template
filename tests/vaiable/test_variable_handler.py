@@ -1,4 +1,6 @@
 from sk_variable_handler.variable_handler import VariableHandler
+from sk_variable_handler.variable_handler import SolveFunction
+from sk_variable_handler.variable_handler import IsFunction
 from sk_calculator import Calculator
 from sk_regex_maker import RegexMaker
 import unittest
@@ -7,6 +9,7 @@ from sk_function_solver.process_function_calling import ProcessFunctionCalling
 from sk_function_solver.single_function_solver import SingleFunctionSOlver
 from sk_function_solver.get_index_value import GetIndexValue
 from sk_function_solver.process_condition import ProcessCondition
+
 
 class TestGetValues(unittest.TestCase):
 
@@ -280,6 +283,38 @@ class TestTableHandler(unittest.TestCase):
         result  = self.table_solver.run(data,value)
         self.assertEqual(result,'$<x>select({x : 1})')
 
+
+
+
+class TestIsFunction:
+
+    def setUp(self):
+        self.is_function = IsFunction()
+
+    def test_is_function(self):
+
+        result = self.is_function('([1,2,3,4,5]).sum()')
+        self.assertEqual(result,True)
+
+        result = self.is_function('([1,2,3,4,5])[1].sum()')
+        self.assertEqual(result,True)
+
+        result = self.is_function('([1,2,3,4,5])[(1)].sum()')
+        self.assertEqual(result,True)
+
+        result = self.is_function('([1,2,3,4,5])[(1)].sum()')
+        self.assertEqual(result,True)
+
+        result = self.is_function('([1,2,3,4,5])[("ki")].sum()')
+        self.assertEqual(result,True)
+
+        result = self.is_function('([1,2,3,4,5])[("ki")].sum((x)=>x).sum((x)=>x)[1].sum((x)=>x)')
+        self.assertEqual(result,True)
+
+
+
+        result = self.is_function('([1,2,3,4,5])[("ki")]')
+        self.assertEqual(result,False)
 
 if __name__ == '__main__':
     unittest.main()

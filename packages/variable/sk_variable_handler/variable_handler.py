@@ -192,7 +192,7 @@ class IsExpression:
 class IsFunction:
 
     def run(self,value):
-        pattern  = r'((\(([^()]|(?2))*\))((\[\d+\])?((\.\w+(?2)?)|(\[\d+\]))+))'
+        pattern  = r'((\(([^()]|(?2))*\))((\[\(?[\w+\"\']\)?\])?((\.\w+(?2)?)|(\[\(?[\w+\"\']\)?\]))+))'
         return re.search(pattern,value)
 
 
@@ -204,10 +204,10 @@ class SolveFunction:
         self.function_solver.set_process_function_calling(self.process_function_calling)
         self.function_solver.set_single_obj_solver(self.single_function_solver)
         value_of_function = function_calling
-        pattern = r'((\(([^()]|(?2))*\))((\[\d+\])?((\.\w+(?2)?)|(\[\d+\]))+))'
+        pattern = r'((\(([^()]|(?2))*\))((\[\(?[\w+\"\']\)?\])?((\.\w+(?2)?)|(\[\(?[\w+\"\']\)?\]))+))'
         matches = re.findall(pattern,value_of_function)
         for match in matches:
-            self.function_solver.set_data({'$function_name' : eval(match[1])})
+            self.function_solver.set_data({'$function_name' : eval(match[1]+match[4])})
             evaluated_value =self.function_solver.solve('$function_name'+match[3])
             try:
                 evaluated_value = eval(evaluated_value)

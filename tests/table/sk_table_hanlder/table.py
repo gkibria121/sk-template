@@ -1,0 +1,17 @@
+$x =[1,2,3,4,-2];
+$y = $x.first_index_of(-2);
+$a = $x.index_of(-2);
+$z = $x.last_index_of(2);
+$b = $x.find((x)=> x>1);
+$c = $x.find_first((x)=> x>1);
+$d = $x.find_last((x)=> x>1);
+$f = $x.in(1);
+$g = $x.in(5);
+$temp = 1;
+$gg = $x.in($temp);
+$arr = [1,2,3,4,5,6];
+$new_one = [{x : 1},{x : 2}];
+$arr_test = $<new_one:x>select({x : x.x})->where(x.x>1);
+$new = $<arr:x>select( {id:x ,val:x*2},x )->where(x.id>1);
+$new_two = $<arr:x>select( {id:x ,val:x*2});
+$new_three = $<arr:x>select((x>1), {id:x ,val:x*2},x);
