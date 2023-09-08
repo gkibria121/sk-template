@@ -37,7 +37,6 @@ class DataStructure:
         self.calculator = calculator
 
 
-
     def set_random(self,random):
         self.random = random
 

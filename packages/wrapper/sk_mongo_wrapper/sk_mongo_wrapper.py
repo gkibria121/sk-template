@@ -7,6 +7,8 @@ class MongoWrapper:
         self.primary_table = None
         self.query_process = QueryProcess()
         self.evaluate_script = EvaluateScript()
+        self.data = None
+
 
 
     def set_mongo_controller(self,controller):
@@ -61,10 +63,6 @@ class MongoWrapper:
     def evaluate(self,query):
 
         return self.evaluate_script.run(query)
-
-
-
-
 
 
 

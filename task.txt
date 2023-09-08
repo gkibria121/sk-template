@@ -1,3 +1,5 @@
 create select in script where select can change list into object
 
 $x =[1,2,3,4];
+$<arr:x>select((x)=>(condition){ {id:x ,val:x*2} } );
+r'\$<(\w+)(:\w+)>(\s*(\w+)\(\s*\(\s*(\w+)\s*\)\s*=>\s*(\((([^()]|(?6))*)\))?\s*(\{(([^{}]|(?9))*)\})\s*\)\s*)(->(?3))*;'
