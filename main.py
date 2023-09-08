@@ -59,10 +59,41 @@ class Controller:
 
 controller = Controller()
 data = '''
-$objs=[{ID:1, quantity:100},{ ID:2, quantity:120}];
-$qt0=$objs[0].quantity;
-$pos=1;
-$qy1=$objs[$pos].quantity;'
+$x={
+        'name': 'John',
+        'age': 30,
+        'hobbies': ['Reading', 'Hiking', 'Gaming'],
+        'address': {
+            'street': '123 Main St',
+            'city': 'Cityville',
+            'zipCode': '12345'
+        },
+        'friends': [
+            {'name': 'Alice', 'age': 28},
+            {'name': 'Bob', 'age': 32},
+            {'name': 'Eve', 'age': 29}
+        ]
+    };
+    $y = $x.name;
+$ids=[1,2,3,4];
+$values=[{id:1, val: 1.5},{id:2, val: 2.0},{id:3, val: 2.5},{id:4, val: 3.5}];
+$qy1=$values[$ids.index_of(3)].val;
+$name={
+    'name': 'John',
+    'age': 30,
+    'hobbies': ['Reading', 'Hiking', 'Gaming'],
+    'address': {
+        'street': '123 Main St',
+        'city': 'Cityville',
+        'zipCode': '12345'
+    },
+    'friends': [
+        {'name': 'Alice', 'age': 28},
+        {'name': 'Bob', 'age': 32},
+        {'name': 'Eve', 'age': 29}
+    ]
+};
+$name = $name.friends[0]["name"];
 '''
 ##data = {'$table': [{'id': 1, 'first_name': 'John', 'last_name': 'Doe', 'age': 30, 'department': 'Sales', 'salary': 50000.0, 'hire_date': '2020-01-15'}, {'id': 2, 'first_name': 'Jane', 'last_name': 'Smith', 'age': 35, 'department': 'HR', 'salary': 60000.0, 'hire_date': '2019-05-20'}, {'id': 3, 'first_name': 'Michael', 'last_name': 'Johnson', 'age': 28, 'department': 'IT', 'salary': 55000.0, 'hire_date': '2021-03-10'}, {'id': 4, 'first_name': 'Sarah', 'last_name': 'Williams', 'age': 32, 'department': 'Marketing', 'salary': 58000.0, 'hire_date': '2018-09-01'}, {'id': 5, 'first_name': 'David', 'last_name': 'Brown', 'age': 29, 'department': 'Finance', 'salary': 52000.0, 'hire_date': '2022-02-28'}]}
 ##template = '''<><<{{$table[0].id}}>> </>'''

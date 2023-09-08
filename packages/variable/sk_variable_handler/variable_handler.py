@@ -25,6 +25,7 @@ class VariableHandler:
         self.is_function = IsFunction()
         self.is_table = IsTable()
         self.solve_function = SolveFunction()
+        self.solve_function.set_get_original_type(self.get_original_type)
 
         self.solve_expression = ExpressionSolver()
         self.solve_table =TableSolver()
@@ -109,7 +110,7 @@ class SolveVariables:
 
         matches = re.findall(pattern,declaraions)
         for match in matches:
-            variable_in_expression =re.search(r'\$\w+',match[2])
+            variable_in_expression = re.search(r'\$\w+',match[2])
             if  not variable_in_expression:
                 solved_expression[match[1]] =self.eval_value.run(solved_expression,match[2])
 
@@ -117,7 +118,8 @@ class SolveVariables:
                 temp_expression = match[2]
                 for key,value in solved_expression.items():
                     temp_expression = re.sub(re.escape(key)+r'(?=\b)',f"({value})",temp_expression)
-                variable_in_solved_expression =re.search(r'\$\w+',temp_expression)
+
+                variable_in_solved_expression = re.search(r'\$\w+',temp_expression)
 
                 if not variable_in_solved_expression:
                     solved_expression[match[1]]=self.eval_value.run(solved_expression,temp_expression)
@@ -192,8 +194,12 @@ class IsExpression:
 class IsFunction:
 
     def run(self,value):
-        pattern  = r'((\(([^()]|(?2))*\))((\[\(?[\w+\"\']\)?\])?((\.\w+(?2)?)|(\[\(?[\w+\"\']\)?\]))+))'
-        return re.search(pattern,value)
+        pattern  = r'((\(([^()]|(?2))*\))(\[\(?[\w\"\']+\)?\])?(((\.\w+(?2)?)|(\[\(?[\w\"\']+\)?\]))+))'
+        if re.search(pattern,value):
+            return True
+
+        return False
+
 
 
 class SolveFunction:
@@ -204,24 +210,27 @@ class SolveFunction:
         self.function_solver.set_process_function_calling(self.process_function_calling)
         self.function_solver.set_single_obj_solver(self.single_function_solver)
         value_of_function = function_calling
-        pattern = r'((\(([^()]|(?2))*\))((\[\(?[\w+\"\']\)?\])?((\.\w+(?2)?)|(\[\(?[\w+\"\']\)?\]))+))'
+        pattern = r'((\(([^()]|(?2))*\))(\[\(?[\w\"\']+\)?\])?(((\.\w+(?2)?)|(\[\(?[\w\"\']+\)?\]))+))'
         matches = re.findall(pattern,value_of_function)
-        for match in matches:
-            self.function_solver.set_data({'$function_name' : eval(match[1]+match[4])})
-            evaluated_value =self.function_solver.solve('$function_name'+match[3])
-            try:
-                evaluated_value = eval(evaluated_value)
-                evaluated_value = f"{evaluated_value}"
-            except:
-                evaluated_value = f'"{evaluated_value}"'
-            value_of_function = re.sub(re.escape(match[0]),evaluated_value,value_of_function)
+        while True:
+            for match in matches:
+                self.function_solver.set_data({'$function_name' : eval(match[1]+match[3])})
+                evaluated_value =self.function_solver.solve('$function_name'+match[4])
+                evaluated_value = self.get_original_type.run(evaluated_value)
+
+                value_of_function = re.sub(re.escape(match[0]),evaluated_value,value_of_function)
+            matches = re.findall(pattern,value_of_function)
+            if not matches:
+                break
+
         return value_of_function
     def set_function_solver(self,solver):
         self.function_solver = solver
     def set_function_solver(self,function_solver):
         self.function_solver  = function_solver
 
-
+    def set_get_original_type(self,get):
+        self.get_original_type = get
 
     def set_process_function_calling(self,function):
         self.process_function_calling = function
@@ -234,6 +243,9 @@ class SolveFunction:
 
     def set_process_condition(self,condition):
         self.process_condition = condition
+
+
+
 
 class IsTable:
     def run(self,value):
@@ -273,10 +285,10 @@ class GetOriginalType:
     def run(self,value):
         flag = True
         try:
-            value = eval(value) if type(value)==str else value
-            flag = True
-        except:
+            value = str(value) if type(eval(value))!=str else value
             flag = False
+        except:
+            flag = True
 
         if type(value)==str and flag:
             value = f'"{value}"'

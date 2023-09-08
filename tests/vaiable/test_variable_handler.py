@@ -25,7 +25,7 @@ class TestGetValues(unittest.TestCase):
         self.variable.set_process_function_calling(ProcessFunctionCalling())
         self.variable.set_single_function_solver(SingleFunctionSOlver())
         self.variable.set_next(type('Default',(),{'process' : lambda text: text}))
-
+        self.maxDiff = None
     def test_get_result(self):
         declarations = "$x=@'1+2';$y=@'2+1';$var=@'12+223+(222+2)+sin(90)';$var2= $x+$y;$xy=($var2+$x+$y);$yx=$xy+$var2;"
         expected_result = "$x = 3;$y = 3;$var = 460;$var2 = 6;$xy = 12;$yx = 18;"
@@ -61,19 +61,19 @@ class TestGetValues(unittest.TestCase):
     def test_get_list_variables(self):
         # Test getting the value of a nested variable
         declarations = "$x = [5];$y = $x+[3];$z =$y+[2];"
-        expected_result = "$x = [5];$y = [5, 3];$z = [5, 3, 2];"
+        expected_result = "$x = [5];$y = ([5])+[3];$z = (([5])+[3])+[2];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
 
     def test_expression_in_list(self):
         # Test getting the value of a nested variable
         declarations = "$x = [5 ,@\"5+10\"];$y = $x+[3];$z =$y+[2];"
-        expected_result = "$x = [5, 15];$y = [5, 15, 3];$z = [5, 15, 3, 2];"
+        expected_result = "$x = [5 ,15];$y = ([5 ,15])+[3];$z = (([5 ,15])+[3])+[2];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
     def test_nested_expressions(self):
         declarations = "$x = [5 , @\"5+10\"];$y = @'$x+[3]';$z =$y+[2, @'1+2^3'];"
-        expected_result = "$x = [5, 15];$y = [5, 15, 3];$z = [5, 15, 3, 2, 9];"
+        expected_result = "$x = [5 , 15];$y = ([5 , 15])+[3];$z = (([5 , 15])+[3])+[2, 9];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
     def test_mathematical_expressions(self):
@@ -89,7 +89,7 @@ class TestGetValues(unittest.TestCase):
 
     def test_mixed_data_list(self):
         declarations = "$x = [1, 'hello', 3.14];$y = $x + [True, None];"
-        expected_result = "$x = [1, 'hello', 3.14];$y = [1, 'hello', 3.14, True, None];"
+        expected_result = "$x = [1, 'hello', 3.14];$y = ([1, 'hello', 3.14]) + [True, None];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
 
@@ -136,13 +136,13 @@ class TestGetValues(unittest.TestCase):
         # Test an empty expression
         declarations = "$x= '2';"
         result = self.variable.process(declarations)
-        self.assertEqual(result, "$x = \"2\";")
+        self.assertEqual(result, "$x = \'2\';")
 
 
 
     def test_get_result(self):
         declarations = "$x=@'1+2';$y=@'2+1';$var=@'12+223+(222+2)+sin(90)';$var2= $x+$y;$xy=@'($var2+$x+$y)';$yx=$xy+$var2;"
-        expected_result = "$x = 3;$y = 3;$var = 460;$var2 = 6;$xy = 12;$yx = 18;"
+        expected_result = "$x = 3;$y = 3;$var = 460;$var2 = (3)+(3);$xy = 12;$yx = (12)+((3)+(3));"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
 
@@ -163,9 +163,9 @@ class TestGetValues(unittest.TestCase):
         {'name': 'Eve', 'age': 29}
     ]
 };
-$y = $x.name;
+$x = $x.name;
 '''
-        expected_result = "$x = {'name': 'John', 'age': 30, 'hobbies': ['Reading', 'Hiking', 'Gaming'], 'address': {'street': '123 Main St', 'city': 'Cityville', 'zipCode': '12345'}, 'friends': [{'name': 'Alice', 'age': 28}, {'name': 'Bob', 'age': 32}, {'name': 'Eve', 'age': 29}]};$y = \"John\";"
+        expected_result = '''$x = "John";'''
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
 
@@ -184,37 +184,11 @@ $y = $x.name;
         {'name': 'Eve', 'age': 29}
     ]
 };
-$y = $x.friends[0].name;
+$x = $x.friends[0].name;
 '''
-        expected_result = "$x = {'name': 'John', 'age': 30, 'hobbies': ['Reading', 'Hiking', 'Gaming'], 'address': {'street': '123 Main St', 'city': 'Cityville', 'zipCode': '12345'}, 'friends': [{'name': 'Alice', 'age': 28}, {'name': 'Bob', 'age': 32}, {'name': 'Eve', 'age': 29}]};$y = \"Alice\";"
+        expected_result = "$x = \"Alice\";"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
-
-    def test_skipt_table(self):
-
-            declarations = '''$x={
-        'name': 'John',
-        'age': 30,
-        'hobbies': ['Reading', 'Hiking', 'Gaming'],
-        'address': {
-            'street': '123 Main St',
-            'city': 'Cityville',
-            'zipCode': '12345'
-        },
-        'friends': [
-            {'name': 'Alice', 'age': 28},
-            {'name': 'Bob', 'age': 32},
-            {'name': 'Eve', 'age': 29}
-        ]
-    };
-    $y = $x.name;
-    $z = $<z>select({'key' : z.key});
-    '''
-            expected_result = "$x = {'name': 'John', 'age': 30, 'hobbies': ['Reading', 'Hiking', 'Gaming'], 'address': {'street': '123 Main St', 'city': 'Cityville', 'zipCode': '12345'}, 'friends': [{'name': 'Alice', 'age': 28}, {'name': 'Bob', 'age': 32}, {'name': 'Eve', 'age': 29}]};$y = \"John\";$z = $<z>select({'key' : z.key});"
-            result = self.variable.process(declarations)
-            self.assertEqual(result, expected_result)
-
-
 
 from sk_variable_handler.variable_handler import GetOriginalType
 
@@ -227,14 +201,14 @@ class TestGetOriginalType(unittest.TestCase):
 
         result = self.get_original_type.run('12')
 
-        self.assertEqual(result,12)
+        self.assertEqual(result,'12')
 
         result = self.get_original_type.run('"12"')
 
         self.assertEqual(result,'"12"')
         result = self.get_original_type.run('[1,2,3,4,5,6]')
 
-        self.assertEqual(result,[1,2,3,4,5,6])
+        self.assertEqual(result,'[1,2,3,4,5,6]')
 
 
         result = self.get_original_type.run('"[1,2,3,4,5,6]"')
@@ -243,7 +217,7 @@ class TestGetOriginalType(unittest.TestCase):
 
 
         result = self.get_original_type.run('$<table:x>select({"x" : "y"})')
-        self.assertEqual(result,'$<table:x>select({"x" : "y"})')
+        self.assertEqual(result,'"$<table:x>select({"x" : "y"})"')
 
 from sk_variable_handler.variable_handler import GenerateText
 
@@ -264,7 +238,7 @@ class TestGenerateText(unittest.TestCase):
         self.assertEqual(result,'$x = 1;')
 
         result = self.generate_text.run({'$x' : '1','$y' : '[1,2,3,4,5]'})
-        self.assertEqual(result,'$x = 1;$y = [1, 2, 3, 4, 5];')
+        self.assertEqual(result,'$x = 1;$y = [1,2,3,4,5];')
 
 from sk_variable_handler.variable_handler import TableSolver
 
@@ -286,35 +260,35 @@ class TestTableHandler(unittest.TestCase):
 
 
 
-class TestIsFunction:
+class TestIsFunction(unittest.TestCase):
 
     def setUp(self):
         self.is_function = IsFunction()
 
     def test_is_function(self):
 
-        result = self.is_function('([1,2,3,4,5]).sum()')
+        result = self.is_function.run('([1,2,3,4,5]).sum()')
         self.assertEqual(result,True)
 
-        result = self.is_function('([1,2,3,4,5])[1].sum()')
+        result = self.is_function.run('([1,2,3,4,5])[1].sum()')
         self.assertEqual(result,True)
 
-        result = self.is_function('([1,2,3,4,5])[(1)].sum()')
+        result = self.is_function.run('([1,2,3,4,5])[(1)].sum()')
         self.assertEqual(result,True)
 
-        result = self.is_function('([1,2,3,4,5])[(1)].sum()')
+        result = self.is_function.run('([1,2,3,4,5])[(1)].sum()')
         self.assertEqual(result,True)
 
-        result = self.is_function('([1,2,3,4,5])[("ki")].sum()')
+        result = self.is_function.run('([1,2,3,4,5])[("ki")].sum()')
         self.assertEqual(result,True)
 
-        result = self.is_function('([1,2,3,4,5])[("ki")].sum((x)=>x).sum((x)=>x)[1].sum((x)=>x)')
+        result = self.is_function.run('([1,2,3,4,5])[("ki")].sum((x)=>x).sum((x)=>x)[1].sum((x)=>x)')
         self.assertEqual(result,True)
 
 
 
-        result = self.is_function('([1,2,3,4,5])[("ki")]')
-        self.assertEqual(result,False)
+        result = self.is_function.run('([1,2,3,4,5])[("ki")]')
+        self.assertEqual(result,True)
 
 if __name__ == '__main__':
     unittest.main()

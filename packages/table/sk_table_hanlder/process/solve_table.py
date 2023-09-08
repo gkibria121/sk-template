@@ -10,7 +10,7 @@ class SolveTable:
                 temp_data.update({variable[0]: eval(variable[1])})
             else:
                 value =self.single_table_solver.run(temp_data,variable)
-                temp_data.update({variable[0] : eval(value)} )
+                temp_data.update({variable[0] : eval(str(value))} )
 
         return temp_data
 

@@ -10,6 +10,7 @@ class DataStructure:
 
 
     def run(self,data_text):
+
         self.comment_remover.set_next(self.json_process)
         self.json_process.set_next(self.random)
         self.random.set_next(self.variable)
