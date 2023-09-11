@@ -194,7 +194,7 @@ class IsExpression:
 class IsFunction:
 
     def run(self,value):
-        pattern  = r'((\(([^()]|(?2))*\))(\[\(?[\w\"\']+\)?\])?(((\.\w+(?2)?)|(\[\(?[\w\"\']+\)?\]))+))'
+        pattern  = r'((\(([^()]|(?2))*\))(\[([^\[\]]|(?4))*\])*((?:(\.\w+(?2)?)|(?4))+))'
         if re.search(pattern,value):
             return True
 
@@ -210,12 +210,13 @@ class SolveFunction:
         self.function_solver.set_process_function_calling(self.process_function_calling)
         self.function_solver.set_single_obj_solver(self.single_function_solver)
         value_of_function = function_calling
-        pattern = r'((\(([^()]|(?2))*\))(\[\(?[\w\"\']+\)?\])?(((\.\w+(?2)?)|(\[\(?[\w\"\']+\)?\]))+))'
+        pattern = r'((\(([^()]|(?2))*\))(\[([^\[\]]|(?4))*\])*((?:(\.\w+(?2)?)|(?4))+))'
         matches = re.findall(pattern,value_of_function)
         while True:
             for match in matches:
-                self.function_solver.set_data({'$function_name' : eval(match[1]+match[3])})
-                evaluated_value =self.function_solver.solve('$function_name'+match[4])
+                index_of_value = match[3]
+                self.function_solver.set_data({'$function_name' : eval(match[1]+index_of_value)})
+                evaluated_value =self.function_solver.solve('$function_name'+match[5])
                 evaluated_value = self.get_original_type.run(evaluated_value)
 
                 value_of_function = re.sub(re.escape(match[0]),evaluated_value,value_of_function)
@@ -285,13 +286,16 @@ class GetOriginalType:
     def run(self,value):
         flag = True
         try:
-            value = str(value) if type(eval(value))!=str else value
-            flag = False
+            value = eval(value)
+            flag = True if type(value)==str else False
+            value = str(value)
+
         except:
             flag = True
 
         if type(value)==str and flag:
             value = f'"{value}"'
+
         return value
 
 

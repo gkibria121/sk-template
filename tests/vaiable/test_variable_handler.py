@@ -1,6 +1,13 @@
 from sk_variable_handler.variable_handler import VariableHandler
 from sk_variable_handler.variable_handler import SolveFunction
 from sk_variable_handler.variable_handler import IsFunction
+from sk_variable_handler.variable_handler import IsExpression
+from sk_variable_handler.variable_handler import EvaluateValue
+from sk_variable_handler.variable_handler import ExpressionSolver
+from sk_variable_handler.variable_handler import GenerateText
+from sk_variable_handler.variable_handler import GetOriginalType
+from sk_variable_handler.variable_handler import IsTable
+from sk_variable_handler.variable_handler import SolveFunction
 from sk_calculator import Calculator
 from sk_regex_maker import RegexMaker
 import unittest
@@ -61,19 +68,19 @@ class TestGetValues(unittest.TestCase):
     def test_get_list_variables(self):
         # Test getting the value of a nested variable
         declarations = "$x = [5];$y = $x+[3];$z =$y+[2];"
-        expected_result = "$x = [5];$y = ([5])+[3];$z = (([5])+[3])+[2];"
+        expected_result = "$x = [5];$y = [5, 3];$z = [5, 3, 2];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
 
     def test_expression_in_list(self):
         # Test getting the value of a nested variable
         declarations = "$x = [5 ,@\"5+10\"];$y = $x+[3];$z =$y+[2];"
-        expected_result = "$x = [5 ,15];$y = ([5 ,15])+[3];$z = (([5 ,15])+[3])+[2];"
+        expected_result = "$x = [5, 15];$y = [5, 15, 3];$z = [5, 15, 3, 2];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
     def test_nested_expressions(self):
         declarations = "$x = [5 , @\"5+10\"];$y = @'$x+[3]';$z =$y+[2, @'1+2^3'];"
-        expected_result = "$x = [5 , 15];$y = ([5 , 15])+[3];$z = (([5 , 15])+[3])+[2, 9];"
+        expected_result = "$x = [5, 15];$y = [5, 15, 3];$z = [5, 15, 3, 2, 9];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
     def test_mathematical_expressions(self):
@@ -89,7 +96,7 @@ class TestGetValues(unittest.TestCase):
 
     def test_mixed_data_list(self):
         declarations = "$x = [1, 'hello', 3.14];$y = $x + [True, None];"
-        expected_result = "$x = [1, 'hello', 3.14];$y = ([1, 'hello', 3.14]) + [True, None];"
+        expected_result = "$x = [1, 'hello', 3.14];$y = [1, 'hello', 3.14, True, None];"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
 
@@ -136,13 +143,13 @@ class TestGetValues(unittest.TestCase):
         # Test an empty expression
         declarations = "$x= '2';"
         result = self.variable.process(declarations)
-        self.assertEqual(result, "$x = \'2\';")
+        self.assertEqual(result, "$x = \"2\";")
 
 
 
     def test_get_result(self):
         declarations = "$x=@'1+2';$y=@'2+1';$var=@'12+223+(222+2)+sin(90)';$var2= $x+$y;$xy=@'($var2+$x+$y)';$yx=$xy+$var2;"
-        expected_result = "$x = 3;$y = 3;$var = 460;$var2 = (3)+(3);$xy = 12;$yx = (12)+((3)+(3));"
+        expected_result = "$x = 3;$y = 3;$var = 460;$var2 = 6;$xy = 12;$yx = 18;"
         result = self.variable.process(declarations)
         self.assertEqual(result, expected_result)
 
@@ -206,15 +213,22 @@ class TestGetOriginalType(unittest.TestCase):
         result = self.get_original_type.run('"12"')
 
         self.assertEqual(result,'"12"')
-        result = self.get_original_type.run('[1,2,3,4,5,6]')
+        result = self.get_original_type.run('[1, 2, 3, 4, 5, 6]')
 
-        self.assertEqual(result,'[1,2,3,4,5,6]')
-
-
-        result = self.get_original_type.run('"[1,2,3,4,5,6]"')
-        self.assertEqual(result,'"[1,2,3,4,5,6]"')
+        self.assertEqual(result,'[1, 2, 3, 4, 5, 6]')
 
 
+        result = self.get_original_type.run('"[1, 2, 3, 4, 5, 6]"')
+        self.assertEqual(result,'"[1, 2, 3, 4, 5, 6]"')
+
+
+        result = self.get_original_type.run('value1')
+        self.assertEqual(result,'"value1"')
+
+
+
+        result = self.get_original_type.run('value3')
+        self.assertEqual(result,'"value3"')
 
         result = self.get_original_type.run('$<table:x>select({"x" : "y"})')
         self.assertEqual(result,'"$<table:x>select({"x" : "y"})"')
@@ -289,6 +303,75 @@ class TestIsFunction(unittest.TestCase):
 
         result = self.is_function.run('([1,2,3,4,5])[("ki")]')
         self.assertEqual(result,True)
+
+        result = self.is_function.run('([1,2,3,4,5])[("ki")+1-2]')
+        self.assertEqual(result,True)
+
+
+        result = self.is_function.run('([1,2,3,4,5])[("ki")+1-2].max(avg([1,2,3,4]))')
+        self.assertEqual(result,True)
+
+class TestIsExpresion(unittest.TestCase):
+
+    def setUp(self):
+        self.is_expression  = IsExpression()
+
+
+    def test_is_expression(self):
+        result =self.is_expression.run('@"1+2+3"')
+        self.assertEqual(result,True)
+
+        result =self.is_expression.run('"1+2+3"')
+        self.assertEqual(result,False)
+
+
+class TestGenerateText(unittest.TestCase):
+
+    def setUp(self):
+        self.generate_text = GenerateText()
+        self.generate_text.set_get_original_type(GetOriginalType())
+
+
+    def test_generate_text(self):
+
+        result = self.generate_text.run({'key' : '"value"'})
+        self.assertEqual(result,'key = "value";')
+
+
+class TestFunctionSolver(unittest.TestCase):
+
+    def setUp(self):
+        self.solve_function = SolveFunction()
+        self.solve_function.set_function_solver(FunctionSolver())
+        self.solve_function.set_get_index(GetIndexValue())
+        self.solve_function.set_get_original_type(GetOriginalType())
+        self.solve_function.set_process_condition(ProcessCondition())
+        self.solve_function.set_process_function_calling(ProcessFunctionCalling())
+        self.solve_function.set_single_function_solver(SingleFunctionSOlver())
+
+
+    def test_function_solver(self):
+
+        result = self.solve_function.run('([1,2,3,4,5])[(2)+1-2]')
+        self.assertEqual(result,'2')
+
+        result = self.solve_function.run('([1,2,3,4,5])[[1,2,3][0]]')
+        self.assertEqual(result,'2')
+
+        result = self.solve_function.run('([1,"value",3,4,5])[[1,2,3][0]]')
+        self.assertEqual(result,'"value"')
+
+        result = self.solve_function.run('([1,2,3,4,5]).sum()')
+        self.assertEqual(result,'15')
+
+        result = self.solve_function.run('([1,2,3,4,5]).reverse().sum()')
+        self.assertEqual(result,'15')
+
+        result = self.solve_function.run('([1,{"friends" : [1,2,3,4]},3,4,5])[1].friends.reverse().sum()')
+        self.assertEqual(result,'10')
+        result = self.solve_function.run('([1,{"friends" : [1,2,3,4]},3,4,5])[1].friends.reverse()[1]')
+        self.assertEqual(result,'3')
+
 
 if __name__ == '__main__':
     unittest.main()
