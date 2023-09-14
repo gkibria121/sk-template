@@ -8,7 +8,6 @@ from packages.random_variable.sk_random_variable import RandomVariableGenerator
 from packages.table.sk_table_hanlder import TableHandler
 from packages.wrapper.sk_mongo_wrapper.sk_mongo_wrapper import MongoWrapper
 from packages.controller.sk_mongo_controller.sk_mongo_controller import MongoController
-
 from packages.function.sk_function_solver.function_solver import FunctionSolver
 from packages.function.sk_function_solver.process_function_calling import ProcessFunctionCalling
 from packages.function.sk_function_solver.single_function_solver import SingleFunctionSOlver
@@ -125,6 +124,9 @@ class TinkerApp(tk.Tk):
         # Add footer widgets
         self.footer_lable = tk.Label(self.footer_frame, text='', font=("Helvetica", 12), anchor="w")
         self.footer_lable.pack(pady=2)
+        self.bind("<Control-'>", self.add_comment)
+
+
     def switch_tab(self, idx):
         self.tab_control.select(idx)
     def create_ds_tab(self):
@@ -190,7 +192,66 @@ class TinkerApp(tk.Tk):
         self.report.configure(state='disabled')
         self.ds.delete(1.0,tk.END)
 
+    def add_comment(self, event):
+        # Get the current cursor position
+        current_window =  self.get_selected_box(self.tab_control.select())
+        cursor_position = current_window.index(tk.INSERT)
+        value = ''
+        if current_window in [self.variable_text]:
+            try:
+                text = current_window.get("sel.first", "sel.last")
+                current_window.delete("sel.first", "sel.last")
+            except tk.TclError:
+                new_line_index = cursor_position.split('.')[0]+'.0'
+                text =current_window.get(new_line_index,cursor_position)
+                current_window.delete(new_line_index,cursor_position)
+            value = self.toggle_comment(text)
+            # Add a comment at the cursor position
+            comment_text = current_window
+            current_window.insert(cursor_position, value)
 
+    def toggle_comment(self,value):
+
+
+        pattern = r'(\/\*(([^\*\/]|(?1))*)\*\/)'
+        match = re.search(pattern,value)
+        if match:
+            return re.sub(pattern,lambda match: match[2],value)
+        value =f'/*{value}*/'
+
+        return value
+
+
+
+
+
+
+    def get_selected_box(self,box):
+
+        index = self.tab_control.index(box)
+        selected_tab =self.tab_control.winfo_children()[index]
+        selected_tab_str = str(selected_tab)
+
+        if  selected_tab_str == '.!notebook.!frame':
+
+            return self.report
+
+        elif  selected_tab_str == '.!notebook.!frame2':
+            return self.template
+
+        elif selected_tab_str == '.!notebook.!frame3':
+            return self.variable_text
+
+        elif  selected_tab_str == '.!notebook.!frame4':
+            return self.ds
+
+        elif  selected_tab_str == '.!notebook.!frame5':
+            return self.errors
+
+
+
+
+        return 1
 
 
     def create_error_logs_tab(self):
@@ -204,7 +265,7 @@ class TinkerApp(tk.Tk):
         # Add content for the "Variable Declaration" tab here
         label = tk.Label(self.tab_variable_declaration, text="Write Script")
         label.pack(padx=10, pady=10)
-        self.variable_text = scrolledtext.ScrolledText(self.tab_variable_declaration,background='lightgrey')
+        self.variable_text = scrolledtext.ScrolledText(self.tab_variable_declaration,background='lightgrey',undo=True)
         self.variable_text.pack(fill='both', expand=True)
         button = tk.Button(self.tab_variable_declaration,text='Generate Data',command=self.get_data,padx=10,pady=10)
         button.pack(pady=10)
@@ -212,7 +273,7 @@ class TinkerApp(tk.Tk):
         # Add content for the "Template" tab here
         label = tk.Label(self.tab_template, text="Insert Template")
         label.pack(padx=10, pady=10)
-        self.template = scrolledtext.ScrolledText(self.tab_template)
+        self.template = scrolledtext.ScrolledText(self.tab_template,undo=True)
         self.template.pack(fill='both', expand=True)
         button = tk.Button(self.tab_template, text='Generate Report', command=self.generate_report, padx=10, pady=10)
         button.pack(side='bottom', pady=10)
@@ -266,7 +327,8 @@ class TinkerApp(tk.Tk):
             self.tab_control.select(redirect)
             return result
         except Exception as error:
-            error = traceback.format_exc()
+##            error = traceback.format_exc()
+##            print(error)
             self.write_error(str(error))
             self.tab_control.tab(4, text="Error Logs ⚠️")
             self.tab_control.select(self.error_logs)
