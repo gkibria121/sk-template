@@ -59,9 +59,10 @@ class Controller:
 
 controller = Controller()
 data = '''
-$ids=[1,2,3,4];
-$values=[10,20,30,40];
-$qy1= $values[$ids.index_of(3)];
+$arr=[{dia:8},{dia:10},{dia:12},{dia:16},{dia:20},{dia:22},{dia:25}];
+#Works
+$bars=$<arr:x>select({dia:x.dia,area:x.dia*x.dia});
+$bars=$<arr:x>select({dia:x.dia,area:3.1415*x.dia*x.dia});
 '''
 ##data = {'$table': [{'id': 1, 'first_name': 'John', 'last_name': 'Doe', 'age': 30, 'department': 'Sales', 'salary': 50000.0, 'hire_date': '2020-01-15'}, {'id': 2, 'first_name': 'Jane', 'last_name': 'Smith', 'age': 35, 'department': 'HR', 'salary': 60000.0, 'hire_date': '2019-05-20'}, {'id': 3, 'first_name': 'Michael', 'last_name': 'Johnson', 'age': 28, 'department': 'IT', 'salary': 55000.0, 'hire_date': '2021-03-10'}, {'id': 4, 'first_name': 'Sarah', 'last_name': 'Williams', 'age': 32, 'department': 'Marketing', 'salary': 58000.0, 'hire_date': '2018-09-01'}, {'id': 5, 'first_name': 'David', 'last_name': 'Brown', 'age': 29, 'department': 'Finance', 'salary': 52000.0, 'hire_date': '2022-02-28'}]}
 ##template = '''<><<{{$table[0].id}}>> </>'''

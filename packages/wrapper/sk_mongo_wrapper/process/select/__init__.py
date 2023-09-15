@@ -9,10 +9,10 @@ class SelectProcess:
 
         if name =='select':
 
-            pattern =r'\:\s*(?![\"\'])((\d+(\.\d+))|([\w\.\s\+\-\/\*\^\%\(\)]+))(?![\"\'])'
+            pattern =r'\:\s*(?![\"\'])(([\w\.\s\+\-\/\*\^\%\(\)]+))(?![\"\'])'
 
 
-            argument = re.sub(pattern , lambda match : f": {self.operators_process.run(match[4])}" if match[3] == None else  f": {match[2]}",argument)
+            argument = re.sub(pattern , lambda match : f": {self.operators_process.run(match[1])}" if not match[1].replace('.','').isdigit() else  f": {match[1]}",argument)
 
         return self.go_next.process(name,argument)
 

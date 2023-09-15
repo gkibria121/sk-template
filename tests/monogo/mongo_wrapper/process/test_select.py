@@ -26,6 +26,9 @@ class TestSelectProcess(unittest.TestCase):
         result = self.select_process.process('select',"{'item' : x.item}")
         self.assertEqual(result,('select','{\'item\' :  "$item"}'))
 
+        result = self.select_process.process('select',"{'item' : 3.23*x.item}")
+        self.assertEqual(result,('select', '{\'item\' : { "$multiply" : [3.23, \'$item\'] }}'))
+
         result = self.select_process.process('select',"{'item' : x.y.item}")
         self.assertEqual(result,('select','{\'item\' :  "$y.item"}'))
 
