@@ -370,7 +370,12 @@ class TestFunctionSolver(unittest.TestCase):
         result = self.solve_function.run('([1,{"friends" : [1,2,3,4]},3,4,5])[1].friends.reverse().sum()')
         self.assertEqual(result,'10')
         result = self.solve_function.run('([1,{"friends" : [1,2,3,4]},3,4,5])[1].friends.reverse()[1]')
+
         self.assertEqual(result,'3')
+
+        result = self.solve_function.run('([10,20,30,40])[([1,2,3,4]).index_of(3)]')
+
+        self.assertEqual(result,'[10, 20, 30, 40][2]')
 
 
 if __name__ == '__main__':

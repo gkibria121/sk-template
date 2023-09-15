@@ -217,7 +217,9 @@ class SolveFunction:
                 index_of_value = match[3]
                 self.function_solver.set_data({'$function_name' : eval(match[1]+index_of_value)})
                 evaluated_value =self.function_solver.solve('$function_name'+match[5])
-                evaluated_value = self.get_original_type.run(evaluated_value)
+                is_function = re.search(pattern,evaluated_value)
+                if not is_function:
+                    evaluated_value = self.get_original_type.run(evaluated_value)
 
                 value_of_function = re.sub(re.escape(match[0]),evaluated_value,value_of_function)
             matches = re.findall(pattern,value_of_function)
