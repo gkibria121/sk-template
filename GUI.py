@@ -213,11 +213,13 @@ class TinkerApp(tk.Tk):
     def toggle_comment(self,value):
 
 
-        pattern = r'(\/\*(([^\*\/]|(?1))*)\*\/)'
+        pattern = r'(\n|^)#'
         match = re.search(pattern,value)
+        print(value)
         if match:
-            return re.sub(pattern,lambda match: match[2],value)
-        value =f'/*{value}*/'
+            return re.sub(pattern,lambda match : match[1],value)
+
+        value = re.sub('(\n|^)',lambda match : match[1]+'#',value)
 
         return value
 
