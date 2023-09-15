@@ -14,7 +14,6 @@ class TableHandler:
         self.get_variable_tokens= GetVariableTokens()
         self.solve_table = SolveTable()
         self.single_table_solver = SingleTableSolver()
-
         self.solve_table.set_single_table_solver(self.single_table_solver)
 
 
@@ -39,6 +38,9 @@ class TableHandler:
     def set_next(self,go_next):
         self.go_next = go_next
 
+
+    def set_function_solver(self,solver):
+        self.single_table_solver.set_function_solver(solver)
 ##$table4 = $<table,table3,table2>(x,z:x.number==z.number,y:x.number==y.number)=>{ {'name' : x.item , 'cost' : x.quantity*y.price ,'unit' : x.unit} };
 ##$table2 = $<table>(x)=>{ {'number' : $<table><[$parent_index-1].number|1>+$<table><[$parent_index+1].number|1> } };
 

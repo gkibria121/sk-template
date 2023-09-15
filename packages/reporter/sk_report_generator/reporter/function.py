@@ -9,14 +9,7 @@ class FunctionEvaluator(IReporter):
     def __init__(self):
         self.successor = None
         self.data = None
-        self.process_function_calling = ProcessFunctionCalling()
-        self.single_function_solver = SingleFunctionSOlver()
-        self.single_function_solver.set_get_index_value(GetIndexValue())
-        self.single_function_solver.set_process_condition(ProcessCondition())
         self.function_solver = FunctionSolver()
-        self.function_solver.set_process_function_calling(self.process_function_calling)
-        self.function_solver.set_single_obj_solver(self.single_function_solver)
-
     def report(self, template):
         pattern = r'(\{\{(?:[\"\']*)(((\{([^{}]|(?4))*\})|([^{}:]+))*)((\:([^{}:]+))|(\:\:(?4)))?(?:[\"\']*)\}\})'
 

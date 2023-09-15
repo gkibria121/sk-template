@@ -7,6 +7,7 @@ import unittest
 class TestRandomVariableGenerator(unittest.TestCase):
     def setUp(self):
         self.declaration = RandomVariableGenerator()
+        self.declaration.set_next(type('Default',(),{'process' : lambda text: text}))
 
 
     def test_get_result(self):

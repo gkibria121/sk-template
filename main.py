@@ -18,17 +18,18 @@ class Controller:
         self.calculator = Calculator()
         self.data_structure = DataStructure()
         self.variable = VariableHandler()
-        self.variable.set_function_solver(FunctionSolver())
-        self.variable.set_get_index(GetIndexValue())
-        self.variable.set_process_condition(ProcessCondition())
-        self.variable.set_process_function_calling(ProcessFunctionCalling())
-        self.variable.set_single_function_solver(SingleFunctionSOlver())
+        self.function_solver =FunctionSolver()
+        self.variable.set_function_solver(self.function_solver )
+
+
+
 
 
         self.random = RandomVariableGenerator()
         self.mongo_controller = MongoController()
         self.mongo_wrapper = MongoWrapper()
         self.table_handler = TableHandler()
+        self.table_handler.set_function_solver(self.function_solver)
         self.table_handler.set_wrapper(self.mongo_wrapper)
         self.table_handler.set_mongo_controller(self.mongo_controller)
 
@@ -59,10 +60,18 @@ class Controller:
 
 controller = Controller()
 data = '''
-$arr=[{dia:8},{dia:10},{dia:12},{dia:16},{dia:20},{dia:22},{dia:25}];
-#Works
-$bars=$<arr:x>select({dia:x.dia,area:x.dia*x.dia});
-$bars=$<arr:x>select({dia:x.dia,area:3.1415*x.dia*x.dia});
+$dias=[8,10,12,16,20,22,25];
+$bar_info=$dias.select(((z)=>True),
+{
+   dia:{val:z, unit:'mm'},
+   area:{val:3.14159/4.0*z/25.4*z/25.4,unit:'sqin'},
+   kg_per_ft:3.14159/4.0*z/304.8*z/304.8*490/2.20456,
+   rft_per_kg:1/(3.14159/4.0*z/304.8*z/304.8*490/2.20456)
+});
+
+$bars=[{ L:105,dia:10 },{ L:211,dia:12 }];
+##$x  = $bars.where(x=> x.L>10);
+$bars_wt=$<bars:z>select({ Wt: $bar_info.where((x)=>(x.dia.val==z.dia))[0].kg_per_ft});
 '''
 ##data = {'$table': [{'id': 1, 'first_name': 'John', 'last_name': 'Doe', 'age': 30, 'department': 'Sales', 'salary': 50000.0, 'hire_date': '2020-01-15'}, {'id': 2, 'first_name': 'Jane', 'last_name': 'Smith', 'age': 35, 'department': 'HR', 'salary': 60000.0, 'hire_date': '2019-05-20'}, {'id': 3, 'first_name': 'Michael', 'last_name': 'Johnson', 'age': 28, 'department': 'IT', 'salary': 55000.0, 'hire_date': '2021-03-10'}, {'id': 4, 'first_name': 'Sarah', 'last_name': 'Williams', 'age': 32, 'department': 'Marketing', 'salary': 58000.0, 'hire_date': '2018-09-01'}, {'id': 5, 'first_name': 'David', 'last_name': 'Brown', 'age': 29, 'department': 'Finance', 'salary': 52000.0, 'hire_date': '2022-02-28'}]}
 ##template = '''<><<{{$table[0].id}}>> </>'''

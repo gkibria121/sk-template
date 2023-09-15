@@ -10,11 +10,7 @@ from sk_function_solver.get_index_value import GetIndexValue
 class TestFunctionSolver(unittest.TestCase):
     def setUp(self):
         self.function_solver = FunctionSolver()
-        self.single_object_solver=SingleFunctionSOlver()
-        self.single_object_solver.set_process_condition(ProcessCondition())
-        self.single_object_solver.set_get_index_value(GetIndexValue())
-        self.function_solver.set_single_obj_solver(self.single_object_solver)
-        self.function_solver.set_process_function_calling(ProcessFunctionCalling())
+
 
 
     def test_function_solver(self):

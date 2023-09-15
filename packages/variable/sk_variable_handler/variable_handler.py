@@ -66,25 +66,9 @@ class VariableHandler:
         self.solve_table.set_next(go_next)
 
 
-    def set_process_function_calling(self,function):
-        self.process_function_calling = function
-        self.solve_function.set_process_function_calling(self.process_function_calling)
-
-    def set_single_function_solver(self,solver):
-        self.single_function_solver = solver
-        self.solve_function.set_single_function_solver(self.single_function_solver)
-
-
-    def set_get_index(self,index):
-        self.get_index = index
-        self.solve_function.set_get_index(self.get_index)
-
     def set_function_solver(self,solver):
         self.function_solver = solver
         self.solve_function.set_function_solver(self.function_solver)
-    def set_process_condition(self,condition):
-        self.process_condition = condition
-        self.solve_function.set_process_condition(self.process_condition)
 
     def set_calculator(self, calculator):
 
@@ -138,17 +122,18 @@ class EvaluateValue:
         self.solve_function.set_function_solver(function_solver)
 
     def run(self,data,value):
+        is_table = self.is_table.run(value)
         is_function= self.is_function.run(value)
+        is_expression = self.is_expression.run(value)
+
+        if is_table:
+
+            value = self.table_solver.run(data,value)
         if is_function:
             value = self.solve_function.run(value)
-
-        is_expression = self.is_expression.run(value)
         if is_expression:
 
             value = self.solve_expression.run(value)
-        is_table = self.is_table.run(value)
-        if is_table:
-            value = self.table_solver.run(data,value)
         return value
 
     def set_is_function(self,is_function):
@@ -204,11 +189,7 @@ class IsFunction:
 
 class SolveFunction:
     def run(self,function_calling):
-        self.single_function_solver.set_get_index_value(self.get_index)
-        self.single_function_solver.set_process_condition(self.process_condition)
 
-        self.function_solver.set_process_function_calling(self.process_function_calling)
-        self.function_solver.set_single_obj_solver(self.single_function_solver)
         value_of_function = function_calling
         pattern = r'((\(([^()]|(?2))*\))(\[([^\[\]]|(?4))*\])*((?:(\.\w+(?2)?)|(?4))+))'
         matches = re.findall(pattern,value_of_function)
@@ -229,24 +210,10 @@ class SolveFunction:
         return value_of_function
     def set_function_solver(self,solver):
         self.function_solver = solver
-    def set_function_solver(self,function_solver):
-        self.function_solver  = function_solver
+
 
     def set_get_original_type(self,get):
         self.get_original_type = get
-
-    def set_process_function_calling(self,function):
-        self.process_function_calling = function
-
-    def set_single_function_solver(self,solver):
-        self.single_function_solver = solver
-
-    def set_get_index(self,index):
-        self.get_index = index
-
-    def set_process_condition(self,condition):
-        self.process_condition = condition
-
 
 
 
@@ -266,6 +233,8 @@ class TableSolver:
         return value
 
     def set_generate_text(self,generator):
+
+
         self.generate_text = generator
     def set_next(self,go_next):
         self.go_next = go_next

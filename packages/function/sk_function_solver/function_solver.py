@@ -1,13 +1,17 @@
 import regex as re
-
-
+from .process_function_calling import ProcessFunctionCalling
+from .single_function_solver import SingleFunctionSOlver
+from .get_index_value import GetIndexValue
+from .process_condition import ProcessCondition
 class FunctionSolver:
     def __init__(self):
         self.obj = None
         self.obj_name = None
         self.data = None
-        self.process_function_calling = None
-        self.single_obj_solver = None
+        self.process_function_calling = ProcessFunctionCalling()
+        self.single_obj_solver = SingleFunctionSOlver()
+        self.single_obj_solver.set_get_index_value(GetIndexValue())
+        self.single_obj_solver.set_process_condition(ProcessCondition())
 
     def solve(self, function_calling):
 
@@ -28,11 +32,6 @@ class FunctionSolver:
         self.data = data
         self.single_obj_solver.set_data(data)
 
-    def set_process_function_calling(self,process_function_calling):
-        self.process_function_calling = process_function_calling
-
-    def set_single_obj_solver(self,single_obj_solver):
-        self.single_obj_solver = single_obj_solver
 
 
 

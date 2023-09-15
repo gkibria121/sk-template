@@ -26,10 +26,13 @@ from .function.select import Select
 from .function.index import Index
 from .function.find import Find
 from.function.in_array import In
+
+from .get_index_value import GetIndexValue
+from .process_condition import ProcessCondition
 class SingleFunctionSOlver:
     def __init__(self):
         self.get_object_value = GetObjectValue()
-        self.get_index_value = None
+        self.get_index_value =None
         self.process_condition = None
 
         self.floor = Floor()

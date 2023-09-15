@@ -27,10 +27,6 @@ class TestGetValues(unittest.TestCase):
         self.variable.set_calculator(self.calculator)
         self.variable.set_regex_maker(RegexMaker())
         self.variable.set_function_solver(FunctionSolver())
-        self.variable.set_get_index(GetIndexValue())
-        self.variable.set_process_condition(ProcessCondition())
-        self.variable.set_process_function_calling(ProcessFunctionCalling())
-        self.variable.set_single_function_solver(SingleFunctionSOlver())
         self.variable.set_next(type('Default',(),{'process' : lambda text: text}))
         self.maxDiff = None
     def test_get_result(self):
@@ -343,11 +339,8 @@ class TestFunctionSolver(unittest.TestCase):
     def setUp(self):
         self.solve_function = SolveFunction()
         self.solve_function.set_function_solver(FunctionSolver())
-        self.solve_function.set_get_index(GetIndexValue())
         self.solve_function.set_get_original_type(GetOriginalType())
-        self.solve_function.set_process_condition(ProcessCondition())
-        self.solve_function.set_process_function_calling(ProcessFunctionCalling())
-        self.solve_function.set_single_function_solver(SingleFunctionSOlver())
+
 
 
     def test_function_solver(self):
