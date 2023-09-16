@@ -41,25 +41,6 @@ class TableHandler:
 
     def set_function_solver(self,solver):
         self.single_table_solver.set_function_solver(solver)
-##$table4 = $<table,table3,table2>(x,z:x.number==z.number,y:x.number==y.number)=>{ {'name' : x.item , 'cost' : x.quantity*y.price ,'unit' : x.unit} };
-##$table2 = $<table>(x)=>{ {'number' : $<table><[$parent_index-1].number|1>+$<table><[$parent_index+1].number|1> } };
 
-##        $table4 = $<table1:x,table2:y,table3:z>join(y:y.item=x.item,z_:x.item=z.item)->where( ((x.item == x.item $or y.item!=x.item) $and (x.item!=y.item )) $or x.item == y.item );
-##        $table4 = $<table1:x>group(x.age,x.name)->select({ 'totalId' : {'$sum' : "$y.id"}, 'name' : '$name' , 'age' : '$age' });
-##        $table4 = $<table1:x>sort(x.name=1,x.name=-1);
-##        $table4 = $<table1:x>sort(x.y.id=-1,x.name=-1);
-##variables = '''
-##        $table1 = [{'item' : 'apple' , 'price' : 100, 'quantity' : 20},{'item' : 'apple' , 'price' : 200, 'quantity' : 40},{'item' : 'apple' , 'price' : 300, 'quantity' : 50},{'item' : 'apple' , 'price' : 400, 'quantity' : 60},{'item' : 'banana' , 'price' : 200, 'quantity' : 30}];
-##
-##        $table5 = $<table1:x>group(x.item)->select({'item' : x.item ,'price' : addToSet(x.price)});
-##
-##
-##        '''
-
-##
-##table = TableHandler()
-##
-##print(table.process(variables))
-##
 
 

@@ -29,7 +29,7 @@ class TinkerApp(tk.Tk):
 
         self.random = RandomVariableGenerator()
         self.table_handler = TableHandler()
-        self.table_handler.set_function_solver(FunctionSolver())
+        self.function_solver =FunctionSolver()
         self.mongo_controller = MongoController()
         self.mongo_wrapper = MongoWrapper()
         self.table_handler.set_wrapper(self.mongo_wrapper)
@@ -41,9 +41,10 @@ class TinkerApp(tk.Tk):
 
         self.variable.set_calculator(self.calculator)
 
-        self.data_structure.set_random(self.variable)
-        self.data_structure.set_variable(self.random)
+        self.data_structure.set_variable(self.variable)
+        self.data_structure.set_random(self.random)
         self.data_structure.set_table_handler(self.table_handler)
+        self.data_structure.set_function_solver(self.function_solver)
 
 
         #app

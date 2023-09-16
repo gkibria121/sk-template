@@ -7,12 +7,14 @@ class DataStructure:
         self.table = None
         self.comment_remover = CommentRemover()
         self.json_process = JsonProcess()
+        self.custom_function = CustomFunction()
 
 
     def run(self,data_text):
 
         self.comment_remover.set_next(self.json_process)
-        self.json_process.set_next(self.random)
+        self.json_process.set_next(self.custom_function)
+        self.custom_function.set_next(self.random)
         self.random.set_next(self.variable)
         self.variable.set_next(self.table_handler)
         self.table_handler.set_next(type('Default',(),{'process' : lambda value: value}))
@@ -49,6 +51,12 @@ class DataStructure:
     def set_table_handler(self,table_handler):
         self.table_handler = table_handler
 
+    def set_function_solver(self,solver):
+        self.function_solver = solver
+        self.custom_function.set_function_solver(self.function_solver)
+        self.variable.set_function_solver(self.function_solver)
+        self.table_handler.set_function_solver(self.function_solver)
+
 
 class JsonProcess:
     def process(self,text):
@@ -63,6 +71,22 @@ class JsonProcess:
 
     def set_next(self,go_next):
         self.go_next= go_next
+
+class CustomFunction:
+    def process(self,text):
+        pattern = ''
+
+
+##        text = self.function_solver.create('name','argument','code')
+
+        return self.go_next.process(text)
+
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def set_function_solver(self,solver):
+        self.function_solver = solver
+
 
 ##
 ##data = DataStructure()

@@ -188,15 +188,16 @@ class IsFunction:
 
 
 class SolveFunction:
-    def run(self,function_calling):
 
+    def run(self,function_calling):
         value_of_function = function_calling
         pattern = r'((\(([^()]|(?2))*\))(\[([^\[\]]|(?4))*\])*((?:(\.\w+(?2)?)|(?4))+))'
         matches = re.findall(pattern,value_of_function)
         while True:
             for match in matches:
                 index_of_value = match[3]
-                self.function_solver.set_data({'$function_name' : eval(match[1]+index_of_value)})
+                value_of_object = self.run(match[1])
+                self.function_solver.set_data({'$function_name' : eval(value_of_object+index_of_value)})
                 evaluated_value =self.function_solver.solve('$function_name'+match[5])
                 is_function = re.search(pattern,evaluated_value)
                 if not is_function:
@@ -206,7 +207,6 @@ class SolveFunction:
             matches = re.findall(pattern,value_of_function)
             if not matches:
                 break
-
         return value_of_function
     def set_function_solver(self,solver):
         self.function_solver = solver

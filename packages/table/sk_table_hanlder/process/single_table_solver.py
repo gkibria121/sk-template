@@ -36,6 +36,7 @@ class SingleTableSolver:
                 self.wrapper.set_table_data(data,table_names)
                 queries = self.wrapper.process_queries(table_queries)
                 script = self.wrapper.query(queries)
+##                print(script)
                 result = self.wrapper.evaluate(script)
                 result = self.remove_object_id.run(result)
 
@@ -165,7 +166,8 @@ class SolveFunction:
         while True:
             for match in matches:
                 index_of_value = match[3]
-                self.function_solver.set_data({'$function_name' : eval(match[1]+index_of_value)})
+                value_of_object = self.run(match[1])
+                self.function_solver.set_data({'$function_name' : eval(value_of_object+index_of_value)})
                 evaluated_value =self.function_solver.solve('$function_name'+match[5])
                 is_function = re.search(pattern,evaluated_value)
                 if not is_function:

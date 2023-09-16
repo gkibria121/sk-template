@@ -80,7 +80,7 @@ class MongoController:
             if not right.endswith('_'):
                 self.pipeline.append(        {
         "$addFields": {
-            "posts": { "$arrayElemAt": ["$posts", 0] }
+           right: { "$arrayElemAt": [f"${right}", 0] }
         }
     })
 
