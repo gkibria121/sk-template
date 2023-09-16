@@ -82,6 +82,7 @@ class RemoveObjectId:
 class ArrayTable:
     def __init__(self):
         self.solve_function = SolveFunction()
+        self.is_function =IsFunction()
         self.solve_function.set_get_original_type(GetOriginalType())
 
     def process(self,data,method,argument):
@@ -97,9 +98,9 @@ class ArrayTable:
             else:
                 is_condition = 'True'
 
-            return_value = re.sub(r'^\s*(\()\s*(\((([^()]|(?2))*)\))\s*,','(',argument)
             value = []
 
+            return_value = re.sub(r'^\s*(\()\s*(\((([^()]|(?2))*)\))\s*,','(',argument)
             for item in data[self.array]:
 
                 exec(f"{self.alias} = {item}")
@@ -117,6 +118,8 @@ class ArrayTable:
                 else:
                     if type(eval(return_value))==tuple:
                         value.append(eval(return_value)[1])
+                if self.is_function.run(argument):
+                    return_value = re.sub(r'^\s*(\()\s*(\((([^()]|(?2))*)\))\s*,','(',argument)
 
         return value
 
