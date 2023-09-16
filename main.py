@@ -70,8 +70,14 @@ $bar_info=$dias.select(((z)=>True),
 });
 
 $bars=[{ L:105,dia:10 },{ L:211,dia:12 }];
-##$x  = $bars.where(x=> x.L>10);
-$bars_wt=$<bars:z>select({ Wt: $bar_info.where((x)=>(x.dia.val==z.dia))[0].kg_per_ft});
+$bar1_wt={
+           val:$bar_info.where((x)=>x.dia.val==$bars[0].dia)[0].kg_per_ft*$bars[0].L,
+           unit:'Kg'
+         };
+$bar2_wt={
+           val:$bar_info.find_first((x)=> x.dia.val==$bars[1].dia).kg_per_ft*$bars[1].L,
+           unit:'Kg'
+         };
 '''
 ##data = {'$table': [{'id': 1, 'first_name': 'John', 'last_name': 'Doe', 'age': 30, 'department': 'Sales', 'salary': 50000.0, 'hire_date': '2020-01-15'}, {'id': 2, 'first_name': 'Jane', 'last_name': 'Smith', 'age': 35, 'department': 'HR', 'salary': 60000.0, 'hire_date': '2019-05-20'}, {'id': 3, 'first_name': 'Michael', 'last_name': 'Johnson', 'age': 28, 'department': 'IT', 'salary': 55000.0, 'hire_date': '2021-03-10'}, {'id': 4, 'first_name': 'Sarah', 'last_name': 'Williams', 'age': 32, 'department': 'Marketing', 'salary': 58000.0, 'hire_date': '2018-09-01'}, {'id': 5, 'first_name': 'David', 'last_name': 'Brown', 'age': 29, 'department': 'Finance', 'salary': 52000.0, 'hire_date': '2022-02-28'}]}
 ##template = '''<><<{{$table[0].id}}>> </>'''
