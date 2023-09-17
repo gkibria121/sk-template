@@ -205,10 +205,15 @@ class Unittest:
 
             self.function_solver.set_data({str(value) : value})
             value = self.function_solver.run(str(value),f'.{name}{argument}')
-            if value == str(item['expected']):
-                result.append({"id" : item["id"] , 'result' : 'Passed' })
+            value = eval(value)
+
+            if 'delta'  in item:
+                value = round(value,item['delta'])
+
+            if value == item['expected']:
+                result.append({"id" : item["id"] , 'result' : 'Passed' ,'expected' : item['expected'] , 'actual' : value})
             else :
-                result.append({"id" : item["id"] , 'result' : 'Faild' })
+                result.append({"id" : item["id"] , 'result' : 'Faild' ,'expected' : item['expected'] , 'actual' : value})
 
 
         return result
