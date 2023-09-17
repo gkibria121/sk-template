@@ -1,10 +1,13 @@
 from sk_report_generator import ReportGenerator
 from sk_calculator import Calculator
+from sk_function_solver.function_solver import FunctionSolver
+
 import unittest
 class TestGetValues(unittest.TestCase):
 
     def setUp(self):
         self.reporter =ReportGenerator()
+        self.reporter.set_function_solver(FunctionSolver())
         self.reporter.function_evaluate.function_solver.single_obj_solver.foreach.set_reporter(self.reporter)
 
         self.maxDiff = None

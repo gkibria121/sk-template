@@ -1,5 +1,6 @@
 import unittest
 from sk_function_solver.function.foreach import Foreach
+from sk_function_solver.function_solver import FunctionSolver
 from sk_function_solver.function.default import MethodDefault
 from sk_report_generator import ReportGenerator
 
@@ -8,7 +9,10 @@ class TestForeach(unittest.TestCase):
     def setUp(self):
         self.foreach = Foreach()
         self.default = MethodDefault()
+
         self.reporter = ReportGenerator()
+        self.function_solver =FunctionSolver()
+        self.reporter.set_function_solver(self.function_solver)
         self.reporter.set_reporter(self.reporter)
         self.foreach.set_reporter(self.reporter)
         data = {'$x' : [{"name": "John Doe","age": 30,"occupation": "Engineer"},{"name": "Jane Smith","age": 25,"occupation": "Teacher"},{"name": "Michael Johnson","age": 40, "occupation": "Doctor"},{"name": "Emily Williams","age": 22,"occupation": "Student"}],
