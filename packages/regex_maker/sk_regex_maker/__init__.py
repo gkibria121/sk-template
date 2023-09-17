@@ -14,8 +14,6 @@ class RegexMaker:
         function_calling =f'({function_name})\(({function_arguments})?\)'
         expression_node = f'({simple_expression_with_brackets})|({function_calling})'
         expresssion_with_node = f'({expression_node})(({operators})({expression_node}))*'
-##        print(f"({expresssion_with_node})",end='')
-##        expresssion_with_node = "(?1)"
 
         function_arguments_2 = f'({expresssion_with_node})(,({expresssion_with_node}))*'
         function_calling_2 =f'({function_name})\(({function_arguments_2})?\)'
@@ -59,10 +57,10 @@ class RegexMaker:
 
 
 
-
-
-regex_finder = RegexMaker()
-pattern = regex_finder.make('expression')
+##
+##
+##regex_finder = RegexMaker()
+##pattern = regex_finder.make('expression')
 
 
 

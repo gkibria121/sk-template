@@ -37,6 +37,7 @@ class TinkerApp(tk.Tk):
 
 
         self.reporter = ReportGenerator()
+        self.reporter.set_function_solver(self.function_solver)
         self.reporter.set_reporter(self.reporter)
 
         self.variable.set_calculator(self.calculator)

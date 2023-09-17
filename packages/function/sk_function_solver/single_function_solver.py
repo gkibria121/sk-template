@@ -160,13 +160,16 @@ class CustomFunction:
             argument =self.functions[method]['argument']
 
             code = self.functions[method]['code']
-            code = f"this = {value}\n{code}"
             #process code
             code = code.replace(';','\n')
+            code = f'import math\n{code}'
             code = re.sub(r'return\s*([^\n]+)',lambda match : f'print({match[1]})',code)
+            code = re.sub(r'sqrt','math.sqrt',code)
+            for item,value in value.items():
+                code = re.sub(r'\b'+re.escape(item)+r'\b',str(value),code)
             value = self.evaluate.run(code)
 
-        return value
+        return self.go_next.run(value,method,argument)
 
     def set_next(self,go_next):
         self.go_next = go_next

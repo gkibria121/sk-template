@@ -7,7 +7,7 @@ def delete_pycache(current_path):
     path = Path(current_path)
     for item in path.iterdir():
         if not str(item).endswith('.git'):
-            if item.is_dir() and (str(item).endswith('__pycache__') or str(item).endswith('.pytest_cache') ) :
+            if item.is_dir() and (str(item).endswith('__pycache__') or str(item).endswith('.pytest_cache') or str(item).endswith('.egg-info')) :
                 delete_folder_contents(item)
                 item.rmdir()
             elif item.is_dir():

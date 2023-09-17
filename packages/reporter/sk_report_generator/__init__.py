@@ -36,6 +36,8 @@ class ReportGenerator:
 
     def set_reporter(self,reporter):
         self.function_evaluate.function_solver.single_obj_solver.foreach.set_reporter(reporter)
-
+    def set_function_solver(self,solver):
+        self.function_solver = solver
+        self.function_evaluate.set_function_solver(self.function_solver)
 
 

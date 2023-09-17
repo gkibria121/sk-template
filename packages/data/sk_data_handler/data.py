@@ -77,10 +77,13 @@ class JsonProcess:
 
 class CustomFunction:
     def process(self,text):
-        pattern = '\$(\w+)\s*=\s*\((\s*)\)\s*=>\s*(\{(([^{}]|(?3))*)\});'
+        pattern = '\$(\w+)\s*(\((([^()]|(?2))*)\))\s*=>\s*((\{(([^{}]|(?6))*)\})|([^;]+));'
 
 
-        text = re.sub(pattern,lambda match : self.function_solver.create(match[1],match[2],match[4]),text)
+        text = re.sub(pattern,lambda match : self.function_solver.create(match[1],match[3],self.get_code(match[9],match[7])),text)
+
+        text = self.process_custom_function_calling(text)
+
 
         return self.go_next.process(text)
 
@@ -89,6 +92,20 @@ class CustomFunction:
 
     def set_function_solver(self,solver):
         self.function_solver = solver
+
+
+    def get_code(self,single_line,multi_line):
+        if single_line:
+            return f"return {single_line};"
+        return multi_line
+
+
+    def process_custom_function_calling(self,text):
+
+        pattern = r'\$(\w+)(\((([^()]|(?2))*)\))'
+        text = re.sub(pattern,lambda match: f"({match[3]}).{match[1]}()",text)
+        return text
+
 
 class Unittest:
     def process(self,text):

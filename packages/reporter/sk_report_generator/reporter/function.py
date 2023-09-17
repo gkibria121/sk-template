@@ -4,12 +4,11 @@ from .base import IReporter
 from sk_function_solver.process_function_calling import ProcessFunctionCalling
 from sk_function_solver.single_function_solver import SingleFunctionSOlver
 from sk_function_solver.get_index_value import GetIndexValue
-from sk_function_solver.process_condition import ProcessCondition
 class FunctionEvaluator(IReporter):
     def __init__(self):
         self.successor = None
         self.data = None
-        self.function_solver = FunctionSolver()
+        self.function_solver = None
     def report(self, template):
         pattern = r'(\{\{(?:[\"\']*)(((\{([^{}]|(?4))*\})|([^{}:]+))*)((\:([^{}:]+))|(\:\:(?4)))?(?:[\"\']*)\}\})'
 
@@ -22,6 +21,10 @@ class FunctionEvaluator(IReporter):
             template = re.sub(re.escape(match[0]), changed_value, template)
 
         return self.successor.report(template)
+
+    def set_function_solver(self,solver):
+        self.function_solver = solver
+
 
     def set_successor(self, successor):
         self.successor = successor
