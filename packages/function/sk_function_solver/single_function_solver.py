@@ -61,6 +61,8 @@ class SingleFunctionSOlver:
         self.index = Index()
         self.find = Find()
         self.in_array = In()
+        self.custom = CustomFunction()
+        self.unittest_runner = Unittest()
 
 
 
@@ -86,13 +88,15 @@ class SingleFunctionSOlver:
         self.range.set_next(self.select)
         self.select.set_next(self.index)
         self.index.set_next(self.find)
-        self.find.set_next(self.in_array)
+        self.find.set_next(self.custom)
+        self.custom.set_next(self.in_array)
         self.in_array.set_next(self.set)
 
         self.set.set_next(self.foreach)
         self.foreach.set_next(self.sum)
         self.sum.set_next(self.default)
 
+        self.unittest_runner.set_function_chain(self.floor)
 
 
     def run(self,object_name,methods):
@@ -130,3 +134,80 @@ class SingleFunctionSOlver:
 
     def set_get_index_value(self,get_index_value):
         self.get_index_value = get_index_value
+
+
+    def def_function(self,function_name,argument,code):
+        self.custom.create(function_name,argument,code)
+
+
+    def unittest(self,function_name,argument,list_of_test):
+
+        result = self.unittest_runner.run(function_name,argument,list_of_test)
+
+        return result
+class CustomFunction:
+    def __init__(self):
+        self.functions={}
+
+
+    def create(self,name,argument,code):
+        self.functions[name] = {'name' : name,'argument' : argument,'code' : code}
+        self.evaluate = EvaluateScript()
+
+    def run(self,value,method,argument):
+
+        if method in self.functions:
+            argument =self.functions[method]['argument']
+            code = self.functions[method]['code']
+            code = f"{argument} = {value}\n{code}"
+            #process code
+            code = code.replace(';','\n')
+            code = re.sub(r'return\s*([^\n]+)',lambda match : f'print({match[1]})',code)
+            value = self.evaluate.run(code)
+
+        return value
+
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+import io
+import sys
+
+class EvaluateScript:
+
+    def run(self,script):
+
+        code_string = script
+        output_stream = io.StringIO()
+        sys.stdout = output_stream
+        exec(code_string)
+        sys.stdout = sys.__stdout__
+        captured_output = output_stream.getvalue().strip()
+
+        return captured_output
+
+
+
+
+class Unittest:
+
+    def run(self,name,argument,list_of_test):
+
+        result = []
+        list_of_test = eval(list_of_test)
+
+        for item in list_of_test:
+            if argument == '(this)':
+                argument = ''
+            value = item["data"]
+            value = self.function_chain.run(value,name,argument)
+            if value == str(item['expected']):
+                result.append({"id" : item["id"] , 'result' : 'Passed' })
+            else :
+                result.append({"id" : item["id"] , 'result' : 'Faild' })
+
+
+        return result
+
+    def set_function_chain(self,function_chain):
+        self.function_chain = function_chain

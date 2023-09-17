@@ -32,6 +32,14 @@ class FunctionSolver:
         self.data = data
         self.single_obj_solver.set_data(data)
 
+    def create(self,function_name,argument,code):
+        code = self.process_function_calling.run(code)
+        self.single_obj_solver.def_function(function_name,argument,code)
+        return ''
+
+    def unittest(self,function_name,argument,list_of_test):
+        result = self.single_obj_solver.unittest(function_name,argument,list_of_test)
+        return result
 
 
 

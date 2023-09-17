@@ -8,13 +8,15 @@ class DataStructure:
         self.comment_remover = CommentRemover()
         self.json_process = JsonProcess()
         self.custom_function = CustomFunction()
+        self.unittest = Unittest()
 
 
     def run(self,data_text):
 
         self.comment_remover.set_next(self.json_process)
         self.json_process.set_next(self.custom_function)
-        self.custom_function.set_next(self.random)
+        self.custom_function.set_next(self.unittest)
+        self.unittest.set_next(self.random)
         self.random.set_next(self.variable)
         self.variable.set_next(self.table_handler)
         self.table_handler.set_next(type('Default',(),{'process' : lambda value: value}))
@@ -55,6 +57,7 @@ class DataStructure:
         self.function_solver = solver
         self.custom_function.set_function_solver(self.function_solver)
         self.variable.set_function_solver(self.function_solver)
+        self.unittest.set_function_solver(self.function_solver)
         self.table_handler.set_function_solver(self.function_solver)
 
 
@@ -74,10 +77,10 @@ class JsonProcess:
 
 class CustomFunction:
     def process(self,text):
-        pattern = ''
+        pattern = '\$(\w+)\s*=\s*\(([\w]+)\)\s*=>\s*(\{(([^{}]|(?3))*)\});'
 
 
-##        text = self.function_solver.create('name','argument','code')
+        text = re.sub(pattern,lambda match : self.function_solver.create(match[1],match[2],match[4]),text)
 
         return self.go_next.process(text)
 
@@ -86,6 +89,22 @@ class CustomFunction:
 
     def set_function_solver(self,solver):
         self.function_solver = solver
+
+class Unittest:
+    def process(self,text):
+        pattern = '(\$\w+)\s*=\s*\$unittest.test\(([\w\s]+)\,(\((([^()]|(?2)))*\)),\s*(\[(([^\[\]]|(?6)))*\])\);'
+
+
+        text = re.sub(pattern,lambda match :f"{match[1]} = {self.function_solver.unittest(match[2],match[3],match[6])};",text)
+
+        return self.go_next.process(text)
+
+    def set_next(self,go_next):
+        self.go_next = go_next
+
+    def set_function_solver(self,solver):
+        self.function_solver = solver
+
 
 
 ##
