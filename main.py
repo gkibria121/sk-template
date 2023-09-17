@@ -62,15 +62,15 @@ class Controller:
 
 controller = Controller()
 data = '''
-$volume_of_box = (this) => {
+$volume_of_box = () => {
 s= this.X*this.Y*this.Z;
 return s;
 };
 
 
-$test= $unittest.test(volume_of_box,(this),[{id:"case1", data:{X:10,Y:20,Z:7}, expected:1400},{id:"case2", data:{X:10,Y:15,Z:5}, expected:750}]);
+$test= $unittest.test(volume_of_box,(),[{id:"case1", data:{X:10,Y:20,Z:7}, expected:1400},{id:"case2", data:{X:10,Y:15,Z:5}, expected:750}]);
 
-
+$test2= $unittest.test(max,((x)=> x<5),[{id:"case1", data:[1,2,3,4,5], expected:4},{id:"case2", data:[1,2,3,4,5,6], expected:5}]);
 $custom_function (x)=>  s = x.X*x.Y*x.Z;
 $boxes=[
   {Id:1, X:10,Y:20,Z:7},

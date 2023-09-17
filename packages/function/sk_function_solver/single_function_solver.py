@@ -96,7 +96,7 @@ class SingleFunctionSOlver:
         self.foreach.set_next(self.sum)
         self.sum.set_next(self.default)
 
-        self.unittest_runner.set_function_chain(self.floor)
+        self.unittest_runner.set_function_solver(self)
 
 
     def run(self,object_name,methods):
@@ -158,8 +158,9 @@ class CustomFunction:
 
         if method in self.functions:
             argument =self.functions[method]['argument']
+
             code = self.functions[method]['code']
-            code = f"{argument} = {value}\n{code}"
+            code = f"this = {value}\n{code}"
             #process code
             code = code.replace(';','\n')
             code = re.sub(r'return\s*([^\n]+)',lambda match : f'print({match[1]})',code)
@@ -197,10 +198,10 @@ class Unittest:
         list_of_test = eval(list_of_test)
 
         for item in list_of_test:
-            if argument == '(this)':
-                argument = ''
             value = item["data"]
-            value = self.function_chain.run(value,name,argument)
+
+            self.function_solver.set_data({str(value) : value})
+            value = self.function_solver.run(str(value),f'.{name}{argument}')
             if value == str(item['expected']):
                 result.append({"id" : item["id"] , 'result' : 'Passed' })
             else :
@@ -209,5 +210,5 @@ class Unittest:
 
         return result
 
-    def set_function_chain(self,function_chain):
-        self.function_chain = function_chain
+    def set_function_solver(self,solver):
+        self.function_solver = solver
