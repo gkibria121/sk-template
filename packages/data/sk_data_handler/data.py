@@ -12,7 +12,6 @@ class DataStructure:
 
 
     def run(self,data_text):
-
         self.comment_remover.set_next(self.json_process)
         self.json_process.set_next(self.custom_function)
         self.custom_function.set_next(self.unittest)
@@ -22,10 +21,10 @@ class DataStructure:
         self.table_handler.set_next(type('Default',(),{'process' : lambda value: value}))
 
 
+
         data_text = self.comment_remover.process(data_text)
         data_structure = self.get_data_structure(data_text)
         return data_structure
-
 
     def get_data_structure(self,solved_table):
         temp = {}

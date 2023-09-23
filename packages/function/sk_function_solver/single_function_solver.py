@@ -160,14 +160,14 @@ class CustomFunction:
 
     def create(self,name,argument,code):
         self.functions[name] = {'name' : name,'argument' : argument,'code' : code}
-        self.evaluate = EvaluateScript()
 
     def run(self,value,method,argument):
 
         if method in self.functions:
             function_argument =self.functions[method]['argument']
-            list_of_function_argument = function_argument.split(',')
+            list_of_function_argument =[item for index,item in enumerate (function_argument.split(',')) if item!='']
             list_of_argument = eval(f"[{argument}]")
+
             argument_variable = ''
             for i in range(len(list_of_function_argument)):
                 argument_variable+= f"{list_of_function_argument[i]} = {list_of_argument[i]};"
