@@ -42,7 +42,9 @@ class FunctionSolver:
         return result
 
 
-
+    def set_ds_solver_chain(self,chain):
+        self.ds_solver_chain = chain
+        self.single_obj_solver.set_ds_solver_chain(self.ds_solver_chain)
 
 
 

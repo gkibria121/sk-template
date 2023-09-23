@@ -96,6 +96,8 @@ class SingleFunctionSOlver:
         self.foreach.set_next(self.sum)
         self.sum.set_next(self.default)
 
+
+
         self.unittest_runner.set_function_solver(self)
 
 
@@ -143,8 +145,14 @@ class SingleFunctionSOlver:
     def unittest(self,function_name,argument,list_of_test):
 
         result = self.unittest_runner.run(function_name,argument,list_of_test)
-
         return result
+
+
+    def set_ds_solver_chain(self,chain):
+        self.ds_solver_chain = chain
+        self.custom.set_ds_solver_chain(self.ds_solver_chain)
+
+
 class CustomFunction:
     def __init__(self):
         self.functions={}
@@ -157,22 +165,33 @@ class CustomFunction:
     def run(self,value,method,argument):
 
         if method in self.functions:
-            argument =self.functions[method]['argument']
+            function_argument =self.functions[method]['argument']
+            list_of_function_argument = function_argument.split(',')
+            list_of_argument = eval(f"[{argument}]")
+            argument_variable = ''
+            for i in range(len(list_of_function_argument)):
+                argument_variable+= f"{list_of_function_argument[i]} = {list_of_argument[i]};"
+
+
 
             code = self.functions[method]['code']
-            #process code
-            code = code.replace(';','\n')
-            code = f'import math\n{code}'
-            code = re.sub(r'return\s*([^\n]+)',lambda match : f'print({match[1]})',code)
-            code = re.sub(r'sqrt','math.sqrt',code)
-            for item,value in value.items():
-                code = re.sub(r'\b'+re.escape(item)+r'\b',str(value),code)
-            value = self.evaluate.run(code)
+
+            code_with_value = argument_variable+code
+            output = self.ds_solver_chain.process(code_with_value)
+            value = re.search(r'\$return\s*=\s*([^;]+);',output)
+            if value:
+                value = eval(value[1])
+            else:
+                value = -1
+
+
 
         return self.go_next.run(value,method,argument)
 
     def set_next(self,go_next):
         self.go_next = go_next
+    def set_ds_solver_chain(self,chain):
+        self.ds_solver_chain = chain
 
 import io
 import sys
@@ -199,23 +218,17 @@ class Unittest:
 
         result = []
         list_of_test = eval(list_of_test)
-
         for item in list_of_test:
             value = item["data"]
-
             self.function_solver.set_data({str(value) : value})
             value = self.function_solver.run(str(value),f'.{name}{argument}')
             value = eval(value)
-
             if 'delta'  in item:
                 value = round(value,item['delta'])
-
             if value == item['expected']:
                 result.append({"id" : item["id"] , 'result' : 'Passed' ,'expected' : item['expected'] , 'actual' : value})
             else :
                 result.append({"id" : item["id"] , 'result' : 'Faild' ,'expected' : item['expected'] , 'actual' : value})
-
-
         return result
 
     def set_function_solver(self,solver):

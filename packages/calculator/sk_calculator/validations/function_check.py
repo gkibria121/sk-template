@@ -14,7 +14,7 @@ class FunctionErrorChecker(IValidation):
 
         if matches:
             for match in matches:
-                empty_call = '\(\s*\)'
+                empty_call = r'\(\s*\)'
                 if match[0] not in self.valid_functions and 'log' not in match[0]:
                     self.error_handler.set_error(f'Syntax Error: Invalid Function {match[0]}()')
 

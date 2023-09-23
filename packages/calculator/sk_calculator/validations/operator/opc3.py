@@ -12,7 +12,7 @@ class Op3(IValidation):
 
         ## missing operator between brackets and numbers
 
-        operators_pattern = '(?<!\w)(\d+(?:\.\d+)?)\((\d+(?:\.\d+)?)'
+        operators_pattern = r'(?<!\w)(\d+(?:\.\d+)?)\((\d+(?:\.\d+)?)'
 
         matches = regex.findall(operators_pattern,expression)
 

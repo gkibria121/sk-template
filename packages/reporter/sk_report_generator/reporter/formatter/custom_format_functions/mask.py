@@ -28,7 +28,7 @@ class GetPattern:
         pattern = ''
         for match in matches:
             count =len(match)
-            pattern += '([\d\.]{'+str(count)+'})'
+            pattern += r'([\d\.]{'+str(count)+r'})'
         mask_pattern = re.sub(r'([#]+)', lambda match, count=iter(range(1, 100)): '\\'+str(next(count)), mask)
         return pattern,mask_pattern
 

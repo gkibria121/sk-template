@@ -1,5 +1,19 @@
 create select in script where select can change list into object
 
-undo/redo  in GUI
-Show exact error message  
-select to comment in GUI with mouse keyboard
+
+
+here is another requirement """$objA={id:2, X:10,Y:20,Z:7};
+$costs_per_volume=[{id:1, qt:100},{id:2, qt:50},{id:3, qt:125}];
+##need to define function like
+$Calc(x,y)=>
+{ 
+   ##here x is ObjA and y is $costs_per_volume
+   vol=x.X*x.Y*x.Z;
+   q=y.find_first((y)=>y.id==x.id).qy;
+   return vol*q;
+};
+
+##calling function
+$result=Calc($objA,$costs_per_volume);
+
+### result should be 70,000.0"""

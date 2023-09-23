@@ -5,7 +5,7 @@ class Log(IFunction):
 
     def evaluate(self,match):
         if 'log' in match[0]:
-            base_pattern = '[a-zA-Z]+(\d+)'
+            base_pattern = r'[a-zA-Z]+(\d+)'
             base = regex.search(base_pattern,match[0])
             try:
                 if match[0]=='log':

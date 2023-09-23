@@ -45,6 +45,8 @@ class Controller:
         self.data_structure.set_random(self.random)
         self.data_structure.set_table_handler(self.table_handler)
         self.data_structure.set_function_solver(self.function_solver)
+        self.function_solver.set_ds_solver_chain(self.data_structure.comment_remover)
+
 
 
 
@@ -63,41 +65,15 @@ class Controller:
 
 controller = Controller()
 data = '''
-$boxes=[
-  {Id:1, X:10,Y:20,Z:7},
-  {Id:2, X:12,Y:15,Z:8},
-  {Id:3, X:11,Y:22,Z:9},
-  {Id:4, X:18,Y:12,Z:6},
-  {Id:5, X:12,Y:6,Z:9},
-];
-
-$voulume_of_box()=>X*Y*Z;
-$Top_of_box()=>Y*Z;
-$Side_area_of_box()=>(X*Z+Y*Z)*2;
-
-###caling of function
-$box_volumes=$<boxes:x>select(
+$obj={X:10,Y:20,Z:30,id:1};
+$costs_per_volume=[{id:1, qt:100},{id:2, qt:50},{id:3, qt:125}];
+$Calc($x,$y)=>
 {
-    Id:x.Id,
-    volume:$voulume_of_box(x),
-    top_area:$Top_of_box(x),
-    side_area:$Side_area_of_box(x)
-});
-
-$triangles=[
-   {a:12,b:7.5,c:9.81},
-   {a:5.5,b:9.81,c:7.2},
-   {a:8.3,b:4.51,c:6.85},
-   {a:15,b:10.8,c:9.81}
-];
-
-$area_of_triangle()=> {
-    s=a+b+c;
-    return sqrt(s*(s-a)*(s-b)*(s-c));
+$vol=$x.X*$x.Y*$x.Z;
+$q=$y.find_first((y)=>y.id==$x.id).qt;
+return $vol*$q;
 };
-$triangle_areas=$<triangles:x>select({ area:$area_of_triangle(x)});
-$test= $unittest.test(voulume_of_box,(),[{id:"case1", data:{X:10,Y:20,Z:7.00000000001 }, expected:1400},{id:"case2", data:{X:10,Y:15,Z:5}, expected:750}]);
-$test2= $unittest.test(voulume_of_box,(),[{id:"case1", data:{X:10,Y:20,Z:7.00000000001 },delta : 3, expected:1400},{id:"case2", data:{X:10,Y:15,Z:5}, expected:750}]);
+$result=$Calc($obj,$costs_per_volume);
 '''
 ##data = {'$table': [{'id': 1, 'first_name': 'John', 'last_name': 'Doe', 'age': 30, 'department': 'Sales', 'salary': 50000.0, 'hire_date': '2020-01-15'}, {'id': 2, 'first_name': 'Jane', 'last_name': 'Smith', 'age': 35, 'department': 'HR', 'salary': 60000.0, 'hire_date': '2019-05-20'}, {'id': 3, 'first_name': 'Michael', 'last_name': 'Johnson', 'age': 28, 'department': 'IT', 'salary': 55000.0, 'hire_date': '2021-03-10'}, {'id': 4, 'first_name': 'Sarah', 'last_name': 'Williams', 'age': 32, 'department': 'Marketing', 'salary': 58000.0, 'hire_date': '2018-09-01'}, {'id': 5, 'first_name': 'David', 'last_name': 'Brown', 'age': 29, 'department': 'Finance', 'salary': 52000.0, 'hire_date': '2022-02-28'}]}
 ##template = '''<><<{{$table[0].id}}>> </>'''

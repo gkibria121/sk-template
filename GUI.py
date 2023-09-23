@@ -45,6 +45,7 @@ class TinkerApp(tk.Tk):
         self.data_structure.set_variable(self.variable)
         self.data_structure.set_random(self.random)
         self.data_structure.set_table_handler(self.table_handler)
+        self.function_solver.set_ds_solver_chain(self.data_structure.comment_remover)
         self.data_structure.set_function_solver(self.function_solver)
 
 

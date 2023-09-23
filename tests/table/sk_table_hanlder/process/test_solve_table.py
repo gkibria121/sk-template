@@ -20,7 +20,7 @@ class TestSingleTableSolver(unittest.TestCase):
 
         result = self.single_table_solver.run({'$array' : [1,2,3,4]},('$array','$<array:z>select({"x" : ([1,2,3,4,5]).max()})'))
         self.assertEqual(result,"[{'x': 5, }, {'x': 5, }, {'x': 5, }, {'x': 5, }]")
-        result = self.single_table_solver.run({'$array' : [{'x': 5, }, {'x': 5, }, {'x': 5, }, {'x': 5, }]},('$array','$<array:z>select({"x" :x})'))
+        result = self.single_table_solver.run({'$array' : [{'x': 5, }, {'x': 5, }, {'x': 5, }, {'x': 5, }]},('$array','$<array:x>select({"x" :x})'))
         self.assertEqual(result,"[{'x': 5}, {'x': 5}, {'x': 5}, {'x': 5}]")
 
 if __name__=='__main__':
