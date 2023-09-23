@@ -220,6 +220,8 @@ class Unittest:
         list_of_test = eval(list_of_test)
         for item in list_of_test:
             value = item["data"]
+            for key,val in value.items():
+                argument = re.sub(re.escape(key)+r'(?=\b)',str(val),argument)
             self.function_solver.set_data({str(value) : value})
             value = self.function_solver.run(str(value),f'.{name}{argument}')
             value = eval(value)
