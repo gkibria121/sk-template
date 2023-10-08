@@ -152,6 +152,10 @@ class IsFunction:
         pattern  = r'((\(([^()]|(?2))*\))(\[([^\[\]]|(?4))*\])*((?:(\.\w+(?2)?)|(?4))+))'
         if re.search(pattern,value):
             return True
+        pattern  = r'\.\w+(\(([^()]|(?1))*\))'
+        if re.search(pattern,value):
+            return True
+
 
         return False
 

@@ -27,5 +27,28 @@ class TestFunctionSolver(unittest.TestCase):
         result = self.function_solver.solve('$x.max()')
         self.assertEqual(result,'4')
 
+        self.function_solver.set_data({'$x': [
+    {
+
+    'expenses':
+          [
+            { 'amount':100, 'sl_no':'01'},
+        { 'amount':430, 'sl_no':'02'},
+      ]
+    },
+    {
+
+    'expenses':
+          [
+             { 'amount':700, 'sl_no':'03'},
+         { 'amount':360, 'sl_no':'04'},
+      ]
+    }
+]})
+        result = self.function_solver.solve('$x.expenses.amount')
+        self.assertEqual(result,'[100, 430, 700, 360]')
+
+        result = self.function_solver.solve('$x.expenses.amount.sum()')
+        self.assertEqual(result,'1590')
 if __name__=='__main__':
     unittest.main()
