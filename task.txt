@@ -17,3 +17,14 @@ $Calc(x,y)=>
 $result=Calc($objA,$costs_per_volume);
 
 ### result should be 70,000.0"""
+
+
+
+study :
+static class er static method
+single tone
+dependancy injection
+factory pattern
+
+make tdd and mock data to test class
+di container /helper [assembli problem/reflection]

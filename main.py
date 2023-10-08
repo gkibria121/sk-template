@@ -65,8 +65,25 @@ class Controller:
 
 controller = Controller()
 data = '''
-$volume_of_box($x,$y)=>$x.X*$y.Y;
-$test= $unittest.test(volume_of_box,($x,$y),[{id:"case1", data:{ $x : {X:10,Y:20,Z:7},$y : {X:10,Y:20,Z:7} }, expected:1400},{id:"case2", data:{ $x : {X:10,Y:20,Z:7},$y : {X:10,Y:20,Z:7} }, expected:200}]);
+$accounts=[
+    {
+    budget:1000,
+    expenses:
+          [
+            { amount:100, sl_no:'01'},
+        { amount:430, sl_no:'02'},
+      ]
+    },
+    {
+    budget:1800,
+    expenses:
+          [
+             { amount:700, sl_no:'03'},
+         { amount:360, sl_no:'04'},
+      ]
+    }
+];
+$total_exp=$accounts.expenses.amount.sum();
 '''
 ##data = {'$table': [{'id': 1, 'first_name': 'John', 'last_name': 'Doe', 'age': 30, 'department': 'Sales', 'salary': 50000.0, 'hire_date': '2020-01-15'}, {'id': 2, 'first_name': 'Jane', 'last_name': 'Smith', 'age': 35, 'department': 'HR', 'salary': 60000.0, 'hire_date': '2019-05-20'}, {'id': 3, 'first_name': 'Michael', 'last_name': 'Johnson', 'age': 28, 'department': 'IT', 'salary': 55000.0, 'hire_date': '2021-03-10'}, {'id': 4, 'first_name': 'Sarah', 'last_name': 'Williams', 'age': 32, 'department': 'Marketing', 'salary': 58000.0, 'hire_date': '2018-09-01'}, {'id': 5, 'first_name': 'David', 'last_name': 'Brown', 'age': 29, 'department': 'Finance', 'salary': 52000.0, 'hire_date': '2022-02-28'}]}
 ##template = '''<><<{{$table[0].id}}>> </>'''

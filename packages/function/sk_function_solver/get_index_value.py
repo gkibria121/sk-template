@@ -8,7 +8,14 @@ class GetIndexValue:
         if type(value)==list:
             if re.search(r'\[\d+\]',index):
                 return eval(f'{value}{index}')
-            return eval(f'[item{index} for index,item in enumerate(value)]')
+            r_value = []
+            for item in value:
+                if type(item) == list:
+                    r_value += eval(f'[item2{index} for index,item2 in enumerate(item)]')
+            if len(r_value)==0:
+
+                return eval(f'[item{index} for index,item in enumerate(value)]')
+            return r_value
 
 
         if type(value) == dict:
