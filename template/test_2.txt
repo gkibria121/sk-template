@@ -1,2 +1,0 @@
-<template>ddwasd</template>
-<script>asdwasd</script>
